@@ -20,18 +20,18 @@
 
 int main(int argc, char *argv[])
 {
-	//int pitch = 48;  // Middle C
-	//FrqValue duration = 1;
-	//AmpValue volume = 1;
+	int pitch = 48;  // Middle C
+	int32_t duration = 1;
+	int32_t volume = 1;
 
-	//if (argc > 1)
-		//duration = atof(argv[1]);
-	//if (argc > 2)
-		//pitch = atoi(argv[2]);
-	//if (argc > 3)
-		//volume = atof(argv[3]);
+	if (argc > 1)
+		duration = atof(argv[1]);
+	if (argc > 2)
+		pitch = atoi(argv[2]);
+	if (argc > 3)
+		volume = atof(argv[3]);
 
-	//InitSynthesizer();
+	InitSynthesizer();
 	//FrqValue frequency = synthParams.GetFrequency(pitch);
 
 	//PhsAccum phaseIncr = synthParams.frqRad * frequency;

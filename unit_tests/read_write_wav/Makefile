@@ -22,8 +22,8 @@ chkdirs:
 
 OUTPUT=$(ZZBIN)/testbench$(EXE)
 
-$(OUTPUT): chkdirs testbench.cpp 
-	$(CPP) $(CPPFLAGS) -o $@ testbench.cpp  -lm 
+$(OUTPUT): chkdirs testbench.cpp $(CMNLIB)
+	$(CPP) $(CPPFLAGS) -o $@ testbench.cpp $(CMNLIB) -lm 
 
 all: $(OUTPUT)
 
