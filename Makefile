@@ -16,9 +16,22 @@ include include/zz_synth.mk
 lib_common  := src/common
 libraries   := $(lib_common)
 
-.PHONY: all $(libraries) $(lib_common) TAGS build_msg
+unit_test := unit_tests/read_write_wav
+
+.PHONY: all $(libraries) $(lib_common) TAGS clean $(unit_test)
+
+#-----------------------
+#  TARGETS 
+#-----------------------
+clean:
+	@printf "#\n# [Make:] Root directory, nothing to clean.\n#\n"
 
 $(lib_common):
+	@$(build-msg)
+	$(MAKE) --directory=$@ $(TARGET)
+	$(if $(TARGET), $(MAKE) $(TARGET))
+
+$(unit_test):
 	@$(build-msg)
 	$(MAKE) --directory=$@ $(TARGET)
 	$(if $(TARGET), $(MAKE) $(TARGET))

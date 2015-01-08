@@ -20,9 +20,11 @@ endif
 
 # The directory containing the binaries, include files and
 # libraries
-ZZBIN=$(ZZDIR)/bin
-ZZINC=$(ZZDIR)/include/common
-ZZLIB=$(ZZDIR)/lib
+ZZBIN = $(ZZDIR)/bin
+ZZINC = $(ZZDIR)/include
+ZZLIB = $(ZZDIR)/lib
+
+lib_common := $(ZZLIB)/libcommon.a
 
 # The Common zz_synth library:
 LIBPREFIX=lib
@@ -35,27 +37,28 @@ CMNLIB=$(ZZLIB)/$(LIBPREFIX)Common.a
 EXE=.out
 
 # CPPFLAGS
-ifeq ($(COMPILE_FLAGS),)
-CPPFLAGS= -I $(ZZINC) $(OPTFLAG)
-$(info Standard compile flags...)
-else
-CPPFLAGS= -I $(ZZINC) $(OPTFLAG) -Wall -pedantic
+CPPFLAGS = $(OPTFLAG)
+ifeq "$(COMPILE_FLAGS)" "PEDANTIC"
+CPPFLAGS += -Wall -pedantic
 $(info Pedantic compile flags...)
 endif
 
+INCLUDES = -I $(ZZINC)
+CXX = g++
+
 # The compiler
-CPP=g++
+COMPILE.cpp = $(CXX) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) $(TARGET_ARCH) -c
 
 #-----------------------
 #  IMPLICIT RULES 
 #-----------------------
 %.o: %.cc
 	@echo Compiling $<
-	@$(CPP) -c $(CPPFLAGS) $<
+	$(COMPILE.cpp) $<
 
-$(ODIR)/%.o: %.cc
+$(ZZBIN)/%.o: %.cc
 	@echo Compiling $<
-	@$(CPP) -c $(CPPFLAGS) $< -o $@
+	$(COMPILE.cpp) $< -o $@
 
 #-----------------------
 #  MACROS
@@ -67,6 +70,7 @@ endef
 #-----------------------
 #  SHELL COMMANDS 
 #-----------------------
-RANLIB = ranlib
-AR = ar rv
-RM = rm -rf
+RANLIB  = ranlib
+AR      = ar rv
+RM      = rm -rf
+MKDIR   = mkdir -p

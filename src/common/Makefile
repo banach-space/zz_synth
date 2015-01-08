@@ -21,31 +21,32 @@ include ../../include/zz_synth.mk
 #-----------------------
 source_files = zz_SynthConfig.cc
 
-object_files =$(patsubst %.cc, $(ODIR)/%.o, $(source_files))
+object_files = $(patsubst %.cc, $(ZZBIN)/%.o, $(source_files))
 
 #-----------------------
 #  TARGETS 
 #-----------------------
-all: chkdirs $(lib_common) 
-	@echo $(object_files) 
+#lib_common = $(ZZLIB)/libcommon.a
+
+all: chkdirs $(lib_common)
 
 new: clean all
 
 chkdirs:
-	@test -d $(ODIR) || mkdir $(ODIR)
+	@$(MKDIR) $(ZZBIN)
 	
 clean:
-	-@rm $(OBJS)
-	-@rm $(lib_common)
+	@$(RM) $(object_files)
+	@$(RM) $(lib_common)
 
-$(lib_common): $(objects)
-	@test $@ || rm $@
-	@ar r $@ $(OBJS)
-	@ranlib $@
+$(lib_common): $(object_files)
+	@echo $(object_files)
+	@$(AR) $@ $?
+	@$(RANLIB) $@
 
 #-----------------------
 #  DEPENDENCIES 
 #-----------------------
 zz_SynthConfig.cc: \
-	$(ZZINC)/zz_SynthConfig.h\
-	$(ZZINC)/zz_global_include.h
+	$(ZZINC)/common/zz_SynthConfig.h\
+	$(ZZINC)/common/zz_global_include.h

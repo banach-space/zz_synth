@@ -12,24 +12,39 @@
 # License: GNU GPL v2.0 
 #=============================================================
 ZZDIR = ~/github/zz_synth
-include ../../include/zz_synth.cfg
+include ../../include/zz_synth.mk
 
 .PHONY: all new clean chkdirs
 
-chkdirs:
-	@echo Building from $(ZZDIR)
-	@test -d $(ZZBIN) || mkdir $(ZZBIN)
+#-----------------------
+#  SOURCE/OBJECT FILES 
+#-----------------------
+source_files = testbench.cc
 
-OUTPUT=$(ZZBIN)/testbench$(EXE)
+object_files = $(patsubst %.cc, $(ZZBIN)/%.o, $(source_files))
 
-$(OUTPUT): chkdirs testbench.cpp $(CMNLIB)
-	$(CPP) $(CPPFLAGS) -o $@ testbench.cpp $(CMNLIB) -lm 
+testbench = $(ZZBIN)/testbench$(EXE)
 
-all: $(OUTPUT)
+#-----------------------
+#  TARGETS 
+#-----------------------
+all: $(testbench) $(chkdirs) 
+	@echo dupa
 
 new: clean $(OUTPUT)
 
 clean:
 	-rm $(OUTPUT)
 
-testbench.cpp: $(ZZINC)/zz_global.h $(ZZINC)/zz_WavFile.h
+chkdirs:
+	@$(MKDIR) $(ZZBIN)
+
+$(testbench): $(object_files) $(lib_common)
+	$(LINK.o) $^ -o $@
+
+#-----------------------
+#  DEPENDENCIES 
+#-----------------------
+testbench.cc: \
+	$(ZZINC)/common/zz_global.h\
+	$(ZZINC)/common/zz_WavFile.h

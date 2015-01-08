@@ -15,8 +15,8 @@
 #include <string.h>
 #include <math.h>
 
-#include "zz_global.h"
-#include "zz_WavFile.h"
+#include "common/zz_global.h"
+#include "common/zz_WavFile.h"
 
 int main(int argc, char *argv[])
 {
