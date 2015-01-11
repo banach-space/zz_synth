@@ -1,6 +1,6 @@
 #=============================================================
 # FILE:
-#   inclue/zz_synth.cfg 
+#   inclue/zz_synth.mk 
 #
 # AUTHOR:
 #   zimzum@github 
@@ -24,41 +24,22 @@ ZZBIN = $(ZZDIR)/bin
 ZZINC = $(ZZDIR)/include
 ZZLIB = $(ZZDIR)/lib
 
-lib_common := $(ZZLIB)/libcommon.a
-
-# The Common zz_synth library:
-LIBPREFIX=lib
-CMNLIB=$(ZZLIB)/$(LIBPREFIX)Common.a
+#-----------------------
+#  LIBRARIES 
+#-----------------------
+lib_common  := src/common
+#lib_common  := $(ZZLIB)/libcommon.a
 
 #-----------------------
 #  COMPILE VARIABLES 
 #-----------------------
 # Extension for executables 
-EXE=.out
-
-# CPPFLAGS
-CPPFLAGS = $(OPTFLAG)
-ifeq "$(COMPILE_FLAGS)" "PEDANTIC"
-CPPFLAGS += -Wall -pedantic
-$(info Pedantic compile flags...)
-endif
-
-INCLUDES = -I $(ZZINC)
-CXX = g++
-
-# The compiler
-COMPILE.cpp = $(CXX) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) $(TARGET_ARCH) -c
+EXE =.out
 
 #-----------------------
-#  IMPLICIT RULES 
+#  SOURCE/OBJECT FILES 
 #-----------------------
-%.o: %.cc
-	@echo Compiling $<
-	$(COMPILE.cpp) $<
-
-$(ZZBIN)/%.o: %.cc
-	@echo Compiling $<
-	$(COMPILE.cpp) $< -o $@
+object_files = $(patsubst %.cc, $(ZZBIN)/%.o, $(source_files))
 
 #-----------------------
 #  MACROS
@@ -66,11 +47,3 @@ $(ZZBIN)/%.o: %.cc
 define build-msg
  @printf "#\n# [Make:] Building $@\n#\n"
 endef
-
-#-----------------------
-#  SHELL COMMANDS 
-#-----------------------
-RANLIB  = ranlib
-AR      = ar rv
-RM      = rm -rf
-MKDIR   = mkdir -p

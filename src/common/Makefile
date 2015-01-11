@@ -11,38 +11,32 @@
 #
 # License: GNU GPL v2.0 
 #=============================================================
-ZZDIR = ~/github/zz_synth
+ZZDIR   = ~/github/zz_synth
+library := $(ZZDIR)/lib/libcommon.a
 include ../../include/zz_synth.mk
 
 .PHONY: all new clean chkdirs
 
 #-----------------------
-#  SOURCE/OBJECT FILES 
+#  SOURCE FILES -->  RULES 
 #-----------------------
 source_files = zz_SynthConfig.cc
-
-object_files = $(patsubst %.cc, $(ZZBIN)/%.o, $(source_files))
+include ../../include/zz_synth_rules.mk
+INCLUDES += -lm
 
 #-----------------------
 #  TARGETS 
 #-----------------------
-#lib_common = $(ZZLIB)/libcommon.a
+all: chkdirs $(library)
 
-all: chkdirs $(lib_common)
+clean:
+	@$(RM) $(object_files)
+	@$(RM) $(library)
 
 new: clean all
 
 chkdirs:
-	@$(MKDIR) $(ZZBIN)
-	
-clean:
-	@$(RM) $(object_files)
-	@$(RM) $(lib_common)
-
-$(lib_common): $(object_files)
-	@echo $(object_files)
-	@$(AR) $@ $?
-	@$(RANLIB) $@
+	@$(MKDIR) $(ZZLIB)
 
 #-----------------------
 #  DEPENDENCIES 

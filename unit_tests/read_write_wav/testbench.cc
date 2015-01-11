@@ -10,13 +10,18 @@
 //
 // License: GNU GPL v2.0 
 //=============================================================
+
+//=============================================================
+// Includes
+//=============================================================
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
 
-#include "common/zz_global.h"
+//#include "common/zz_global.h"
 #include "common/zz_WavFile.h"
+#include "common/zz_SynthConfig.h"
 
 int main(int argc, char *argv[])
 {
@@ -31,8 +36,8 @@ int main(int argc, char *argv[])
 	if (argc > 3)
 		volume = atof(argv[3]);
 
-	InitSynthesizer();
-	//FrqValue frequency = synthParams.GetFrequency(pitch);
+	zz_SynthConfig &synthesiser  = zz_SynthConfig::getInstance();
+	double frequency = synthesiser.frequency_table(pitch);
 
 	//PhsAccum phaseIncr = synthParams.frqRad * frequency;
 	//PhsAccum phase = 0;

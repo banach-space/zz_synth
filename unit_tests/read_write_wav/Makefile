@@ -20,31 +20,30 @@ include ../../include/zz_synth.mk
 #  SOURCE/OBJECT FILES 
 #-----------------------
 source_files = testbench.cc
-
-object_files = $(patsubst %.cc, $(ZZBIN)/%.o, $(source_files))
-
+libraries = $(ZZDIR)/lib/libcommon.a
 testbench = $(ZZBIN)/testbench$(EXE)
+
+include ../../include/zz_synth_rules.mk
 
 #-----------------------
 #  TARGETS 
 #-----------------------
 all: $(testbench) $(chkdirs) 
-	@echo dupa
+	@echo pupaPUPA
 
 new: clean $(OUTPUT)
 
 clean:
+	@echo pupa
+	@echo $(testbench)
 	-rm $(OUTPUT)
 
 chkdirs:
 	@$(MKDIR) $(ZZBIN)
 
-$(testbench): $(object_files) $(lib_common)
-	$(LINK.o) $^ -o $@
-
 #-----------------------
 #  DEPENDENCIES 
 #-----------------------
 testbench.cc: \
-	$(ZZINC)/common/zz_global.h\
-	$(ZZINC)/common/zz_WavFile.h
+	$(ZZINC)/common/zz_WavFile.h\
+    $(ZZINC)/common/zz_SynthConfig.h
