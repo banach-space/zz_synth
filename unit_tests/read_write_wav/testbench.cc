@@ -19,7 +19,7 @@
 #include <string.h>
 #include <math.h>
 
-//#include "common/zz_global.h"
+#include "common/zz_global.h"
 #include "common/zz_WavFile.h"
 #include "common/zz_SynthConfig.h"
 

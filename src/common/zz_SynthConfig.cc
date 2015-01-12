@@ -13,7 +13,7 @@
 //=============================================================
 
 #include "common/zz_SynthConfig.h"
-extern double kTwelthRootOfTwo;
+#include "common/zz_global_include.h"
 
 //=============================================================
 // Public methods
