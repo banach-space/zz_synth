@@ -20,10 +20,10 @@
 #-----------------------
 #  COMPILATION VARIABLES 
 #-----------------------
-CPPFLAGS = $(OPTFLAG)
+CPPFLAGS = $(OPTFLAG) -std=c++11
 
 ifeq "$(COMPILE_FLAGS)" "PEDANTIC"
-CPPFLAGS += -Wall -pedantic
+CPPFLAGS += -Wall -pedantic 
 $(info Pedantic compile flags...)
 endif
 

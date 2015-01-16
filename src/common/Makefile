@@ -20,7 +20,7 @@ include ../../include/zz_synth.mk
 #-----------------------
 #  SOURCE FILES -->  RULES 
 #-----------------------
-source_files = zz_SynthConfig.cc zz_global.cc
+source_files = zz_SynthConfig.cc zz_WaveFile.cc zz_global.cc
 include ../../include/zz_synth_rules.mk
 INCLUDES += -lm
 
@@ -46,4 +46,9 @@ zz_SynthConfig.cc: \
 	$(ZZINC)/common/zz_global_include.h
 
 zz_global.cc: \
-	$(ZZINC)/common/zz_global.h\
+	$(ZZINC)/common/zz_global.h
+
+zz_WaveFile.cc: \
+	$(ZZINC)/common/zz_WaveFile.h\
+	$(ZZINC)/common/zz_global_include.h\
+	$(ZZINC)/common/zz_global.h

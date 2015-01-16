@@ -28,6 +28,8 @@ int main(int argc, char *argv[])
 	int pitch = 48;  // Middle C
 	int32_t duration = 1;
 	int32_t volume = 1;
+    uint32_t totalSamples;
+    double frequency, phaseIncr;
 
 	if (argc > 1)
 		duration = atof(argv[1]);
@@ -37,14 +39,14 @@ int main(int argc, char *argv[])
 		volume = atof(argv[3]);
 
 	zz_SynthConfig &synthesiser  = zz_SynthConfig::getInstance();
-	double frequency = synthesiser.frequency_table(pitch);
+	frequency = synthesiser.frequency_table(pitch);
 
-	//PhsAccum phaseIncr = synthParams.frqRad * frequency;
-	//PhsAccum phase = 0;
+	phaseIncr = synthesiser.frqRad * frequency;
+	PhsAccum phase = 0;
 
-	//long totalSamples = (long) ((synthParams.sampleRate * duration) + 0.5);
+	totalSamples = (uint32_t) ((synthParams.sampleRate * duration) + 0.5);
 
-	//WaveFile wf;
+	WaveFile wf;
 	//if (wf.OpenWaveFile("example01.wav", 1))
 	//{
 		//printf("Cannot open wavefile for output\n");

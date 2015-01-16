@@ -1,0 +1,30 @@
+====================================
+  ZZ-SYNTH: THE CODING STYLE
+====================================
+
+This library almost completely adheres to Google's C++ coding style:
+
+http://google-styleguide.googlecode.com/svn/trunk/cppguide.html#Function_Names
+
+The only intentional breach/extension of this coding style is when naming
+variables. The following rules are applied:
+
+- The names of variables and data members are all lowercase, with underscores
+  between words, i.e.
+    char my_favourite_variable;
+    int not_my_favourite_variable;
+- Data members of classes (but not structs) additionally have trailing
+  underscores:
+    char MyClass::my_favourite_variable_;
+    int MyClass::not_my_favourite_variable_;
+- Pointers always start with "p_":
+    char *p_my_favourite_variable;
+    int *p_not_my_favourite_variable;
+- Constants always start with "k_":
+    char k_my_favourite_variable;
+    int k_not_my_favourite_variable;
+- Globals always start with "g_":
+    char g_my_favourite_variable;
+    int g_not_my_favourite_variable;
+- Allow mixing of the above prefixes. This should discourage anyone from
+  defining to many globals

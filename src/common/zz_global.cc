@@ -15,6 +15,11 @@
 
 #include "common/zz_global.h"
 
+//=============================================================
+// Floating poing globals 
+//=============================================================
+const double kTwelthRootOfTwo = 1.0594630943593;
+
 // Pi and 2*Pi
 const double kPi    = 3.14159265358979;
 const double kTwoPi = 6.28318530717958;
@@ -22,5 +27,31 @@ const double kTwoPi = 6.28318530717958;
 // Notes
 const double kNoteC0 = 16.35;
 
-// Useful floating poing numbers 
-const double kTwelthRootOfTwo = 1.0594630943593;
+//=============================================================
+// Fixed point globals 
+//=============================================================
+const int32_t kNumberOfBitsPerByte = 8;
+const int8_t kNumberOfBitsPerSample = 16;
+
+// Contains the letters "RIFF" in ASCII big-endian form
+const int32_t kRiffChunkId = 0x52494646;
+
+// Contains the letters "WAVE" in ASCII big-endian form
+const int32_t  kRiffFormat = 0x57415645;
+
+// Contains the letters "fmt" in ASCII big-endian form
+const int32_t kFmtSubchunkId = 0x52494646;
+
+// Contains the letters "data" in ASCII big-endian form
+const int32_t kDataSubchunkId = 0x52494646;
+
+// 16 for PCM
+const int32_t kPcmSubchunk1Size = 16;
+
+// 1 for pcm
+const int16_t kPcmAudioFormat = 1;
+
+const int16_t kNumberOfChannelsMono = 1;
+const int16_t kNumberOfChannelsStereo = 2;
+
+const int32_t kCdSampleRate = 44100;
