@@ -45,5 +45,5 @@ chkdirs:
 #  DEPENDENCIES 
 #-----------------------
 testbench.cc: \
-	$(ZZINC)/common/zz_WavFile.h\
+	$(ZZINC)/common/zz_WaveFile.h\
     $(ZZINC)/common/zz_SynthConfig.h

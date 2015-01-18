@@ -19,8 +19,9 @@
 #include <string.h>
 #include <math.h>
 
+
 #include "common/zz_global.h"
-#include "common/zz_WavFile.h"
+#include "common/zz_WaveFile.h"
 #include "common/zz_SynthConfig.h"
 
 int main(int argc, char *argv[])
@@ -29,7 +30,8 @@ int main(int argc, char *argv[])
 	int32_t duration = 1;
 	int32_t volume = 1;
     uint32_t totalSamples;
-    double frequency, phaseIncr;
+    double frequency, phase_increment, phase;
+    int8_t number_of_seconds = 5;
 
 	if (argc > 1)
 		duration = atof(argv[1]);
@@ -41,26 +43,20 @@ int main(int argc, char *argv[])
 	zz_SynthConfig &synthesiser  = zz_SynthConfig::getInstance();
 	frequency = synthesiser.frequency_table(pitch);
 
-	phaseIncr = synthesiser.frqRad * frequency;
-	PhsAccum phase = 0;
+    phase_increment = synthesiser.phase_increment_per_sample() * frequency;
+	phase = 0;
 
-	totalSamples = (uint32_t) ((synthParams.sampleRate * duration) + 0.5);
+	totalSamples = (std::size_t) ((synthesiser.sample_rate() * duration) + 0.5);
 
-	WaveFile wf;
-	//if (wf.OpenWaveFile("example01.wav", 1))
-	//{
-		//printf("Cannot open wavefile for output\n");
-		//exit(1);
-	//}
+    WaveFile wf(number_of_seconds);
+    for (std::size_t n = 0; n < totalSamples; n++)
+    {
+        wf.sample_buffer_[n] = volume * sin(phase);
+        if ((phase += phase_increment) >= kTwoPi)
+            phase -= kTwoPi;
+    }
 
-	//for (long n = 0; n < totalSamples; n++)
-	//{
-		//wf.Output1(volume * sinv(phase));
-		//if ((phase += phaseIncr) >= twoPI)
-			//phase -= twoPI;
-	//}
-
-	//wf.CloseWaveFile();
+    wf.SaveBufferToFile(std::string("example01.wav"));
 
 	return 0;
 }

@@ -33,17 +33,25 @@ const double kNoteC0 = 16.35;
 const int32_t kNumberOfBitsPerByte = 8;
 const int8_t kNumberOfBitsPerSample = 16;
 
-// Contains the letters "RIFF" in ASCII big-endian form
-const int32_t kRiffChunkId = 0x52494646;
+// Contains the letters "RIFF" in ASCII in little-endian form,
+// so that on little-endia machine (i.e. x86) it will be saved in
+// big-endian form, as per the format
+const int32_t kRiffChunkId = 0x46464952;
 
-// Contains the letters "WAVE" in ASCII big-endian form
-const int32_t  kRiffFormat = 0x57415645;
+// Contains the letters "WAVE" in ASCII in little-endian form,
+// so that on little-endia machine (i.e. x86) it will be saved in
+// big-endian form, as per the format
+const int32_t  kRiffFormat = 0x45564157;
 
-// Contains the letters "fmt" in ASCII big-endian form
-const int32_t kFmtSubchunkId = 0x52494646;
+// Contains the letters "fmt " in ASCII in little-endian form,
+// so that on little-endia machine (i.e. x86) it will be saved in
+// big-endian form, as per the format
+const int32_t kFmtSubchunkId = 0x20746d66;
 
-// Contains the letters "data" in ASCII big-endian form
-const int32_t kDataSubchunkId = 0x52494646;
+// Contains the letters "data" in ASCII in little-endian form,
+// so that on little-endia machine (i.e. x86) it will be saved in
+// big-endian form, as per the format
+const int32_t kDataSubchunkId = 0x61746164;
 
 // 16 for PCM
 const int32_t kPcmSubchunk1Size = 16;
@@ -55,3 +63,6 @@ const int16_t kNumberOfChannelsMono = 1;
 const int16_t kNumberOfChannelsStereo = 2;
 
 const int32_t kCdSampleRate = 44100;
+
+extern const int8_t kSizeTwoBytes = 2;
+extern const int8_t kSizeFourBytes = 4;

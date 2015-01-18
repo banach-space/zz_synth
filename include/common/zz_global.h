@@ -59,4 +59,7 @@ extern const int16_t kNumberOfChannelsStereo;
 
 extern const int32_t kCdSampleRate;
 
+extern const int8_t kSizeTwoBytes;
+extern const int8_t kSizeFourBytes;
+
 #endif /* _GLOBAL_H_ */

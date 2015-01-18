@@ -21,30 +21,25 @@
 // None
 
 //=============================================================
-//Public defines 
-//=============================================================
-// None
-
-//=============================================================
 //Private data structures
 //=============================================================
 // None
 
-/*=============================================================
-  Public data structures
-  =============================================================*/
+//=============================================================
+//  Public data structures
+//=============================================================
 class WaveFile
 {
 public:
     explicit WaveFile(int8_t number_of_seconds);
-    ~WaveFile();
+    ~WaveFile() { std::cout << "~WaveFile()" << std::endl;}
 
     void SaveBufferToFile(const std::string& file_name);
+    std::unique_ptr<int16_t[]> sample_buffer_;
 private:
     explicit WaveFile(const WaveFile& rhs);
     WaveFile& operator=(const WaveFile &rhs);
     
-    int16_t *p_sample_buffer_;
     int8_t signal_length_in_seconds;
 
     //---------------------------------------------------------
@@ -84,13 +79,14 @@ private:
     //              +-------------------+   ---
     //
     //---------------------------------------------------------
+
     int32_t chunk_id_;
     // The size of the rest of the chunk following this number. This is
     // the size of the entire WAVE file in bytes minus 8 bytes for the
     // two fields not included in this count: chunk_id_ and chunk_size_.
     int32_t chunk_size_;
     int32_t format_;
-    int32_t subchunk_1_id;
+    int32_t subchunk_1_id_;
     int32_t subchunk_1_size_;
     int16_t audio_format_;
     int16_t num_channels_;

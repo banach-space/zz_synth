@@ -21,15 +21,6 @@
 class zz_SynthConfig
 {
 public:
-    // Sampling rate
-    float sampleRate;
-    // Maximum frequency (Nyquist limit)
-    float nyquist;
-    // Sample rate as integer
-    int32_t isampleRate;
-    // Pre-calculated multipler for frequency to radians
-    // (twoPI/sampleRate)
-    double frqRad;
     // Pre-calculated multipler for frequency to table index
     // (tableLength/sampleRate)
     double frqTI;
@@ -84,6 +75,15 @@ public:
     //--------------------------------------------------------------
     double frequency_table(int pitch);
 
+    //--------------------------------------------------------------
+    // ACCESSORS
+    //--------------------------------------------------------------
+    float sample_rate() const {return sample_rate_;}
+    double phase_increment_per_sample() const
+    {
+        return phase_increment_per_sample_;
+    }
+
 private:
     // Block direct access to constructors - this class is a singleton
     zz_SynthConfig() {};
@@ -93,6 +93,12 @@ private:
     // The frequencie table based on equal-tempered scale with
     // middle C at index 48 (i.e. frequencies[48]). 
     double frequency_table_[128];
+    // Sampling rate
+    float sample_rate_;
+    // Maximum representable frequency according to Nyquist
+    float nyquist_limit_;
+    // Phase increment per sample is simply 2*Pi / sample_rate_
+    double phase_increment_per_sample_;
 
 };
 

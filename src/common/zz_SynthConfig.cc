@@ -21,14 +21,14 @@
 void zz_SynthConfig::Init(int32_t sr, int32_t tl)
 {
     // !!! TODO Commenting!!!
-    sampleRate = (float) sr;
-    nyquist = sampleRate * 0.5;
-    isampleRate = sr;
-    itableLength = tl;
-    ftableLength = (double) tl;
-    maxIncrWT = ftableLength * 0.5;
+    sample_rate_    = (float) sr;
+    nyquist_limit_  = sample_rate_ * 0.5;
+    itableLength    = tl;
+    ftableLength    = (double) tl;
+    maxIncrWT       = ftableLength * 0.5;
+    phase_increment_per_sample_ = kTwoPi / sample_rate_;
     //frqRad = twoPI / (double) sampleRate;
-    frqTI = ftableLength / (double) sampleRate;
+    //frqTI = ftableLength / (double) sampleRate;
     //radTI = ftableLength / twoPI;
 }
 
@@ -41,7 +41,7 @@ zz_SynthConfig& zz_SynthConfig::getInstance()
     // Initialise frequency_table_.
     double frequency = kNoteC0;
 
-    for (int i = 0; i < 128; i++)
+    for (std::size_t i = 0; i < 128; i++)
     {
         instance.frequency_table_[i] = frequency;
         frequency *= kTwelthRootOfTwo;
