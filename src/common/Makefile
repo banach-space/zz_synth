@@ -20,7 +20,7 @@ include ../../include/zz_synth.mk
 #-----------------------
 #  SOURCE FILES -->  RULES 
 #-----------------------
-source_files = zz_SynthConfig.cc zz_WaveFile.cc zz_global.cc
+source_files = synth_config.cc wave_file.cc zz_global.cc
 include ../../include/zz_synth_rules.mk
 INCLUDES += -lm
 
@@ -41,14 +41,14 @@ chkdirs:
 #-----------------------
 #  DEPENDENCIES 
 #-----------------------
-zz_SynthConfig.cc: \
-	$(ZZINC)/common/zz_SynthConfig.h\
+synth_config.cc: \
+	$(ZZINC)/common/synth_config.h\
 	$(ZZINC)/common/zz_global_include.h
 
 zz_global.cc: \
 	$(ZZINC)/common/zz_global.h
 
-zz_WaveFile.cc: \
-	$(ZZINC)/common/zz_WaveFile.h\
+wave_file.cc: \
+	$(ZZINC)/common/wave_file.h\
 	$(ZZINC)/common/zz_global_include.h\
 	$(ZZINC)/common/zz_global.h

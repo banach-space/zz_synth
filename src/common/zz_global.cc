@@ -30,8 +30,18 @@ const double kNoteC0 = 16.35;
 //=============================================================
 // Fixed point globals 
 //=============================================================
+//-------------------------------------------------------------
+// Wave File Related
+//-------------------------------------------------------------
 const int32_t kNumberOfBitsPerByte = 8;
 const int8_t kNumberOfBitsPerSample = 16;
+
+// The size of the header in the Canonical Wave File format. See
+// WaveFile.h for description of this format. This is basically
+// the size of the whole file minus:
+//      - 8 bytes not included in this count (ChunkId and ChunkSize)
+//      - size of data (sound samples) in bytes.
+const int8_t kWaveFileHeaderSize = 36;
 
 // Contains the letters "RIFF" in ASCII in little-endian form,
 // so that on little-endia machine (i.e. x86) it will be saved in
@@ -62,6 +72,9 @@ const int16_t kPcmAudioFormat = 1;
 const int16_t kNumberOfChannelsMono = 1;
 const int16_t kNumberOfChannelsStereo = 2;
 
+//-------------------------------------------------------------
+// General 
+//-------------------------------------------------------------
 const int32_t kCdSampleRate = 44100;
 
 extern const int8_t kSizeTwoBytes = 2;

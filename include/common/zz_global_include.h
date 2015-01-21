@@ -29,8 +29,8 @@
 // zz_synth library
 //=============================================================
 #include "zz_global.h"
-#include "zz_SynthConfig.h"
-#include "zz_WaveFile.h"
+#include "synth_config.h"
+#include "wave_file.h"
 
 
 #endif /* _GLOBAL_INCLUDE_H_ */

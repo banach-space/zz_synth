@@ -45,5 +45,10 @@ object_files = $(patsubst %.cc, $(ZZBIN)/%.o, $(source_files))
 #  MACROS
 #-----------------------
 define build-msg
- @printf "#\n# [Make:] Building $@\n#\n"
+ @printf "=====================================================\n"
+ @printf "[build-msg]"
+ @tput bold
+ @printf " Building $@"
+ @tput sgr0 
+ @printf "\n=====================================================\n"
 endef

@@ -12,21 +12,18 @@
 // License: GNU GPL v2.0 
 //=============================================================
 
-#include "common/zz_SynthConfig.h"
+#include "common/synth_config.h"
 #include "common/zz_global_include.h"
 
 //=============================================================
 // Public methods
 //=============================================================
-void zz_SynthConfig::Init(int32_t sr, int32_t tl)
+void zz_SynthConfig::Init(int32_t sampling_rate)
 {
     // !!! TODO Commenting!!!
-    sample_rate_    = (float) sr;
-    nyquist_limit_  = sample_rate_ * 0.5;
-    itableLength    = tl;
-    ftableLength    = (double) tl;
-    maxIncrWT       = ftableLength * 0.5;
-    phase_increment_per_sample_ = kTwoPi / sample_rate_;
+    sampling_rate_  = sampling_rate;
+    nyquist_limit_  = sampling_rate_ >> 1;
+    phase_increment_per_sample_ = kTwoPi / sampling_rate_;
     //frqRad = twoPI / (double) sampleRate;
     //frqTI = ftableLength / (double) sampleRate;
     //radTI = ftableLength / twoPI;

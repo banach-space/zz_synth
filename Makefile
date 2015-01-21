@@ -21,6 +21,7 @@ unit_test_rww := unit_tests/read_write_wav
 
 .PHONY:				\
 	all				\
+	new				\
 	$(libraries)	\
 	$(lib_common)	\
 	TAGS			\
@@ -30,8 +31,9 @@ unit_test_rww := unit_tests/read_write_wav
 #-----------------------
 #  TARGETS 
 #-----------------------
-#clean:
-	#@printf "#\n# [Make:] Root directory, nothing to clean.\n#\n"
+clean new:
+	@$(build-msg)
+	#@printf "#\n# [Make:] Root directory, nothing to clean\\ build.\n#\n"
 
 $(lib_common):
 	@$(build-msg)

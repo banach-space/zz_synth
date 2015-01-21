@@ -29,14 +29,11 @@ include ../../include/zz_synth_rules.mk
 #  TARGETS 
 #-----------------------
 all: $(testbench) $(chkdirs) 
-	@echo pupaPUPA
 
-new: clean $(OUTPUT)
+new: clean all
 
 clean:
-	@echo pupa
-	@echo $(testbench)
-	-rm $(OUTPUT)
+	-rm $(testbench) $(object_files)
 
 chkdirs:
 	@$(MKDIR) $(ZZBIN)
@@ -45,5 +42,5 @@ chkdirs:
 #  DEPENDENCIES 
 #-----------------------
 testbench.cc: \
-	$(ZZINC)/common/zz_WaveFile.h\
-    $(ZZINC)/common/zz_SynthConfig.h
+	$(ZZINC)/common/wave_file.h\
+    $(ZZINC)/common/synth_config.h

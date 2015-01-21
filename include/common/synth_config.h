@@ -50,7 +50,7 @@ public:
     //--------------------------------------------------------------
     static zz_SynthConfig& getInstance();
 
-    void Init(int32_t sr = 44100, int32_t tl = 16384);
+    void Init(int32_t sampling_rate = 44100);
 
     //-------------------------------------------------------------
     //  NAME:
@@ -78,7 +78,7 @@ public:
     //--------------------------------------------------------------
     // ACCESSORS
     //--------------------------------------------------------------
-    float sample_rate() const {return sample_rate_;}
+    int32_t sampling_rate() const {return sampling_rate_;}
     double phase_increment_per_sample() const
     {
         return phase_increment_per_sample_;
@@ -93,8 +93,7 @@ private:
     // The frequencie table based on equal-tempered scale with
     // middle C at index 48 (i.e. frequencies[48]). 
     double frequency_table_[128];
-    // Sampling rate
-    float sample_rate_;
+    int32_t sampling_rate_;
     // Maximum representable frequency according to Nyquist
     float nyquist_limit_;
     // Phase increment per sample is simply 2*Pi / sample_rate_

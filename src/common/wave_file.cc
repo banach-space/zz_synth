@@ -11,7 +11,7 @@
 // License: GNU GPL v2.0 
 //=============================================================
 
-#include "common/zz_WaveFile.h"
+#include "common/wave_file.h"
 
 //=============================================================
 // Public methods
@@ -93,8 +93,7 @@ WaveFile::WaveFile(int8_t number_of_seconds)
     internal_buffer_size = number_of_seconds * sample_rate_;
     subchunk_2_size_ = internal_buffer_size * num_channels_ 
         * bits_per_sample_ / kNumberOfBitsPerByte;
-    std::cout << subchunk_2_size_ << std::endl;
-    chunk_size_ = 36 + subchunk_2_size_;
+    chunk_size_ = kWaveFileHeaderSize + subchunk_2_size_;
     byte_rate_  = sample_rate_ * num_channels_ * bits_per_sample_
         / kNumberOfBitsPerByte;
     block_align_= num_channels_ * bits_per_sample_ / kNumberOfBitsPerByte;
