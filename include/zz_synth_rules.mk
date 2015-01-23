@@ -31,6 +31,10 @@ INCLUDES    = -I $(ZZINC)
 CXX         = g++
 COMPILE.cpp = $(CXX) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) $(TARGET_ARCH) -c
 
+# The following are extra include flags needed by the Google Unit Testing
+# framework.
+INCLUDES_UT = -lgtest -lgtest_main -lpthread
+
 #-----------------------
 #  SHELL COMMANDS 
 #-----------------------
@@ -48,7 +52,6 @@ MKDIR   = mkdir -p
 
 $(ZZBIN)/%.o: %.cc
 	@echo Compiling $<
-	@echo $(INCLUDES) 
 	$(COMPILE.cpp) $< -o $@
 
 $(library): $(object_files)
@@ -58,4 +61,4 @@ $(library): $(object_files)
 	@$(RANLIB) $@
 
 $(testbench): $(object_files) $(libraries)
-	$(LINK.cc) $^ -o $@
+	$(LINK.cc) $(INCLUDES_UT) $^ -o $@
