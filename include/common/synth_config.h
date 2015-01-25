@@ -96,7 +96,8 @@ private:
     int32_t sampling_rate_;
     // Maximum representable frequency according to Nyquist
     float nyquist_limit_;
-    // Phase increment per sample is simply 2*Pi / sample_rate_
+    // Phase increment per sample for signals at 1 Hz. Mathematically this
+    // is simply 2*Pi / sample_rate_.
     double phase_increment_per_sample_;
 
 };

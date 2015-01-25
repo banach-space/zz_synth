@@ -25,14 +25,16 @@
 
 #include <gtest/gtest.h>
 
+using namespace::std;
+
 //=============================================================
 // Tests
 //=============================================================
-TEST(ReadWriteWaveFileTest, HandleDifferentPitches )
+TEST(ReadWriteWaveFileTest, HandleDifferentPitches)
 {
     int pitch = 48;  // Middle C
     int32_t volume = 1 << 15;
-    uint32_t total_number_of_samples;
+    size_t total_number_of_samples;
     double frequency, phase_increment, phase;
     int8_t number_of_seconds = 5;
     const std::string file_name("example01.wav");
@@ -41,20 +43,19 @@ TEST(ReadWriteWaveFileTest, HandleDifferentPitches )
     zz_SynthConfig &synthesiser  = zz_SynthConfig::getInstance();
     synthesiser.Init();	
 
-    // 0. General test setting
+    // 2. Physical properties of the signal 
     frequency = synthesiser.frequency_table(pitch);
+    phase = 0;
 
     phase_increment = synthesiser.phase_increment_per_sample() * frequency;
-    phase = 0;
     total_number_of_samples = 
-        (std::size_t) ((synthesiser.sampling_rate() * number_of_seconds) + 0.5);
+        (size_t) ((synthesiser.sampling_rate() * number_of_seconds) + 0.5);
 
-
-    // 2. The output buffer and the output file
+    // 2. Generate the desired signal and save it to the output file
     WaveFileOut wf_out(number_of_seconds);
 
-    std::vector<int16_t> samples_out(total_number_of_samples);
-    for (std::size_t n = 0; n < total_number_of_samples; n++)
+    vector<int16_t> samples_out(total_number_of_samples);
+    for (size_t n = 0; n < total_number_of_samples; n++)
     {
         samples_out[n] = volume * sin(phase);
 
@@ -64,8 +65,8 @@ TEST(ReadWriteWaveFileTest, HandleDifferentPitches )
 
     wf_out.SaveBufferToFile(file_name, samples_out);
     
-    // 3. The input buffer and the input file
-    std::vector<int16_t> samples_in;
+    // 3. Read the file saved in Step 2
+    vector<int16_t> samples_in;
     WaveFileIn wf_in;
     samples_in = wf_in.ReadBufferFromFile(file_name);
 
