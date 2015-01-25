@@ -25,7 +25,7 @@ class WaveFile
 public:
     // Constructors + destructors
     explicit WaveFile();
-    ~WaveFile() = default;
+    virtual ~WaveFile() = 0;
 
     // Accessors
     int32_t chunk_id();
@@ -42,6 +42,7 @@ public:
     int32_t subchunk_2_id();
     int32_t subchunk_2_size();
 
+protected:
     // 4. Mutators
     void set_chunk_id(int32_t value);
     void set_chunk_size(int32_t value);
@@ -126,7 +127,7 @@ private:
 class WaveFileOut: public WaveFile
 {
 public:
-    explicit WaveFileOut(size_t number_of_seconds);
+    explicit WaveFileOut(std::size_t number_of_seconds);
     ~WaveFileOut() = default;
 
     void SaveBufferToFile(
@@ -138,10 +139,10 @@ public:
 class WaveFileIn: public WaveFile
 {
 public:
-    explicit WaveFileIn();
+    explicit WaveFileIn() {};
     ~WaveFileIn() = default;
 
-    std::vector<int16_t>& ReadBufferFromFile(const std::string& file_name);
+    std::vector<int16_t> ReadBufferFromFile(const std::string& file_name);
 };
 
 #endif /* #define _WAVEFILE_H_ */

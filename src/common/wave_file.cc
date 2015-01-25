@@ -42,6 +42,8 @@ WaveFile::WaveFile()
     block_align_= num_channels_ * bits_per_sample_ / kNumberOfBitsPerByte;
 }
 
+WaveFile::~WaveFile() {}
+
 // 3. Accessors
 int32_t WaveFile::chunk_id() {return chunk_id_;}
 int32_t WaveFile::chunk_size() {return chunk_size_;}
@@ -183,9 +185,19 @@ void WaveFileOut::SaveBufferToFile(
 }
 
 //-------------------------------------------------------------
-// Class: WaveFileOut
+// Class: WaveFileIn
 //-------------------------------------------------------------
-std::vector<int16_t>& 
+//WaveFileIn::WaveFileIn(const std::string& file_name)
+//{
+//std::size_t temp_size;
+//
+//temp_size = WaveFile::sample_rate() * WaveFile::num_channels()
+//* WaveFile::bits_per_sample() / kNumberOfBitsPerByte;
+//
+//WaveFile::set_subchunk_2_size(temp_size * number_of_seconds);
+//}
+
+std::vector<int16_t> 
 WaveFileIn::ReadBufferFromFile(const std::string& file_name)
 {
     int32_t temp32;
@@ -271,18 +283,20 @@ WaveFileIn::ReadBufferFromFile(const std::string& file_name)
         number_of_samples = WaveFile::subchunk_2_size() 
             / WaveFile::num_channels() / WaveFile::bits_per_sample() 
             * kNumberOfBitsPerByte;
-        std::cout << number_of_samples << std::endl;
         std::vector<int16_t> samples(number_of_samples);
 
-        input_file.read(
-                reinterpret_cast<char*>(&samples[0]),  
-                number_of_samples);
+        for (std::size_t idx = 0; idx < number_of_samples; idx++)
+        {
+            input_file.read(reinterpret_cast<char*>(&temp16), sizeof(temp16));            samples.push_back(temp16);
+        }
         input_file.close();
+        return samples;
     }
     catch (std::ifstream::failure e)
     {
         std::cout << "Exception opening/reading/closing file\n";
     }
+
 
 }
 
