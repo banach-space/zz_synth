@@ -16,12 +16,11 @@
 using namespace std;
 
 //=============================================================
-// Public methods
+// Class: WaveFile
 //=============================================================
 //-------------------------------------------------------------
-// Class: WaveFile
+// Constructors + destructors
 //-------------------------------------------------------------
-// 1. Constructors + destructors
 WaveFile::WaveFile()
 {
     // 1. Member variables that can be initialised independently
@@ -46,7 +45,9 @@ WaveFile::WaveFile()
 
 WaveFile::~WaveFile() {}
 
-// 3. Accessors
+//-------------------------------------------------------------
+// Accessors
+//-------------------------------------------------------------
 int32_t WaveFile::chunk_id() {return chunk_id_;}
 int32_t WaveFile::chunk_size() {return chunk_size_;}
 int32_t WaveFile::format()    {return format_;}
@@ -61,7 +62,9 @@ int16_t WaveFile::bits_per_sample() {return bits_per_sample_;}
 int32_t WaveFile::subchunk_2_id() {return subchunk_2_id_;}
 int32_t WaveFile::subchunk_2_size() {return subchunk_2_size_;}
 
-// 4. Mutators
+//-------------------------------------------------------------
+// Mutators
+//-------------------------------------------------------------
 void WaveFile::set_chunk_id(int32_t value) {chunk_id_ = value;}
 void WaveFile::set_chunk_size(int32_t value) {chunk_size_ = value;}
 void WaveFile::set_format(int32_t value) {format_ = value;}
@@ -76,9 +79,9 @@ void WaveFile::set_bits_per_sample(int16_t value) {bits_per_sample_ = value;}
 void WaveFile::set_subchunk_2_id(int32_t value) {subchunk_2_id_ = value;}
 void WaveFile::set_subchunk_2_size(int32_t value) {subchunk_2_size_ = value;}
 
-//-------------------------------------------------------------
+//=============================================================
 // Class: WaveFileOut
-//-------------------------------------------------------------
+//=============================================================
 WaveFileOut::WaveFileOut(std::size_t number_of_seconds)
 {
     std::size_t temp_size;
@@ -96,16 +99,19 @@ void WaveFileOut::SaveBufferToFile(
     int32_t temp32;
     int16_t temp16;
 
-    std::ofstream output_file;
-    output_file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-
-    // The size of the 2nd chunk is the number of bytes for all samples
-    WaveFile::set_subchunk_2_size(samples.size() * sizeof(int16_t));
+    // Make sure that there's enough input samples.
+    if (samples.size() * sizeof(int16_t) < subchunk_2_size())
+    {
+        cout << "Not enough input samples\n" << endl;
+        return;
+    }
 
     try
     {
-        // Open the file
-        output_file.open(file_name, std::ifstream::binary);
+        // Create and open the output file
+        std::ofstream output_file;
+        output_file.exceptions(ifstream::failbit | ifstream::badbit);
+        output_file.open(file_name, ifstream::binary);
 
         // Write in binary format to the file so that correct Wave file is
         // constructed
@@ -178,7 +184,9 @@ void WaveFileOut::SaveBufferToFile(
                 reinterpret_cast<const char*>(&samples[0]),  
                 WaveFile::subchunk_2_size() );
 
+        // Tidy up and return
         output_file.close();
+        return;
     }
     catch (std::ifstream::failure e)
     {
@@ -186,19 +194,9 @@ void WaveFileOut::SaveBufferToFile(
     }
 }
 
-//-------------------------------------------------------------
+//=============================================================
 // Class: WaveFileIn
-//-------------------------------------------------------------
-//WaveFileIn::WaveFileIn(const std::string& file_name)
-//{
-//std::size_t temp_size;
-//
-//temp_size = WaveFile::sample_rate() * WaveFile::num_channels()
-//* WaveFile::bits_per_sample() / kNumberOfBitsPerByte;
-//
-//WaveFile::set_subchunk_2_size(temp_size * number_of_seconds);
-//}
-
+//=============================================================
 std::vector<int16_t> 
 WaveFileIn::ReadBufferFromFile(const std::string& file_name)
 {
@@ -206,12 +204,11 @@ WaveFileIn::ReadBufferFromFile(const std::string& file_name)
     int16_t temp16;
     std::size_t number_of_samples;
 
-    std::ifstream input_file;
-    input_file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
-
     try
     {
-        // Open the file
+        // Create and open the input file
+        std::ifstream input_file;
+        input_file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
         input_file.open(file_name, std::ifstream::binary);
 
         // Read from the binary file assume it's in the cannoncial Wave
@@ -281,16 +278,19 @@ WaveFileIn::ReadBufferFromFile(const std::string& file_name)
                 kSizeFourBytes);
         WaveFile::set_subchunk_2_size(temp32);
 
-        // There's now enough data to calculate the number of data samples
+        // There's now enough data to calculate the number of samples
         number_of_samples = WaveFile::subchunk_2_size()* kNumberOfBitsPerByte
             / WaveFile::num_channels() / WaveFile::bits_per_sample();
-        std::vector<int16_t> samples(number_of_samples);
+        vector<int16_t> samples(number_of_samples);
 
-        for (std::size_t idx = 0; idx < number_of_samples; idx++)
+        // Read the samples into the "samples" vector
+        for (size_t idx = 0; idx < number_of_samples; idx++)
         {
             input_file.read(reinterpret_cast<char*>(&temp16), sizeof(temp16));
             samples[idx] = temp16;
         }
+
+        // Tidy up and return
         input_file.close();
         return samples;
     }

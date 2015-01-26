@@ -26,54 +26,49 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
+//=============================================================
+// Namespaces 
+//=============================================================
 using namespace::std;
 
 //=============================================================
-// Tests
+// Helper functions (generate samples) 
 //=============================================================
-TEST(ReadWriteWaveFileTest, HandleDifferentPitches)
+vector<int16_t> generate_samples(
+        int32_t volume, 
+        size_t pitch,
+        size_t number_of_seconds)
 {
-    int pitch[] = {0, 48, 127};  // Middle C
-    int32_t volume = 1 << 15;
-    size_t total_number_of_samples;
+
     double frequency, phase_increment, phase;
-    int8_t number_of_seconds = 1;
-    const std::string file_name("example01.wav");
+    size_t number_of_samples;
 
     // 1. Initialise the synthesiser
     zz_SynthConfig &synthesiser  = zz_SynthConfig::getInstance();
     synthesiser.Init();	
 
-    for (size_t pitch_id = 0; pitch_id < 3; pitch_id++)
+    // 2. Physical properties of the signal 
+    frequency = synthesiser.frequency_table(pitch);
+    phase = 0;
+
+    phase_increment = synthesiser.phase_increment_per_sample() * frequency;
+    number_of_samples = 
+        (size_t) (synthesiser.sampling_rate() * number_of_seconds);
+
+    vector<int16_t> generated_samples(number_of_samples);
+    for (size_t n = 0; n < number_of_samples; n++)
     {
-        // 2. Physical properties of the signal 
-        frequency = synthesiser.frequency_table(pitch[pitch_id]);
-        phase = 0;
+        generated_samples[n] = volume * sin(phase);
 
-        phase_increment = synthesiser.phase_increment_per_sample() * frequency;
-        total_number_of_samples = 
-            (size_t) (synthesiser.sampling_rate() * number_of_seconds);
+        if ((phase += phase_increment) >= kTwoPi)
+            phase -= kTwoPi;
+    }
 
-        // 2. Generate the desired signal and save it to the output file
-        WaveFileOut wf_out(number_of_seconds);
+    return generated_samples;
+}
 
-        vector<int16_t> samples_out(total_number_of_samples);
-        for (size_t n = 0; n < total_number_of_samples; n++)
-        {
-            samples_out[n] = volume * sin(phase);
-
-            if ((phase += phase_increment) >= kTwoPi)
-                phase -= kTwoPi;
-        }
-
-        wf_out.SaveBufferToFile(file_name, samples_out);
-
-        // 3. Read the file saved in Step 2
-        vector<int16_t> samples_in;
-        WaveFileIn wf_in;
-        samples_in = wf_in.ReadBufferFromFile(file_name);
-
-        // 4. The input and output files ought to be indentical. Verify that.
+void compare_wave_headers(WaveFileOut &wf_out, WaveFileIn &wf_in)
+{
         EXPECT_EQ(wf_out.chunk_id(), wf_in.chunk_id());
         EXPECT_EQ(wf_out.chunk_size(), wf_in.chunk_size());
         EXPECT_EQ(wf_out.format(), wf_in.format());
@@ -88,8 +83,41 @@ TEST(ReadWriteWaveFileTest, HandleDifferentPitches)
         EXPECT_EQ(wf_out.subchunk_2_id(), wf_in.subchunk_2_id());
         EXPECT_EQ(wf_out.subchunk_2_size(), wf_in.subchunk_2_size());
         EXPECT_EQ(wf_out.subchunk_2_size(), wf_in.subchunk_2_size());
-        EXPECT_THAT(samples_in, ::testing::ContainerEq(samples_out));
 
+}
+
+//=============================================================
+// Tests
+//=============================================================
+TEST(ReadWriteWaveFileTest, HandleDifferentPitches)
+{
+    int pitch[] = {0, 48, 48}; 
+    int32_t volume = 1 << 15;
+    int8_t number_of_seconds = 5;
+    const string file_name("test_pitch.wav");
+
+
+    for (size_t pitch_id = 0; pitch_id < 3; pitch_id++)
+    {
+        // 1. Generate the desired signal and save it to the output file
+        WaveFileOut wf_out(number_of_seconds);
+
+        // 2. Save to a WaveFileOut file
+        vector<int16_t> samples_out = generate_samples(
+                volume,
+                pitch[pitch_id],
+                number_of_seconds);
+
+        wf_out.SaveBufferToFile(file_name, samples_out);
+
+        // 3. Read the file saved in Step 2 into a WaveFileIn file
+        vector<int16_t> samples_in;
+        WaveFileIn wf_in;
+        samples_in = wf_in.ReadBufferFromFile(file_name);
+
+        // 4. Validate by comparing input and output
+        compare_wave_headers(wf_out, wf_in);
+        EXPECT_THAT(samples_in, ::testing::ContainerEq(samples_out));
     }
 }
 
