@@ -13,6 +13,8 @@
 
 #include "common/wave_file.h"
 
+using namespace std;
+
 //=============================================================
 // Public methods
 //=============================================================
@@ -174,7 +176,7 @@ void WaveFileOut::SaveBufferToFile(
 
         output_file.write(
                 reinterpret_cast<const char*>(&samples[0]),  
-                temp32 );
+                WaveFile::subchunk_2_size() );
 
         output_file.close();
     }
@@ -280,14 +282,14 @@ WaveFileIn::ReadBufferFromFile(const std::string& file_name)
         WaveFile::set_subchunk_2_size(temp32);
 
         // There's now enough data to calculate the number of data samples
-        number_of_samples = WaveFile::subchunk_2_size() 
-            / WaveFile::num_channels() / WaveFile::bits_per_sample() 
-            * kNumberOfBitsPerByte;
+        number_of_samples = WaveFile::subchunk_2_size()* kNumberOfBitsPerByte
+            / WaveFile::num_channels() / WaveFile::bits_per_sample();
         std::vector<int16_t> samples(number_of_samples);
 
         for (std::size_t idx = 0; idx < number_of_samples; idx++)
         {
-            input_file.read(reinterpret_cast<char*>(&temp16), sizeof(temp16));            samples.push_back(temp16);
+            input_file.read(reinterpret_cast<char*>(&temp16), sizeof(temp16));
+            samples[idx] = temp16;
         }
         input_file.close();
         return samples;

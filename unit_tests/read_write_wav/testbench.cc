@@ -24,6 +24,7 @@
 #include <vector>
 
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
 using namespace::std;
 
@@ -36,7 +37,7 @@ TEST(ReadWriteWaveFileTest, HandleDifferentPitches)
     int32_t volume = 1 << 15;
     size_t total_number_of_samples;
     double frequency, phase_increment, phase;
-    int8_t number_of_seconds = 5;
+    int8_t number_of_seconds = 1;
     const std::string file_name("example01.wav");
 
     // 1. Initialise the synthesiser
@@ -51,7 +52,7 @@ TEST(ReadWriteWaveFileTest, HandleDifferentPitches)
 
         phase_increment = synthesiser.phase_increment_per_sample() * frequency;
         total_number_of_samples = 
-            (size_t) ((synthesiser.sampling_rate() * number_of_seconds) + 0.5);
+            (size_t) (synthesiser.sampling_rate() * number_of_seconds);
 
         // 2. Generate the desired signal and save it to the output file
         WaveFileOut wf_out(number_of_seconds);
@@ -87,7 +88,7 @@ TEST(ReadWriteWaveFileTest, HandleDifferentPitches)
         EXPECT_EQ(wf_out.subchunk_2_id(), wf_in.subchunk_2_id());
         EXPECT_EQ(wf_out.subchunk_2_size(), wf_in.subchunk_2_size());
         EXPECT_EQ(wf_out.subchunk_2_size(), wf_in.subchunk_2_size());
-        //EXPECT_THAT(samples_in, ::testing::ContainerEq(samples_out));
+        EXPECT_THAT(samples_in, ::testing::ContainerEq(samples_out));
 
     }
 }
