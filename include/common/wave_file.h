@@ -16,6 +16,7 @@
 
 #include "zz_global_include.h" 
 #include <vector>
+#include <exception>
 
 //=============================================================
 // CLASS: WaveFile
@@ -24,7 +25,7 @@ class WaveFile
 {
 public:
     //--------------------------------------------------------------
-    // 1. Constructors/Destructors/Assignment Operators
+    //  -= CONSTRUCTORS/DESTRUCTORS/ASSIGNMENT OPERATORS =-
     //--------------------------------------------------------------
     // Make this class pure abstract and block copy constructor, assignment
     // operator and the corresponding move operators.
@@ -36,7 +37,7 @@ public:
     WaveFile& operator=(WaveFile&& rhs) = delete;
 
     //--------------------------------------------------------------
-    // 2. Accessors
+    // -= ACCESSORS =-
     //--------------------------------------------------------------
     int32_t chunk_id();
     int32_t chunk_size();
@@ -52,13 +53,9 @@ public:
     int32_t subchunk_2_id();
     int32_t subchunk_2_size();
 
-    //--------------------------------------------------------------
-    // 3. Interface
-    //--------------------------------------------------------------
-
 protected:
     //--------------------------------------------------------------
-    // 4. Mutators
+    //  -= MUTATORS =-
     //--------------------------------------------------------------
     void set_chunk_id(int32_t value);
     void set_chunk_size(int32_t value);
@@ -140,13 +137,13 @@ class WaveFileOut: public WaveFile
 {
 public:
     //--------------------------------------------------------------
-    // 1. Constructors/Destructors/Assignment Operators
+    //  -= CONSTRUCTORS/DESTRUCTORS/ASSIGNMENT OPERATORS =-
     //--------------------------------------------------------------
     explicit WaveFileOut(size_t number_of_seconds);
     ~WaveFileOut() = default;
 
     //--------------------------------------------------------------
-    // 2. Interface
+    //  -= INTERFACE =-
     //--------------------------------------------------------------
     //--------------------------------------------------------------
     //  NAME:
@@ -173,13 +170,13 @@ class WaveFileIn: public WaveFile
 {
 public:
     //--------------------------------------------------------------
-    // 1. Constructors/Destructors/Assignment Operators
+    //  -= CONSTRUCTORS/DESTRUCTORS/ASSIGNMENT OPERATORS =-
     //--------------------------------------------------------------
     explicit WaveFileIn() {};
     ~WaveFileIn() = default;
 
     //--------------------------------------------------------------
-    //  -= Interface =-
+    //  -= INTERFACE =-
     //--------------------------------------------------------------
     //--------------------------------------------------------------
     //  NAME:
@@ -195,9 +192,18 @@ public:
     //      The name of the file to read.
     //  OUTPUT:
     //      Vector containing read samples.
+    //  EXCEPTIONS:
+    //      BufferToSmallException, std::ofstream::failure
     // 
     //--------------------------------------------------------------
     std::vector<int16_t> ReadBufferFromFile(const string& file_name);
 };
 
+//=============================================================
+//  CLASS: BufferToSmallException 
+//=============================================================
+class BufferToSmallException : public exception
+{
+    virtual const char* what() const throw();
+};
 #endif /* #define _WAVEFILE_H_ */

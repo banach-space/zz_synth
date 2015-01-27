@@ -17,7 +17,7 @@
 using namespace std;
 
 //=============================================================
-// Class: WaveFile
+// CLASS: WaveFile
 //=============================================================
 //-------------------------------------------------------------
 // Constructors/Destructors
@@ -82,7 +82,7 @@ void WaveFile::set_subchunk_2_id(int32_t value) {subchunk_2_id_ = value;}
 void WaveFile::set_subchunk_2_size(int32_t value) {subchunk_2_size_ = value;}
 
 //=============================================================
-// Class: WaveFileOut
+// CLASS: WaveFileOut
 //=============================================================
 WaveFileOut::WaveFileOut(size_t number_of_seconds)
 {
@@ -101,15 +101,14 @@ void WaveFileOut::SaveBufferToFile(
     int32_t temp32;
     int16_t temp16;
 
-    // Make sure that there's enough input samples.
-    if (samples.size() * sizeof(int16_t) < subchunk_2_size())
-    {
-        cout << "Not enough input samples\n" << endl;
-        return;
-    }
-
     try
     {
+        // Make sure that there's enough input samples.
+        if (samples.size() * sizeof(int16_t) < subchunk_2_size())
+        {
+            throw BufferToSmallException;
+        }
+
         // Create and open the output file
         std::ofstream output_file;
         output_file.exceptions(ifstream::failbit | ifstream::badbit);
@@ -197,7 +196,7 @@ void WaveFileOut::SaveBufferToFile(
 }
 
 //=============================================================
-// Class: WaveFileIn
+// CLASS: WaveFileIn
 //=============================================================
 std::vector<int16_t> 
 WaveFileIn::ReadBufferFromFile(const std::string& file_name)
@@ -305,11 +304,9 @@ WaveFileIn::ReadBufferFromFile(const std::string& file_name)
 }
 
 //=============================================================
-// Protected methods
+//  CLASS: BufferToSmallException 
 //=============================================================
-// None
-
-//=============================================================
-// Private methods
-//=============================================================
-// None
+const char* BufferToSmallException::what() const throw()
+{
+    return "WaveFile: Buffer to small Exception happened";
+}
