@@ -17,6 +17,8 @@
 
 #include <cstdint>
 
+using namespace std;
+
 //=============================================================
 // Floating point globals
 //=============================================================
@@ -52,6 +54,11 @@ extern const int16_t kPcmAudioFormat;
 
 extern const int16_t kNumberOfChannelsMono;
 extern const int16_t kNumberOfChannelsStereo;
+
+//-------------------------------------------------------------
+// SynthConfig 
+//-------------------------------------------------------------
+extern const size_t kNumberOfFrequencies;
 
 //-------------------------------------------------------------
 // General 

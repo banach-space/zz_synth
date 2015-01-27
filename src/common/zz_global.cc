@@ -73,6 +73,13 @@ const int16_t kNumberOfChannelsMono = 1;
 const int16_t kNumberOfChannelsStereo = 2;
 
 //-------------------------------------------------------------
+// SynthConfig 
+//-------------------------------------------------------------
+// SynthConfig contains pre-calculated frequencies for various notes.
+// This number specifies how many of those it contains.
+const size_t kNumberOfFrequencies = 128;
+
+//-------------------------------------------------------------
 // General 
 //-------------------------------------------------------------
 const int32_t kCdSampleRate = 44100;

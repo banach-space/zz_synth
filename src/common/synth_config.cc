@@ -16,51 +16,59 @@
 #include "common/zz_global_include.h"
 
 //=============================================================
-// Public methods
+// Class: SynthConfig
 //=============================================================
-void zz_SynthConfig::Init(int32_t sampling_rate)
-{
-    // !!! TODO Commenting!!!
-    sampling_rate_  = sampling_rate;
-    nyquist_limit_  = sampling_rate_ >> 1;
-    phase_increment_per_sample_ = kTwoPi / sampling_rate_;
-    //frqRad = twoPI / (double) sampleRate;
-    //frqTI = ftableLength / (double) sampleRate;
-    //radTI = ftableLength / twoPI;
-}
+//--------------------------------------------------------------
+// Constructors/Destructors/Assignment Operators
+//--------------------------------------------------------------
+// None
 
-zz_SynthConfig& zz_SynthConfig::getInstance()
+//--------------------------------------------------------------
+// User interface 
+//--------------------------------------------------------------
+SynthConfig& SynthConfig::getInstance()
 {   
     // The only instance of the SynthConfig class. Guaranteed to be
     // lazy initialised and destroyed correctly.
-    static zz_SynthConfig instance;
-
-    // Initialise frequency_table_.
-    double frequency = kNoteC0;
-
-    for (std::size_t i = 0; i < 128; i++)
-    {
-        instance.frequency_table_[i] = frequency;
-        frequency *= kTwelthRootOfTwo;
-    }
+    static SynthConfig instance;
 
     return instance;
 }
 
-double zz_SynthConfig::frequency_table(int pitch)
+void SynthConfig::Init(const int32_t sampling_rate)
 {
-    if (pitch < 0 || pitch > 127)
+    // Initialise frequency_table_.
+    double frequency = kNoteC0;
+
+    for (
+            vector<double>::iterator it = frequency_table_.begin();
+            it != frequency_table_.end();
+            ++it
+            )
     {
-        return frequency_table_[0] * pow(kTwelthRootOfTwo, pitch);
+        *it = frequency;
+        frequency *= kTwelthRootOfTwo;
     }
 
-    return frequency_table_[pitch];
+    sampling_rate_  = sampling_rate;
+    nyquist_limit_  = sampling_rate_ >> 1;
+    phase_increment_per_sample_ = kTwoPi / sampling_rate_;
 }
 
-//=============================================================
-// Protected methods
-//=============================================================
 
-//=============================================================
-// Private methods
-//=============================================================
+//--------------------------------------------------------------
+// Accessors
+//--------------------------------------------------------------
+double SynthConfig::frequency_table(const int pitch) const
+{
+    return frequency_table_[pitch];
+}
+int32_t SynthConfig::sampling_rate() const 
+{
+    return sampling_rate_;
+}
+
+double SynthConfig::phase_increment_per_sample() const
+{
+    return phase_increment_per_sample_;
+}
