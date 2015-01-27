@@ -18,16 +18,26 @@
 #include <vector>
 
 //=============================================================
-// Base class
+// CLASS: WaveFile
 //=============================================================
 class WaveFile
 {
 public:
-    // Constructors + destructors
+    //--------------------------------------------------------------
+    // 1. Constructors/Destructors/Assignment Operators
+    //--------------------------------------------------------------
+    // Make this class pure abstract and block copy constructor, assignment
+    // operator and the corresponding move operators.
     explicit WaveFile();
     virtual ~WaveFile() = 0;
+    explicit WaveFile(const WaveFile& rhs) = delete;
+    explicit WaveFile(WaveFile&& rhs) = delete;
+    WaveFile& operator=(const WaveFile &rhs) = delete;
+    WaveFile& operator=(WaveFile&& rhs) = delete;
 
-    // Accessors
+    //--------------------------------------------------------------
+    // 2. Accessors
+    //--------------------------------------------------------------
     int32_t chunk_id();
     int32_t chunk_size();
     int32_t format();
@@ -42,8 +52,14 @@ public:
     int32_t subchunk_2_id();
     int32_t subchunk_2_size();
 
+    //--------------------------------------------------------------
+    // 3. Interface
+    //--------------------------------------------------------------
+
 protected:
+    //--------------------------------------------------------------
     // 4. Mutators
+    //--------------------------------------------------------------
     void set_chunk_id(int32_t value);
     void set_chunk_size(int32_t value);
     void set_format(int32_t value);
@@ -57,15 +73,11 @@ protected:
     void set_bits_per_sample(int16_t value);
     void set_subchunk_2_id(int32_t value);
     void set_subchunk_2_size(int32_t value);
-private:
-    explicit WaveFile(const WaveFile& rhs);
-    WaveFile& operator=(const WaveFile &rhs);
-    
-    int8_t signal_length_in_seconds;
 
+private:
     //---------------------------------------------------------
     // The following canonical WAVE file format is implemented :
-    // (c.f. https://ccrma.stanford.edu/courses/422/projects/WaveFormat/)
+    // (see http://soundfile.sapp.org/doc/WaveFormat/ )
     //
     //  Field Size       Field name
     //  (bytes)
@@ -122,27 +134,70 @@ private:
 };
 
 //=============================================================
-//  Derived classes 
+//  CLASS: WaveFileOut 
 //=============================================================
 class WaveFileOut: public WaveFile
 {
 public:
-    explicit WaveFileOut(std::size_t number_of_seconds);
+    //--------------------------------------------------------------
+    // 1. Constructors/Destructors/Assignment Operators
+    //--------------------------------------------------------------
+    explicit WaveFileOut(size_t number_of_seconds);
     ~WaveFileOut() = default;
 
-    void SaveBufferToFile(
-            const std::string& file_name, 
-            std::vector<int16_t> &samples);
+    //--------------------------------------------------------------
+    // 2. Interface
+    //--------------------------------------------------------------
+    //--------------------------------------------------------------
+    //  NAME:
+    //      SaveBufferToFile()  
+    //
+    //  DESCRIPTION:
+    //      Saves the content of this file to the specified physical file.
+    //      The data samples are passed as argument.
+    //  INPUT:
+    //      The name of the file to write to and the data samples.
+    //  OUTPUT:
+    //      Vector containing read samples.
+    // 
+    //--------------------------------------------------------------
+    //--------------------------------------------------------------
+    void SaveBufferToFile(const string& file_name, vector<int16_t> &samples);
 
 };
 
+//=============================================================
+//  CLASS: WaveFileIn 
+//=============================================================
 class WaveFileIn: public WaveFile
 {
 public:
+    //--------------------------------------------------------------
+    // 1. Constructors/Destructors/Assignment Operators
+    //--------------------------------------------------------------
     explicit WaveFileIn() {};
     ~WaveFileIn() = default;
 
-    std::vector<int16_t> ReadBufferFromFile(const std::string& file_name);
+    //--------------------------------------------------------------
+    //  -= Interface =-
+    //--------------------------------------------------------------
+    //--------------------------------------------------------------
+    //  NAME:
+    //      ReadBufferFromFile()  
+    //
+    //  DESCRIPTION:
+    //      Reads a WaveFile. The WAVE header is saved in the appropriate
+    //      variables in the base clase. The audio samples are read into
+    //      a vector and returned. The Wave file is expected to be in the
+    //      canonical WAVE format as described above (see also:
+    //      http://soundfile.sapp.org/doc/WaveFormat/).
+    //  INPUT:
+    //      The name of the file to read.
+    //  OUTPUT:
+    //      Vector containing read samples.
+    // 
+    //--------------------------------------------------------------
+    std::vector<int16_t> ReadBufferFromFile(const string& file_name);
 };
 
 #endif /* #define _WAVEFILE_H_ */

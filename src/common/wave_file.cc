@@ -6,7 +6,8 @@
 //   zimzum@github 
 //
 // DESCRIPTION:
-//   The implementation of the WaveFileOut class. 
+//   The implementation of the WaveFile, WaveFileIn and
+//   WaveFileOut classes.
 //
 // License: GNU GPL v2.0 
 //=============================================================
@@ -19,11 +20,11 @@ using namespace std;
 // Class: WaveFile
 //=============================================================
 //-------------------------------------------------------------
-// Constructors + destructors
+// Constructors/Destructors
 //-------------------------------------------------------------
 WaveFile::WaveFile()
 {
-    // 1. Member variables that can be initialised independently
+    // Step 1: Member variables that can be initialised independently
     chunk_id_       = kRiffChunkId;
     format_         = kRiffFormat;
     subchunk_1_id_  = kFmtSubchunkId;
@@ -34,8 +35,9 @@ WaveFile::WaveFile()
     bits_per_sample_= kNumberOfBitsPerSample;
     subchunk_2_id_  = kDataSubchunkId;
 
-    // 2. Member variables that dependend on previously defined variables
-    // subchunk_2_size is 0 at this stage, as there are no data samples
+    // Step 2: Member variables that dependend on previously defined
+    //         variables. subchunk_2_size is initialised to 0 as there
+    //         are no data samples associated with this file yet.
     subchunk_2_size_ = 0; 
     chunk_size_ = kWaveFileHeaderSize + subchunk_2_size_;
     byte_rate_  = sample_rate_ * num_channels_ * bits_per_sample_
@@ -82,9 +84,9 @@ void WaveFile::set_subchunk_2_size(int32_t value) {subchunk_2_size_ = value;}
 //=============================================================
 // Class: WaveFileOut
 //=============================================================
-WaveFileOut::WaveFileOut(std::size_t number_of_seconds)
+WaveFileOut::WaveFileOut(size_t number_of_seconds)
 {
-    std::size_t temp_size;
+    size_t temp_size;
 
     temp_size = WaveFile::sample_rate() * WaveFile::num_channels()
               * WaveFile::bits_per_sample() / kNumberOfBitsPerByte;
