@@ -1,5 +1,6 @@
 *.[oa]
 *.swp
+*.swo
 tags
 files_ctags
 *.wav
