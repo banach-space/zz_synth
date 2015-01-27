@@ -2,3 +2,5 @@
 *.swp
 tags
 files_ctags
+*.wav
+bin/*
