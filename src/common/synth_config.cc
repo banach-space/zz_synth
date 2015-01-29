@@ -6,8 +6,7 @@
 //   zimzum@github 
 //
 // DESCRIPTION:
-//   The implementation of the SynthConfig class - configuration
-//   class for the zz_synth library.
+//   The implementation of the SynthConfig class.
 //
 // License: GNU GPL v2.0 
 //=============================================================
@@ -19,12 +18,12 @@
 // Class: SynthConfig
 //=============================================================
 //--------------------------------------------------------------
-// Constructors/Destructors/Assignment Operators
+// 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
 //--------------------------------------------------------------
 // None
 
 //--------------------------------------------------------------
-// User interface 
+// 2. GENERAL USER INTERFACE 
 //--------------------------------------------------------------
 SynthConfig& SynthConfig::getInstance()
 {   
@@ -37,7 +36,6 @@ SynthConfig& SynthConfig::getInstance()
 
 void SynthConfig::Init(const int32_t sampling_rate)
 {
-    // Initialise frequency_table_.
     double frequency = kNoteC0;
 
     for (
@@ -57,7 +55,7 @@ void SynthConfig::Init(const int32_t sampling_rate)
 
 
 //--------------------------------------------------------------
-// Accessors
+// 3. ACCESSORS
 //--------------------------------------------------------------
 double SynthConfig::frequency_table(const int pitch) const
 {

@@ -32,7 +32,7 @@
 using namespace::std;
 
 //=============================================================
-// Helper functions (generate samples) 
+// UTILITIES 
 //=============================================================
 vector<int16_t> generate_samples(
         int32_t volume, 
@@ -44,7 +44,7 @@ vector<int16_t> generate_samples(
     size_t number_of_samples;
 
     // 1. Initialise the synthesiser
-    zz_SynthConfig &synthesiser  = zz_SynthConfig::getInstance();
+    SynthConfig &synthesiser  = SynthConfig::getInstance();
     synthesiser.Init();	
 
     // 2. Physical properties of the signal 
@@ -87,11 +87,11 @@ void compare_wave_headers(WaveFileOut &wf_out, WaveFileIn &wf_in)
 }
 
 //=============================================================
-// Tests
+// TESTS
 //=============================================================
 TEST(ReadWriteWaveFileTest, HandleDifferentPitches)
 {
-    int pitch[] = {0, 48, 48}; 
+    size_t pitch[] = {0, kNumberOfFrequencies/size_t(2), kNumberOfFrequencies}; 
     int32_t volume = 1 << 15;
     int8_t number_of_seconds = 5;
     const string file_name("test_pitch.wav");
@@ -121,8 +121,72 @@ TEST(ReadWriteWaveFileTest, HandleDifferentPitches)
     }
 }
 
+TEST(ReadWriteWaveFileTest, HandleDifferentVolumes)
+{
+    int pitch = 48; 
+    int32_t volume[] = {0, 1 << 7, 1 << 15};
+    int8_t number_of_seconds = 5;
+    const string file_name("test_volume.wav");
+
+
+    for (size_t volume_id = 0; volume_id < 3; volume_id++)
+    {
+        // 1. Generate the desired signal and save it to the output file
+        WaveFileOut wf_out(number_of_seconds);
+
+        // 2. Save to a WaveFileOut file
+        vector<int16_t> samples_out = generate_samples(
+                volume[volume_id],
+                pitch,
+                number_of_seconds);
+
+        wf_out.SaveBufferToFile(file_name, samples_out);
+
+        // 3. Read the file saved in Step 2 into a WaveFileIn file
+        vector<int16_t> samples_in;
+        WaveFileIn wf_in;
+        samples_in = wf_in.ReadBufferFromFile(file_name);
+
+        // 4. Validate by comparing input and output
+        compare_wave_headers(wf_out, wf_in);
+        EXPECT_THAT(samples_in, ::testing::ContainerEq(samples_out));
+    }
+}
+
+TEST(ReadWriteWaveFileTest, HandleDifferentDuration)
+{
+    int pitch = 48; 
+    int32_t volume = 1 << 15;
+    size_t number_of_seconds[] = {0, 1, 5};
+    const string file_name("test_duration.wav");
+
+
+    for (size_t duration_idx = 0; duration_idx < 3; duration_idx++)
+    {
+        // 1. Generate the desired signal and save it to the output file
+        WaveFileOut wf_out(number_of_seconds[duration_idx]);
+
+        // 2. Save to a WaveFileOut file
+        vector<int16_t> samples_out = generate_samples(
+                volume,
+                pitch,
+                number_of_seconds[duration_idx]);
+
+        wf_out.SaveBufferToFile(file_name, samples_out);
+
+        // 3. Read the file saved in Step 2 into a WaveFileIn file
+        vector<int16_t> samples_in;
+        WaveFileIn wf_in;
+        samples_in = wf_in.ReadBufferFromFile(file_name);
+
+        // 4. Validate by comparing input and output
+        compare_wave_headers(wf_out, wf_in);
+        EXPECT_THAT(samples_in, ::testing::ContainerEq(samples_out));
+    }
+}
+
 //=============================================================
-// Main 
+// MAIN 
 //=============================================================
 int main(int argc, char *argv[])
 {

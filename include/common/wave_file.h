@@ -6,7 +6,7 @@
 //    zimzum@github 
 //
 //  DESCRIPTION:
-//    The definition of the WaveFileOut class.
+//      The definition of the WaveFile, WaveFileIn and WaveFileOut classes.
 //
 //  License: GNU GPL v2.0 
 //=============================================================
@@ -20,12 +20,16 @@
 
 //=============================================================
 // CLASS: WaveFile
+//
+// DESCRIPTION:
+//  Represents a general WAVE file. Contains a canonical WAVE file
+//  header. It's a pure virtual class.
 //=============================================================
 class WaveFile
 {
 public:
     //--------------------------------------------------------------
-    //  -= CONSTRUCTORS/DESTRUCTORS/ASSIGNMENT OPERATORS =-
+    // 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
     //--------------------------------------------------------------
     // Make this class pure abstract and block copy constructor, assignment
     // operator and the corresponding move operators.
@@ -37,7 +41,12 @@ public:
     WaveFile& operator=(WaveFile&& rhs) = delete;
 
     //--------------------------------------------------------------
-    // -= ACCESSORS =-
+    // 2. GENERAL USER INTERFACE 
+    //--------------------------------------------------------------
+    // None
+
+    //--------------------------------------------------------------
+    // 3. ACCESSORS
     //--------------------------------------------------------------
     int32_t chunk_id();
     int32_t chunk_size();
@@ -55,7 +64,7 @@ public:
 
 protected:
     //--------------------------------------------------------------
-    //  -= MUTATORS =-
+    // 4. MUTATORS
     //--------------------------------------------------------------
     void set_chunk_id(int32_t value);
     void set_chunk_size(int32_t value);
@@ -131,19 +140,24 @@ private:
 };
 
 //=============================================================
-//  CLASS: WaveFileOut 
+// CLASS: WaveFileOut 
+//
+// DESCRIPTION:
+//  Represents an output WAVE file. Implemented for writing WAVE
+//  files to disk. Does not hold output samples. These are always
+//  passed in an input vector. 
 //=============================================================
 class WaveFileOut: public WaveFile
 {
 public:
     //--------------------------------------------------------------
-    //  -= CONSTRUCTORS/DESTRUCTORS/ASSIGNMENT OPERATORS =-
+    // 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
     //--------------------------------------------------------------
     explicit WaveFileOut(size_t number_of_seconds);
     ~WaveFileOut() = default;
 
     //--------------------------------------------------------------
-    //  -= INTERFACE =-
+    // 2. GENERAL USER INTERFACE 
     //--------------------------------------------------------------
     //--------------------------------------------------------------
     //  NAME:
@@ -158,25 +172,30 @@ public:
     //      Vector containing read samples.
     // 
     //--------------------------------------------------------------
-    //--------------------------------------------------------------
     void SaveBufferToFile(const string& file_name, vector<int16_t> &samples);
 
 };
 
 //=============================================================
 //  CLASS: WaveFileIn 
+//
+//
+// DESCRIPTION:
+//  Represents an input WAVE file. Implemented for reading WAVE
+//  files from disk. Does not hold the input samples. Instead it reads
+//  them and returns to the user when requested.
 //=============================================================
 class WaveFileIn: public WaveFile
 {
 public:
     //--------------------------------------------------------------
-    //  -= CONSTRUCTORS/DESTRUCTORS/ASSIGNMENT OPERATORS =-
+    // 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
     //--------------------------------------------------------------
     explicit WaveFileIn() {};
     ~WaveFileIn() = default;
 
     //--------------------------------------------------------------
-    //  -= INTERFACE =-
+    // 2. GENERAL USER INTERFACE 
     //--------------------------------------------------------------
     //--------------------------------------------------------------
     //  NAME:
@@ -201,6 +220,10 @@ public:
 
 //=============================================================
 //  CLASS: BufferToSmallException 
+//
+// DESCRIPTION:
+//  Exception class. Thrown when the number of samples passed is
+//  smaller than expected.
 //=============================================================
 class BufferToSmallException : public exception
 {

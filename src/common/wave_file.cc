@@ -19,9 +19,9 @@ using namespace std;
 //=============================================================
 // CLASS: WaveFile
 //=============================================================
-//-------------------------------------------------------------
-// Constructors/Destructors
-//-------------------------------------------------------------
+//--------------------------------------------------------------
+// 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
+//--------------------------------------------------------------
 WaveFile::WaveFile()
 {
     // Step 1: Member variables that can be initialised independently
@@ -47,9 +47,14 @@ WaveFile::WaveFile()
 
 WaveFile::~WaveFile() {}
 
-//-------------------------------------------------------------
-// Accessors
-//-------------------------------------------------------------
+//--------------------------------------------------------------
+// 2. GENERAL USER INTERFACE 
+//--------------------------------------------------------------
+// None
+
+//--------------------------------------------------------------
+// 3. ACCESSORS
+//--------------------------------------------------------------
 int32_t WaveFile::chunk_id() {return chunk_id_;}
 int32_t WaveFile::chunk_size() {return chunk_size_;}
 int32_t WaveFile::format()    {return format_;}
@@ -64,9 +69,9 @@ int16_t WaveFile::bits_per_sample() {return bits_per_sample_;}
 int32_t WaveFile::subchunk_2_id() {return subchunk_2_id_;}
 int32_t WaveFile::subchunk_2_size() {return subchunk_2_size_;}
 
-//-------------------------------------------------------------
-// Mutators
-//-------------------------------------------------------------
+//--------------------------------------------------------------
+// 4. MUTATORS
+//--------------------------------------------------------------
 void WaveFile::set_chunk_id(int32_t value) {chunk_id_ = value;}
 void WaveFile::set_chunk_size(int32_t value) {chunk_size_ = value;}
 void WaveFile::set_format(int32_t value) {format_ = value;}
@@ -84,6 +89,14 @@ void WaveFile::set_subchunk_2_size(int32_t value) {subchunk_2_size_ = value;}
 //=============================================================
 // CLASS: WaveFileOut
 //=============================================================
+//--------------------------------------------------------------
+// 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
+//--------------------------------------------------------------
+// None
+
+//--------------------------------------------------------------
+// 2. GENERAL USER INTERFACE 
+//--------------------------------------------------------------
 WaveFileOut::WaveFileOut(size_t number_of_seconds)
 {
     size_t temp_size;
@@ -106,7 +119,7 @@ void WaveFileOut::SaveBufferToFile(
         // Make sure that there's enough input samples.
         if (samples.size() * sizeof(int16_t) < subchunk_2_size())
         {
-            throw BufferToSmallException;
+            throw BufferToSmallException();
         }
 
         // Create and open the output file
@@ -198,6 +211,14 @@ void WaveFileOut::SaveBufferToFile(
 //=============================================================
 // CLASS: WaveFileIn
 //=============================================================
+//--------------------------------------------------------------
+// 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
+//--------------------------------------------------------------
+// None 
+
+//--------------------------------------------------------------
+// 2. GENERAL USER INTERFACE 
+//--------------------------------------------------------------
 std::vector<int16_t> 
 WaveFileIn::ReadBufferFromFile(const std::string& file_name)
 {
@@ -306,6 +327,15 @@ WaveFileIn::ReadBufferFromFile(const std::string& file_name)
 //=============================================================
 //  CLASS: BufferToSmallException 
 //=============================================================
+//--------------------------------------------------------------
+// 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
+//--------------------------------------------------------------
+// None 
+
+//--------------------------------------------------------------
+// 2. GENERAL USER INTERFACE 
+//--------------------------------------------------------------
+// None
 const char* BufferToSmallException::what() const throw()
 {
     return "WaveFile: Buffer to small Exception happened";
