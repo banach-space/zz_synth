@@ -1,57 +1,67 @@
 //========================================================================
 //  FILE:
-//      templatetes/class_name.h 
+//      include/oscillator.h 
 //
 //  AUTHOR:
 //      zimzum@github 
 //
 //  DESCRIPTION:
-//      Template header file for defining classes. This file should be
-//      considered as a rough guide and reasonable deviations, where
-//      necessary, are acceptable.
+//      TODO
 //
 //  License: GNU GPL v2.0 
 //========================================================================
 
-#ifndef _CLASSNAME_H_
-#define _CLASSNAME_H_
+#ifndef _OSCILLATOR_H_
+#define _OSCILLATOR_H_
+
+#include <common/zz_global_include.h>
+#include <common/synth_config.h>
 
 //========================================================================
-// CLASS: ClassName
+// CLASS: Oscillator
 //
 // DESCRIPTION:
-//      Short description of the class. Limitations and usage.
+//      TODO
 //========================================================================
-class ClassName 
+class Oscillator 
 {
 public:
     //--------------------------------------------------------------------
     // 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
     //--------------------------------------------------------------------
-    // None
+    // Make this class pure abstract and block copy constructor, assignment
+    // operator and the corresponding move operators.
+    explicit Oscillator(
+            const SynthConfig& synthesiser,
+            int16_t peak_amplitude = static_cast<uint16_t>(1 << 14), 
+            double initial_phase = 0,
+            size_t pitch_id = 48);
+    virtual ~Oscillator() = default;
+    explicit Oscillator(const Oscillator& rhs) = delete;
+    explicit Oscillator(Oscillator&& rhs) = delete;
+    Oscillator& operator=(const Oscillator &rhs) = delete;
+    Oscillator& operator=(Oscillator&& rhs) = delete;
 
     //--------------------------------------------------------------------
     // 2. GENERAL USER INTERFACE 
     //--------------------------------------------------------------------
-    // None
+    vector<int16_t> operator()(uint32_t number_of_seconds);
 
     //--------------------------------------------------------------------
     // 3. ACCESSORS
     //--------------------------------------------------------------------
     // None
 
-protected:
-    //--------------------------------------------------------------------
-    // 4. MUTATORS
-    //--------------------------------------------------------------------
-    // None
-
 private:
     //--------------------------------------------------------------------
-    // 5. DATA MEMMBERS 
+    // 4. DATA MEMMBERS 
     //--------------------------------------------------------------------
-    // None
+    int16_t peak_amplitude_;
+    double frequency_;
+    double initial_phase_;
+    uint32_t sampling_rate_;
+    double phase_increment_;
     
 };
 
-#endif /* #define _CLASSNAME_H_ */
+#endif /* #define _OSCILLATOR_H_ */

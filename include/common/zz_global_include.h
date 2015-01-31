@@ -1,6 +1,6 @@
 //=============================================================
 // FILE:
-//   /include/zz_SynthConfig.h
+//   /include/common/zz_global_include.h
 //
 // AUTHOR:
 //   zimzum@github 
@@ -14,9 +14,15 @@
 #define _GLOBAL_INCLUDE_H_
 
 //=============================================================
+// Namespaces 
+//=============================================================
+using namespace::std;
+
+//=============================================================
 // C standard library
 //=============================================================
 #include <cstdint>
+#include <cmath>
 
 //=============================================================
 // C++ standard library
@@ -24,6 +30,8 @@
 #include <iostream>
 #include <fstream>
 #include <memory>
+#include <string>
+#include <vector>
 
 //=============================================================
 // zz_synth library
@@ -31,6 +39,5 @@
 #include "zz_global.h"
 #include "synth_config.h"
 #include "wave_file.h"
-
 
 #endif /* _GLOBAL_INCLUDE_H_ */

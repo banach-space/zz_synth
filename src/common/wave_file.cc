@@ -1,6 +1,6 @@
 //=============================================================
 // FILE:
-//   /src/zz_WaveFileOut.cc
+//   /src/wave_file.cc
 //
 // AUTHOR:
 //   zimzum@github 
@@ -42,7 +42,8 @@ WaveFile::WaveFile()
     chunk_size_ = kWaveFileHeaderSize + subchunk_2_size_;
     byte_rate_  = sample_rate_ * num_channels_ * bits_per_sample_
         / kNumberOfBitsPerByte;
-    block_align_= num_channels_ * bits_per_sample_ / kNumberOfBitsPerByte;
+    block_align_= static_cast<uint32_t>(num_channels_ * bits_per_sample_) 
+        / kNumberOfBitsPerByte;
 }
 
 WaveFile::~WaveFile() {}
@@ -55,36 +56,36 @@ WaveFile::~WaveFile() {}
 //--------------------------------------------------------------
 // 3. ACCESSORS
 //--------------------------------------------------------------
-int32_t WaveFile::chunk_id() {return chunk_id_;}
-int32_t WaveFile::chunk_size() {return chunk_size_;}
-int32_t WaveFile::format()    {return format_;}
-int32_t WaveFile::subchunk_1_id() {return subchunk_1_id_;}
-int32_t WaveFile::subchunk_1_size() {return subchunk_1_size_;}
-int16_t WaveFile::audio_format() {return audio_format_;}
-int16_t WaveFile::num_channels() {return num_channels_;}
-int32_t WaveFile::sample_rate() {return sample_rate_;}
-int32_t WaveFile::byte_rate() {return byte_rate_;}
-int16_t WaveFile::block_align() {return block_align_;}
-int16_t WaveFile::bits_per_sample() {return bits_per_sample_;}
-int32_t WaveFile::subchunk_2_id() {return subchunk_2_id_;}
-int32_t WaveFile::subchunk_2_size() {return subchunk_2_size_;}
+uint32_t WaveFile::chunk_id() {return chunk_id_;}
+uint32_t WaveFile::chunk_size() {return chunk_size_;}
+uint32_t WaveFile::format()    {return format_;}
+uint32_t WaveFile::subchunk_1_id() {return subchunk_1_id_;}
+uint32_t WaveFile::subchunk_1_size() {return subchunk_1_size_;}
+uint16_t WaveFile::audio_format() {return audio_format_;}
+uint16_t WaveFile::num_channels() {return num_channels_;}
+uint32_t WaveFile::sample_rate() {return sample_rate_;}
+uint32_t WaveFile::byte_rate() {return byte_rate_;}
+uint16_t WaveFile::block_align() {return block_align_;}
+uint16_t WaveFile::bits_per_sample() {return bits_per_sample_;}
+uint32_t WaveFile::subchunk_2_id() {return subchunk_2_id_;}
+uint32_t WaveFile::subchunk_2_size() {return subchunk_2_size_;}
 
 //--------------------------------------------------------------
 // 4. MUTATORS
 //--------------------------------------------------------------
-void WaveFile::set_chunk_id(int32_t value) {chunk_id_ = value;}
-void WaveFile::set_chunk_size(int32_t value) {chunk_size_ = value;}
-void WaveFile::set_format(int32_t value) {format_ = value;}
-void WaveFile::set_subchunk_1_id(int32_t value) {subchunk_1_id_ = value;}
-void WaveFile::set_subchunk_1_size(int32_t value) {subchunk_1_size_ = value;}
-void WaveFile::set_audio_format(int16_t value) {audio_format_ = value;}
-void WaveFile::set_num_channels(int16_t value) {num_channels_ = value;}
-void WaveFile::set_sample_rate(int32_t value) {sample_rate_ = value;}
-void WaveFile::set_byte_rate(int32_t value) {byte_rate_ = value;}
-void WaveFile::set_block_align(int16_t value) {block_align_ = value;}
-void WaveFile::set_bits_per_sample(int16_t value) {bits_per_sample_ = value;}
-void WaveFile::set_subchunk_2_id(int32_t value) {subchunk_2_id_ = value;}
-void WaveFile::set_subchunk_2_size(int32_t value) {subchunk_2_size_ = value;}
+void WaveFile::set_chunk_id(uint32_t value) {chunk_id_ = value;}
+void WaveFile::set_chunk_size(uint32_t value) {chunk_size_ = value;}
+void WaveFile::set_format(uint32_t value) {format_ = value;}
+void WaveFile::set_subchunk_1_id(uint32_t value) {subchunk_1_id_ = value;}
+void WaveFile::set_subchunk_1_size(uint32_t value) {subchunk_1_size_ = value;}
+void WaveFile::set_audio_format(uint16_t value) {audio_format_ = value;}
+void WaveFile::set_num_channels(uint16_t value) {num_channels_ = value;}
+void WaveFile::set_sample_rate(uint32_t value) {sample_rate_ = value;}
+void WaveFile::set_byte_rate(uint32_t value) {byte_rate_ = value;}
+void WaveFile::set_block_align(uint16_t value) {block_align_ = value;}
+void WaveFile::set_bits_per_sample(uint16_t value) {bits_per_sample_ = value;}
+void WaveFile::set_subchunk_2_id(uint32_t value) {subchunk_2_id_ = value;}
+void WaveFile::set_subchunk_2_size(uint32_t value) {subchunk_2_size_ = value;}
 
 //=============================================================
 // CLASS: WaveFileOut
@@ -111,8 +112,8 @@ void WaveFileOut::SaveBufferToFile(
     const std::string &file_name, 
     std::vector<int16_t> &samples)
 {
-    int32_t temp32;
-    int16_t temp16;
+    uint32_t temp32;
+    uint16_t temp16;
 
     try
     {
@@ -222,9 +223,11 @@ void WaveFileOut::SaveBufferToFile(
 std::vector<int16_t> 
 WaveFileIn::ReadBufferFromFile(const std::string& file_name)
 {
-    int32_t temp32;
-    int16_t temp16;
+    uint32_t temp32;
+    uint16_t temp16;
+    int16_t signed_temp16;
     std::size_t number_of_samples;
+    vector<int16_t> samples;
 
     try
     {
@@ -303,24 +306,26 @@ WaveFileIn::ReadBufferFromFile(const std::string& file_name)
         // There's now enough data to calculate the number of samples
         number_of_samples = WaveFile::subchunk_2_size()* kNumberOfBitsPerByte
             / WaveFile::num_channels() / WaveFile::bits_per_sample();
-        vector<int16_t> samples(number_of_samples);
+        samples.resize(number_of_samples);
 
         // Read the samples into the "samples" vector
         for (size_t idx = 0; idx < number_of_samples; idx++)
         {
-            input_file.read(reinterpret_cast<char*>(&temp16), sizeof(temp16));
-            samples[idx] = temp16;
+            input_file.read(
+                    reinterpret_cast<char*>(&signed_temp16), 
+                    sizeof(signed_temp16));
+            samples[idx] = signed_temp16;
         }
 
-        // Tidy up and return
+        // Tidy up
         input_file.close();
-        return samples;
     }
     catch (std::ifstream::failure e)
     {
         std::cout << "Exception opening/reading/closing file\n";
     }
-
+    
+    return samples;
 
 }
 

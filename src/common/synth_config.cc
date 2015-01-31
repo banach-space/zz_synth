@@ -34,7 +34,7 @@ SynthConfig& SynthConfig::getInstance()
     return instance;
 }
 
-void SynthConfig::Init(const int32_t sampling_rate)
+void SynthConfig::Init(uint32_t sampling_rate_arg)
 {
     double frequency = kNoteC0;
 
@@ -48,7 +48,7 @@ void SynthConfig::Init(const int32_t sampling_rate)
         frequency *= kTwelthRootOfTwo;
     }
 
-    sampling_rate_  = sampling_rate;
+    sampling_rate_  = sampling_rate_arg;
     nyquist_limit_  = sampling_rate_ >> 1;
     phase_increment_per_sample_ = kTwoPi / sampling_rate_;
 }
@@ -57,11 +57,12 @@ void SynthConfig::Init(const int32_t sampling_rate)
 //--------------------------------------------------------------
 // 3. ACCESSORS
 //--------------------------------------------------------------
-double SynthConfig::frequency_table(const int pitch) const
+double SynthConfig::frequency_table(vector<double>::size_type  pitch) const
 {
     return frequency_table_[pitch];
 }
-int32_t SynthConfig::sampling_rate() const 
+
+uint32_t SynthConfig::sampling_rate() const 
 {
     return sampling_rate_;
 }

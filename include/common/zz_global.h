@@ -35,25 +35,25 @@ extern const double kNoteC0;
 //-------------------------------------------------------------
 // Wave File Related
 //-------------------------------------------------------------
-extern const int kNumberOfBitsPerByte;
-extern const int8_t kNumberOfBitsPerSample;
+extern const uint32_t kNumberOfBitsPerByte;
+extern const uint8_t kNumberOfBitsPerSample;
 
-extern const int8_t kWaveFileHeaderSize;
+extern const uint8_t kWaveFileHeaderSize;
 
-extern const int32_t kRiffChunkId;
+extern const uint32_t kRiffChunkId;
 
-extern const int32_t  kRiffFormat;
+extern const uint32_t  kRiffFormat;
 
-extern const int32_t kFmtSubchunkId;
+extern const uint32_t kFmtSubchunkId;
 
-extern const int32_t kDataSubchunkId;
+extern const uint32_t kDataSubchunkId;
 
-extern const int32_t kPcmSubchunk1Size;
+extern const uint32_t kPcmSubchunk1Size;
 
-extern const int16_t kPcmAudioFormat;
+extern const uint16_t kPcmAudioFormat;
 
-extern const int16_t kNumberOfChannelsMono;
-extern const int16_t kNumberOfChannelsStereo;
+extern const uint16_t kNumberOfChannelsMono;
+extern const uint16_t kNumberOfChannelsStereo;
 
 //-------------------------------------------------------------
 // SynthConfig 
@@ -63,9 +63,9 @@ extern const size_t kNumberOfFrequencies;
 //-------------------------------------------------------------
 // General 
 //-------------------------------------------------------------
-extern const int32_t kCdSampleRate;
+extern const uint32_t kCdSampleRate;
 
-extern const int8_t kSizeTwoBytes;
-extern const int8_t kSizeFourBytes;
+extern const uint8_t kSizeTwoBytes;
+extern const uint8_t kSizeFourBytes;
 
 #endif /* _GLOBAL_H_ */

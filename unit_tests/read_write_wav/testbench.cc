@@ -14,59 +14,18 @@
 //=============================================================
 // Includes
 //=============================================================
-#include <cmath>
-#include <iostream>
-#include <string>
-
-#include "common/zz_global.h"
-#include "common/wave_file.h"
-#include "common/synth_config.h"
-#include <vector>
+#include <common/zz_global.h>
+#include <common/wave_file.h>
+#include <common/synth_config.h>
+#include <common/oscillator.h>
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
 //=============================================================
-// Namespaces 
-//=============================================================
-using namespace::std;
-
-//=============================================================
 // UTILITIES 
 //=============================================================
-vector<int16_t> generate_samples(
-        int32_t volume, 
-        size_t pitch,
-        size_t number_of_seconds)
-{
-
-    double frequency, phase_increment, phase;
-    size_t number_of_samples;
-
-    // 1. Initialise the synthesiser
-    SynthConfig &synthesiser  = SynthConfig::getInstance();
-    synthesiser.Init();	
-
-    // 2. Physical properties of the signal 
-    frequency = synthesiser.frequency_table(pitch);
-    phase = 0;
-
-    phase_increment = synthesiser.phase_increment_per_sample() * frequency;
-    number_of_samples = 
-        (size_t) (synthesiser.sampling_rate() * number_of_seconds);
-
-    vector<int16_t> generated_samples(number_of_samples);
-    for (size_t n = 0; n < number_of_samples; n++)
-    {
-        generated_samples[n] = volume * sin(phase);
-
-        if ((phase += phase_increment) >= kTwoPi)
-            phase -= kTwoPi;
-    }
-
-    return generated_samples;
-}
-
+void compare_wave_headers(WaveFileOut &wf_out, WaveFileIn &wf_in);
 void compare_wave_headers(WaveFileOut &wf_out, WaveFileIn &wf_in)
 {
         EXPECT_EQ(wf_out.chunk_id(), wf_in.chunk_id());
@@ -91,23 +50,24 @@ void compare_wave_headers(WaveFileOut &wf_out, WaveFileIn &wf_in)
 //=============================================================
 TEST(ReadWriteWaveFileTest, HandleDifferentPitches)
 {
-    size_t pitch[] = {0, kNumberOfFrequencies/size_t(2), kNumberOfFrequencies}; 
+    size_t pitch[] = {0, kNumberOfFrequencies/size_t(2), kNumberOfFrequencies - 1}; 
     int32_t volume = 1 << 15;
-    int8_t number_of_seconds = 5;
+    uint32_t number_of_seconds = 5;
     const string file_name("test_pitch.wav");
+    double initial_phase = 0;
 
+    // Initialise the synthesiser
+    SynthConfig &synthesiser  = SynthConfig::getInstance();
+    synthesiser.Init();	
 
     for (size_t pitch_id = 0; pitch_id < 3; pitch_id++)
     {
-        // 1. Generate the desired signal and save it to the output file
+        // 1. Generate the samples 
+        Oscillator osc(synthesiser, volume, initial_phase, pitch[pitch_id]);
+        vector<int16_t> samples_out = osc(number_of_seconds);
+
+        // 2. Save the generated samples to the file 
         WaveFileOut wf_out(number_of_seconds);
-
-        // 2. Save to a WaveFileOut file
-        vector<int16_t> samples_out = generate_samples(
-                volume,
-                pitch[pitch_id],
-                number_of_seconds);
-
         wf_out.SaveBufferToFile(file_name, samples_out);
 
         // 3. Read the file saved in Step 2 into a WaveFileIn file
@@ -123,23 +83,24 @@ TEST(ReadWriteWaveFileTest, HandleDifferentPitches)
 
 TEST(ReadWriteWaveFileTest, HandleDifferentVolumes)
 {
-    int pitch = 48; 
+    uint32_t pitch = 48; 
     int32_t volume[] = {0, 1 << 7, 1 << 15};
-    int8_t number_of_seconds = 5;
+    uint32_t number_of_seconds = 5;
     const string file_name("test_volume.wav");
+    double initial_phase = 0;
 
+    // Initialise the synthesiser
+    SynthConfig &synthesiser  = SynthConfig::getInstance();
+    synthesiser.Init();	
 
     for (size_t volume_id = 0; volume_id < 3; volume_id++)
     {
-        // 1. Generate the desired signal and save it to the output file
+        // 1. Generate the samples 
+        Oscillator osc(synthesiser, volume[volume_id], initial_phase, pitch);
+        vector<int16_t> samples_out = osc(number_of_seconds);
+
+        // 2. Save the generated samples to the file 
         WaveFileOut wf_out(number_of_seconds);
-
-        // 2. Save to a WaveFileOut file
-        vector<int16_t> samples_out = generate_samples(
-                volume[volume_id],
-                pitch,
-                number_of_seconds);
-
         wf_out.SaveBufferToFile(file_name, samples_out);
 
         // 3. Read the file saved in Step 2 into a WaveFileIn file
@@ -155,23 +116,24 @@ TEST(ReadWriteWaveFileTest, HandleDifferentVolumes)
 
 TEST(ReadWriteWaveFileTest, HandleDifferentDuration)
 {
-    int pitch = 48; 
+    uint32_t pitch = 48; 
     int32_t volume = 1 << 15;
-    size_t number_of_seconds[] = {0, 1, 5};
+    uint32_t number_of_seconds[] = {0, 1, 5};
     const string file_name("test_duration.wav");
+    double initial_phase = 0;
 
+    // Initialise the synthesiser
+    SynthConfig &synthesiser  = SynthConfig::getInstance();
+    synthesiser.Init();	
 
     for (size_t duration_idx = 0; duration_idx < 3; duration_idx++)
     {
-        // 1. Generate the desired signal and save it to the output file
+        // 1. Generate the samples 
+        Oscillator osc(synthesiser, volume, initial_phase, pitch);
+        vector<int16_t> samples_out = osc(number_of_seconds[duration_idx]);
+
+        // 2. Save the generated samples to the file 
         WaveFileOut wf_out(number_of_seconds[duration_idx]);
-
-        // 2. Save to a WaveFileOut file
-        vector<int16_t> samples_out = generate_samples(
-                volume,
-                pitch,
-                number_of_seconds[duration_idx]);
-
         wf_out.SaveBufferToFile(file_name, samples_out);
 
         // 3. Read the file saved in Step 2 into a WaveFileIn file

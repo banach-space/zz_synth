@@ -1,6 +1,6 @@
 //=============================================================
 // FILE:
-//   /include/zz_SynthConfig.h
+//   /include/SynthConfig.h
 //
 // AUTHOR:
 //   zimzum@github 
@@ -74,29 +74,29 @@ public:
     //      of the synthesiser. Make sure that you call this function
     //      before using the synthesiser.
     //  INPUT:
-    //      sampling_rate - the sampling rate to be used
+    //      sampling_rate_arg - the sampling rate to be used
     //  OUTPUT:
     //      none
     // 
     //--------------------------------------------------------------
-    void Init(const int32_t sampling_rate = 44100);
+    void Init(uint32_t sampling_rate_arg = 44100);
 
     //--------------------------------------------------------------
     // 3. ACCESSORS
     //--------------------------------------------------------------
-    double frequency_table(const int pitch) const;
-    int32_t sampling_rate() const;
+    double frequency_table(vector<double>::size_type pitch) const;
+    uint32_t sampling_rate() const;
     double phase_increment_per_sample() const;
 
 private:
     // The default constructor used implicitly in getInstance(). Not to
-    // be called by users.
+    // be called by external users.
     SynthConfig() : frequency_table_(kNumberOfFrequencies) {};
 
     // The frequency table based on equal-tempered scale with
     // middle C at index 48 (i.e. frequencies[48]). 
     vector<double> frequency_table_;
-    int32_t sampling_rate_;
+    uint32_t sampling_rate_;
     // Maximum representable frequency according to Nyquist
     float nyquist_limit_;
     // Phase increment per sample for signals at 1 Hz. Mathematically this

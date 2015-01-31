@@ -48,37 +48,37 @@ public:
     //--------------------------------------------------------------
     // 3. ACCESSORS
     //--------------------------------------------------------------
-    int32_t chunk_id();
-    int32_t chunk_size();
-    int32_t format();
-    int32_t subchunk_1_id();
-    int32_t subchunk_1_size();
-    int16_t audio_format();
-    int16_t num_channels();
-    int32_t sample_rate();
-    int32_t byte_rate();
-    int16_t block_align();
-    int16_t bits_per_sample();
-    int32_t subchunk_2_id();
-    int32_t subchunk_2_size();
+    uint32_t chunk_id();
+    uint32_t chunk_size();
+    uint32_t format();
+    uint32_t subchunk_1_id();
+    uint32_t subchunk_1_size();
+    uint16_t audio_format();
+    uint16_t num_channels();
+    uint32_t sample_rate();
+    uint32_t byte_rate();
+    uint16_t block_align();
+    uint16_t bits_per_sample();
+    uint32_t subchunk_2_id();
+    uint32_t subchunk_2_size();
 
 protected:
     //--------------------------------------------------------------
     // 4. MUTATORS
     //--------------------------------------------------------------
-    void set_chunk_id(int32_t value);
-    void set_chunk_size(int32_t value);
-    void set_format(int32_t value);
-    void set_subchunk_1_id(int32_t value);
-    void set_subchunk_1_size(int32_t value);
-    void set_audio_format(int16_t value);
-    void set_num_channels(int16_t value);
-    void set_sample_rate(int32_t value);
-    void set_byte_rate(int32_t value);
-    void set_block_align(int16_t value);
-    void set_bits_per_sample(int16_t value);
-    void set_subchunk_2_id(int32_t value);
-    void set_subchunk_2_size(int32_t value);
+    void set_chunk_id(uint32_t value);
+    void set_chunk_size(uint32_t value);
+    void set_format(uint32_t value);
+    void set_subchunk_1_id(uint32_t value);
+    void set_subchunk_1_size(uint32_t value);
+    void set_audio_format(uint16_t value);
+    void set_num_channels(uint16_t value);
+    void set_sample_rate(uint32_t value);
+    void set_byte_rate(uint32_t value);
+    void set_block_align(uint16_t value);
+    void set_bits_per_sample(uint16_t value);
+    void set_subchunk_2_id(uint32_t value);
+    void set_subchunk_2_size(uint32_t value);
 
 private:
     //---------------------------------------------------------
@@ -119,23 +119,23 @@ private:
     //
     //---------------------------------------------------------
 
-    int32_t chunk_id_;
+    uint32_t chunk_id_;
     // The size of the rest of the chunk following this number. This is
     // the size of the entire WAVE file in bytes minus 8 bytes for the
     // two fields not included in this count: chunk_id_ and chunk_size_.
-    int32_t chunk_size_;
-    int32_t format_;
-    int32_t subchunk_1_id_;
-    int32_t subchunk_1_size_;
-    int16_t audio_format_;
-    int16_t num_channels_;
-    int32_t sample_rate_;
-    int32_t byte_rate_;
+    uint32_t chunk_size_;
+    uint32_t format_;
+    uint32_t subchunk_1_id_;
+    uint32_t subchunk_1_size_;
+    uint16_t audio_format_;
+    uint16_t num_channels_;
+    uint32_t sample_rate_;
+    uint32_t byte_rate_;
     // The number of bytes for one sample including all channels.
-    int16_t block_align_;
-    int16_t bits_per_sample_;
-    int32_t subchunk_2_id_;
-    int32_t subchunk_2_size_;
+    uint16_t block_align_;
+    uint16_t bits_per_sample_;
+    uint32_t subchunk_2_id_;
+    uint32_t subchunk_2_size_;
     
 };
 
