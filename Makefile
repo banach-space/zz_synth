@@ -18,6 +18,7 @@ libraries   := $(lib_common)
 lib_common_bin := $(lib_common)/libcommon.a
 
 unit_test_rww := unit_tests/read_write_wav
+unit_test_env := unit_tests/envelope_generation
 
 .PHONY:				\
 	all				\
@@ -26,7 +27,8 @@ unit_test_rww := unit_tests/read_write_wav
 	$(lib_common)	\
 	TAGS			\
 	clean			\
-	$(unit_test_rww)
+	$(unit_test_rww)\
+	$(unit_test_env)
 
 #-----------------------
 #  TARGETS 
@@ -41,6 +43,11 @@ $(lib_common):
 	$(if $(TARGET), $(MAKE) $(TARGET))
 
 $(unit_test_rww): $(libraries)
+	@$(build-msg)
+	$(MAKE) --directory=$@ $(TARGET)
+	$(if $(TARGET), $(MAKE) $(TARGET))
+
+$(unit_test_env): $(libraries)
 	@$(build-msg)
 	$(MAKE) --directory=$@ $(TARGET)
 	$(if $(TARGET), $(MAKE) $(TARGET))

@@ -32,11 +32,9 @@ public:
     // operator and the corresponding move operators.
     explicit Envelope(
             SynthConfig& synthesiser,
-            int32_t volume_arg, 
             int32_t peak_amplitude_arg,
             uint32_t attack_duration_arg,
-            uint32_t decay_duration_arg,
-            uint32_t decay_start_arg
+            uint32_t decay_duration_arg
             );
     virtual ~Envelope() = 0;
     explicit Envelope(const Envelope& rhs) = delete;
@@ -67,13 +65,11 @@ private:
     //--------------------------------------------------------------------
     // 5. DATA MEMMBERS 
     //--------------------------------------------------------------------
-    int32_t volume_;
     int32_t peak_amplitude_;
     uint32_t attack_duration_;
     uint32_t decay_duration_;
-    uint32_t decay_start_;
     size_t attack_number_of_samples_; 
-    size_t _number_of_samples_; 
+    size_t decay_number_of_samples_; 
     
 };
 
@@ -93,11 +89,9 @@ public:
     // operator and the corresponding move operators.
     explicit LinearEnvelope(
             SynthConfig& synthesiser,
-            int32_t volume_arg, 
             int32_t peak_amplitude_arg,
             uint32_t attack_duration_arg,
-            uint32_t decay_duration_arg,
-            uint32_t decay_start_arg
+            uint32_t decay_duration_arg
             );
     virtual ~LinearEnvelope() = default;
 

@@ -21,17 +21,13 @@
 //------------------------------------------------------------------------
 Envelope::Envelope(
         SynthConfig& synthesiser,
-        int32_t volume_arg, 
         int32_t peak_amplitude_arg,
         uint32_t attack_duration_arg,
-        uint32_t decay_duration_arg,
-        uint32_t decay_start_arg
+        uint32_t decay_duration_arg
         ) :
-    volume_(volume_arg),
     peak_amplitude_(peak_amplitude_arg),
     attack_duration_(attack_duration_arg),
     decay_duration_(decay_duration_arg),
-    decay_start_(decay_start_arg),
     attack_number_of_samples_(0),
     decay_number_of_samples_(0)
 {
@@ -45,7 +41,8 @@ Envelope::~Envelope() {}
 //------------------------------------------------------------------------
 // 2. GENERAL USER INTERFACE 
 //------------------------------------------------------------------------
-// None
+vector<float> Envelope::GenerateAttack() const {};
+vector<float> Envelope::GenerateDecay() const {};
 
 //------------------------------------------------------------------------
 // 3. ACCESSORS
@@ -68,19 +65,15 @@ size_t Envelope::decay_number_of_samples() const{return decay_number_of_samples_
 //------------------------------------------------------------------------
 LinearEnvelope::LinearEnvelope(
         SynthConfig& synthesiser,
-        int32_t volume_arg, 
         int32_t peak_amplitude_arg,
         uint32_t attack_duration_arg,
-        uint32_t decay_duration_arg,
-        uint32_t decay_start_arg
+        uint32_t decay_duration_arg
         ) : 
     Envelope(
             synthesiser,
-            volume_arg, 
             peak_amplitude_arg, 
             attack_duration_arg,
-            decay_duration_arg,
-            decay_start_arg)
+            decay_duration_arg)
 {
     attack_increment_ = peak_amplitude() / attack_number_of_samples();
     decay_decrement_ = peak_amplitude() / decay_number_of_samples();
