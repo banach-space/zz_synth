@@ -20,7 +20,13 @@ include ../../include/zz_synth.mk
 #-----------------------
 #  SOURCE FILES -->  RULES 
 #-----------------------
-source_files = synth_config.cc wave_file.cc zz_global.cc oscillator.cc
+source_files = \
+               synth_config.cc\
+               wave_file.cc\
+               zz_global.cc\
+               oscillator.cc\
+               envelope.cc
+
 include ../../include/zz_synth_rules.mk
 INCLUDES += -lm
 
@@ -55,4 +61,8 @@ wave_file.cc: \
 
 oscillator.cc: \
 	$(ZZINC)/common/oscillator.h\
+	$(ZZINC)/common/zz_global_include.h
+
+envelope.cc: \
+	$(ZZINC)/common/envelope.h\
 	$(ZZINC)/common/zz_global_include.h\
