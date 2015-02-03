@@ -34,7 +34,7 @@ $(info Pedantic compile flags...)
 endif
 
 INCLUDES    = -I $(ZZINC)
-CXX         = g++
+CXX         = g++ -fdiagnostics-show-option
 COMPILE.cpp = $(CXX) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) $(TARGET_ARCH) -c
 
 # The following are extra include flags needed by the Google Unit Testing

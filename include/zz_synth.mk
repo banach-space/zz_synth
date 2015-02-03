@@ -22,6 +22,7 @@ endif
 # libraries
 ZZBIN = $(ZZDIR)/bin
 ZZINC = $(ZZDIR)/include
+ZZSRC = $(ZZDIR)/src
 ZZLIB = $(ZZDIR)/lib
 
 #-----------------------

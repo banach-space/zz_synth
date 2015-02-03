@@ -25,7 +25,8 @@ source_files = \
                wave_file.cc\
                zz_global.cc\
                oscillator.cc\
-               envelope.cc
+               envelope.cc\
+			   segment.cc
 
 include ../../include/zz_synth_rules.mk
 INCLUDES += -lm
@@ -65,4 +66,9 @@ oscillator.cc: \
 
 envelope.cc: \
 	$(ZZINC)/common/envelope.h\
+	$(ZZSRC)/common/segment.cc\
+	$(ZZINC)/common/zz_global_include.h
+
+segment.cc: \
+	$(ZZINC)/common/segment.h\
 	$(ZZINC)/common/zz_global_include.h\
