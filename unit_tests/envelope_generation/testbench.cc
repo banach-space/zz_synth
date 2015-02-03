@@ -29,7 +29,6 @@ TEST(EnvelopeGenerationTest, LinearEnvelope)
     SynthConfig &synthesiser  = SynthConfig::getInstance();
     synthesiser.Init();	
 
-	LinearEnvelope envelope(synthesiser, 100, 1, 1);
 }
 
 //========================================================================
