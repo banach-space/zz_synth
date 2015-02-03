@@ -1,6 +1,6 @@
 #=============================================================
 # FILE:
-#   src/unit_tests/envelope/Makefile
+#   src/unit_tests/segment/Makefile
 #
 # AUTHOR:
 #   zimzum@github 
@@ -42,5 +42,5 @@ chkdirs:
 #  DEPENDENCIES 
 #-----------------------
 testbench.cc: \
-	$(ZZINC)/common/envelope.h\
+	$(ZZINC)/common/segment.h\
     $(ZZINC)/common/synth_config.h
