@@ -29,6 +29,8 @@ extern const double kTwoPi;
 
 extern const double kNoteC0;
 
+extern const double kEps;
+
 //=============================================================
 // Fixed point globals 
 //=============================================================

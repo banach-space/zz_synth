@@ -41,7 +41,7 @@ public:
     //--------------------------------------------------------------------
     // 2. GENERAL USER INTERFACE 
     //--------------------------------------------------------------------
-    const vector<float> GetSegment();
+    shared_ptr< const vector<float> > GetSegment();
 
     //--------------------------------------------------------------------
     // 3. ACCESSORS
@@ -55,7 +55,7 @@ private:
     virtual void GenerateSegment(
         size_t number_of_samples,
         float peak_amplitude,
-        vector<float> &output_segment) = 0;
+        shared_ptr< vector<float> > output_segment) = 0;
 
     //--------------------------------------------------------------------
     // 5. DATA MEMMBERS 
@@ -66,7 +66,7 @@ private:
     // 'true' once the segment_ vector is set. This is done by the Init()
     // function.
     bool init_;
-    vector<float> segment_;
+    shared_ptr< vector<float> > segment_;
 };
 
 //========================================================================
@@ -100,7 +100,7 @@ private:
     void GenerateSegment(
         size_t number_of_samples,
         float peak_amplitude,
-        vector<float> &output_segment);
+        shared_ptr< vector<float> > output_segment);
 
     //--------------------------------------------------------------------
     // 5. DATA MEMMBERS 

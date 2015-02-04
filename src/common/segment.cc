@@ -23,7 +23,7 @@ Segment::Segment(float peak_amplitude_arg, size_t number_of_steps_arg) :
     number_of_steps_(number_of_steps_arg),
     peak_amplitude_(peak_amplitude_arg),
     init_(false),
-    segment_(0)
+    segment_(new vector<float>(0))
 {}
 
 Segment::~Segment() {}
@@ -31,16 +31,16 @@ Segment::~Segment() {}
 //------------------------------------------------------------------------
 // 2. GENERAL USER INTERFACE 
 //------------------------------------------------------------------------
-const vector<float> Segment::GetSegment()
+shared_ptr< const vector<float> > Segment::GetSegment()
 {
     // No need to reinitialise.
-    if (!segment_.empty() && init_)
+    if (!segment_->empty() && init_)
     {
         return segment_;
     }
 
     // If the segment_ is empty but init_ is true then something is wrong
-    if (segment_.empty() && init_)
+    if (segment_->empty() && init_)
     {
         throw SegmentInitialisationException();
     }
@@ -71,26 +71,27 @@ LinearSegment::~LinearSegment()
 // 2. GENERAL USER INTERFACE 
 //------------------------------------------------------------------------
 void LinearSegment::GenerateSegment(
-        size_t number_of_samples,
+        size_t number_of_steps,
         float peak_amplitude,
-        vector<float> &output_segment)
+        shared_ptr< vector<float> >output_segment)
 {
-    output_segment.reserve(number_of_samples);
-    float volume = 0;
-    const float increment = peak_amplitude / number_of_samples;
+    output_segment->reserve(number_of_steps);
+    double volume = 0;
+    const double increment = peak_amplitude / number_of_steps;
     vector<float>::iterator it;
 
-    for (it = output_segment.begin();
-            it != output_segment.end();
-            it++)
+    for (size_t idx = 0; idx < number_of_steps; idx++)
     {
-        *it = volume;
+        output_segment->push_back(volume);
         volume += increment;
     }
 
     // Due to rounding error the last entry might be different from 
     // peak_amplitude. Force it to be equal.
-    *(--it) = peak_amplitude;
+    if (number_of_steps > 0)
+    {
+        (*output_segment)[number_of_steps] = peak_amplitude;
+    }
 }
 
 //=============================================================

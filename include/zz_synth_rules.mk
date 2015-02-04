@@ -31,6 +31,9 @@ CPPFLAGS += -pedantic -Wall -Wextra -Wcast-align -Wcast-qual\
    	-Wsign-conversion -Wsign-promo -Wstrict-null-sentinel -Wstrict-overflow=5\
    	-Wswitch-default -Wundef -Werror -Wno-unused
 $(info Pedantic compile flags...)
+else ifeq "$(COMPILE_FLAGS)" "DEBUG"
+CPPFLAGS += -g
+$(info Debuggin compile flags...)
 endif
 
 INCLUDES    = -I $(ZZINC)
