@@ -20,7 +20,36 @@
 //========================================================================
 // UTILITIES 
 //========================================================================
+void ValidateSegmentIncline(
+        float peak_amplitude_expected, 
+        size_t size_expected,
+        const vector<float> &segment);
+void ValidateSegmentDecline(
+        float peak_amplitude_expected, 
+        size_t size_expected,
+        const vector<float> &segment);
 
+void ValidateSegmentIncline(
+        float peak_amplitude_expected, 
+        size_t size_expected,
+        const vector<float> &segment)
+{
+        EXPECT_EQ(segment.size(), size_expected + 1);
+        EXPECT_EQ(segment[0], 0);
+        EXPECT_EQ(segment[size_expected], peak_amplitude_expected);
+        EXPECT_LE(fabs(segment[size_expected/2]- peak_amplitude_expected/2), kEps);
+}
+
+void ValidateSegmentDecline(
+        float peak_amplitude_expected, 
+        size_t size_expected,
+        const vector<float> &segment)
+{
+        EXPECT_EQ(segment.size(), size_expected + 1);
+        EXPECT_EQ(segment[size_expected], 0);
+        EXPECT_EQ(segment[0], peak_amplitude_expected);
+        EXPECT_LE(fabs(segment[size_expected/2]- peak_amplitude_expected/2), kEps);
+}
 //========================================================================
 // TESTS
 //========================================================================
@@ -33,14 +62,14 @@ TEST(LinearSegmentTest, HandleEmptySegment)
     SynthConfig &synthesiser  = SynthConfig::getInstance();
     synthesiser.Init();	
 
-    LinearSegment segment(peak_amplitude, number_of_steps); 
+    LinearSegment segment(peak_amplitude, number_of_steps, kIncline); 
 
-    shared_ptr< const vector<float> > segment_data = segment.GetSegment();
+    const vector<float> segment_data = segment.GetSegment();
 
-    EXPECT_EQ(segment_data->empty(), true);
+    EXPECT_EQ(segment_data.empty(), true);
 }
 
-TEST(LinearSegmentTest, HandleDifferentLengths)
+TEST(LinearSegmentTest, HandleDifferentLengthsIncline)
 {
     size_t number_of_steps[] = {2, 40, 100, 1000};
     float peak_amplitude = 1 << 15;
@@ -51,18 +80,14 @@ TEST(LinearSegmentTest, HandleDifferentLengths)
 
     for (size_t idx = 0; idx < 4; idx++) 
     {
-        LinearSegment segment(peak_amplitude, number_of_steps[idx]); 
+        LinearSegment segment(peak_amplitude, number_of_steps[idx], kIncline); 
+        const vector<float> segment_data = segment.GetSegment();
 
-        shared_ptr< const vector<float> > segment_data = segment.GetSegment();
-
-        EXPECT_EQ((*segment_data)[0], 0);
-        EXPECT_EQ((*segment_data)[number_of_steps[idx]], peak_amplitude);
-        // Carefull here: comapring to kEps which is not that small!
-        EXPECT_LE(fabs((*segment_data)[number_of_steps[idx]/2]- peak_amplitude/2), kEps);
+        ValidateSegmentIncline(peak_amplitude, number_of_steps[idx], segment_data);
     }
 }
 
-TEST(LinearSegmentTest, HandleDifferentVolumes)
+TEST(LinearSegmentTest, HandleDifferentVolumesIncline)
 {
     size_t number_of_steps = 100;
     float peak_amplitude[] = {0, 1, 1000, 1 << 15};
@@ -73,14 +98,46 @@ TEST(LinearSegmentTest, HandleDifferentVolumes)
 
     for (size_t idx = 0; idx < 4; idx++) 
     {
-        LinearSegment segment(peak_amplitude[idx], number_of_steps); 
+        LinearSegment segment(peak_amplitude[idx], number_of_steps, kIncline); 
+        const vector<float> segment_data = segment.GetSegment();
+        ValidateSegmentIncline(peak_amplitude[idx], number_of_steps, segment_data);
 
-        shared_ptr< const vector<float> > segment_data = segment.GetSegment();
+    }
+}
 
-        EXPECT_EQ((*segment_data)[0], 0);
-        EXPECT_EQ((*segment_data)[number_of_steps], peak_amplitude[idx]);
-        // Carefull here: comapring to kEps which is not that small!
-        EXPECT_LE(fabs((*segment_data)[number_of_steps/2]- peak_amplitude[idx]/2), kEps);
+TEST(LinearSegmentTest, HandleDifferentLengthsDecline)
+{
+    size_t number_of_steps[] = {2, 40, 100, 1000};
+    float peak_amplitude = 1 << 15;
+
+    // Initialise the synthesiser
+    SynthConfig &synthesiser  = SynthConfig::getInstance();
+    synthesiser.Init();	
+
+    for (size_t idx = 3; idx < 4; idx++) 
+    {
+        LinearSegment segment(peak_amplitude, number_of_steps[idx], kDecline); 
+        const vector<float> segment_data = segment.GetSegment();
+
+        ValidateSegmentDecline(peak_amplitude, number_of_steps[idx], segment_data);
+    }
+}
+
+TEST(LinearSegmentTest, HandleDifferentVolumesDecline)
+{
+    size_t number_of_steps = 100;
+    float peak_amplitude[] = {0, 1, 1000, 1 << 15};
+
+    // Initialise the synthesiser
+    SynthConfig &synthesiser  = SynthConfig::getInstance();
+    synthesiser.Init();	
+
+    for (size_t idx = 0; idx < 4; idx++) 
+    {
+        LinearSegment segment(peak_amplitude[idx], number_of_steps, kDecline); 
+        const vector<float> segment_data = segment.GetSegment();
+
+        ValidateSegmentDecline(peak_amplitude[idx], number_of_steps, segment_data);
     }
 }
 

@@ -16,6 +16,12 @@
 
 #include <common/zz_global_include.h>
 
+enum SegmentType
+{
+    kDecline = 0,
+    kIncline = 1
+};
+
 //========================================================================
 // CLASS: Segment
 //
@@ -30,8 +36,11 @@ public:
     // 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
     //--------------------------------------------------------------------
     // TODO!!! This constructor will only work for linear segments. Need to
-    // come back here later.
-    explicit Segment(float peak_amplitude_arg, size_t number_of_steps_arg);
+    // come bac here later.
+    explicit Segment(
+            float peak_amplitude_arg, 
+            size_t number_of_steps_arg,
+            SegmentType seg_type_arg);
     virtual ~Segment() = 0;
     explicit Segment(const Segment& rhs) = delete;
     explicit Segment(Segment&& rhs) = delete;
@@ -41,7 +50,8 @@ public:
     //--------------------------------------------------------------------
     // 2. GENERAL USER INTERFACE 
     //--------------------------------------------------------------------
-    shared_ptr< const vector<float> > GetSegment();
+    vector<float> GetSegment();
+    SegmentType seg_type() {return seg_type_;};
 
     //--------------------------------------------------------------------
     // 3. ACCESSORS
@@ -55,7 +65,7 @@ private:
     virtual void GenerateSegment(
         size_t number_of_samples,
         float peak_amplitude,
-        shared_ptr< vector<float> > output_segment) = 0;
+        vector<float> &output_segment) = 0;
 
     //--------------------------------------------------------------------
     // 5. DATA MEMMBERS 
@@ -66,7 +76,8 @@ private:
     // 'true' once the segment_ vector is set. This is done by the Init()
     // function.
     bool init_;
-    shared_ptr< vector<float> > segment_;
+    SegmentType seg_type_;
+    vector<float> segment_;
 };
 
 //========================================================================
@@ -81,7 +92,10 @@ public:
     //--------------------------------------------------------------------
     // 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
     //--------------------------------------------------------------------
-    explicit LinearSegment(float peak_amplitude_arg, size_t number_of_steps_arg);
+    explicit LinearSegment(
+            float peak_amplitude_arg, 
+            size_t number_of_steps_arg,
+            SegmentType seg_type_arg);
     ~LinearSegment();
 
     //--------------------------------------------------------------------
@@ -100,7 +114,7 @@ private:
     void GenerateSegment(
         size_t number_of_samples,
         float peak_amplitude,
-        shared_ptr< vector<float> > output_segment);
+        vector<float> &output_segment);
 
     //--------------------------------------------------------------------
     // 5. DATA MEMMBERS 

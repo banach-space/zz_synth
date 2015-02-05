@@ -22,8 +22,8 @@
 //========================================================================
 // UTILITIES 
 //========================================================================
-void compare_wave_headers(WaveFileOut &wf_out, WaveFileIn &wf_in);
-void compare_wave_headers(WaveFileOut &wf_out, WaveFileIn &wf_in)
+void CompareWaveHeaders(WaveFileOut &wf_out, WaveFileIn &wf_in);
+void CompareWaveHeaders(WaveFileOut &wf_out, WaveFileIn &wf_in)
 {
         EXPECT_EQ(wf_out.chunk_id(), wf_in.chunk_id());
         EXPECT_EQ(wf_out.chunk_size(), wf_in.chunk_size());
@@ -73,7 +73,7 @@ TEST(ReadWriteWaveFileTest, HandleDifferentPitches)
         samples_in = wf_in.ReadBufferFromFile(file_name);
 
         // 4. Validate by comparing input and output
-        compare_wave_headers(wf_out, wf_in);
+        CompareWaveHeaders(wf_out, wf_in);
         EXPECT_THAT(samples_in, ::testing::ContainerEq(samples_out));
     }
 }
@@ -106,7 +106,7 @@ TEST(ReadWriteWaveFileTest, HandleDifferentVolumes)
         samples_in = wf_in.ReadBufferFromFile(file_name);
 
         // 4. Validate by comparing input and output
-        compare_wave_headers(wf_out, wf_in);
+        CompareWaveHeaders(wf_out, wf_in);
         EXPECT_THAT(samples_in, ::testing::ContainerEq(samples_out));
     }
 }
@@ -139,7 +139,7 @@ TEST(ReadWriteWaveFileTest, HandleDifferentDuration)
         samples_in = wf_in.ReadBufferFromFile(file_name);
 
         // 4. Validate by comparing input and output
-        compare_wave_headers(wf_out, wf_in);
+        CompareWaveHeaders(wf_out, wf_in);
         EXPECT_THAT(samples_in, ::testing::ContainerEq(samples_out));
     }
 }

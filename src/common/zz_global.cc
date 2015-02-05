@@ -26,7 +26,7 @@ const double kTwoPi = 6.28318530717958;
 
 // Epsilon for floating point comparisons. Very carefull here: is this value
 // accurate enough for you!?
-extern const double kEps = 1e-2;
+extern const double kEps = 1e-14;
 
 // Notes: C0
 const double kNoteC0 = 16.35;

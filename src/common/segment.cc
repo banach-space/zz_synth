@@ -19,11 +19,15 @@
 //------------------------------------------------------------------------
 // 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
 //------------------------------------------------------------------------
-Segment::Segment(float peak_amplitude_arg, size_t number_of_steps_arg) :
+Segment::Segment(
+        float peak_amplitude_arg, 
+        size_t number_of_steps_arg,
+        SegmentType seg_type_arg) :
     number_of_steps_(number_of_steps_arg),
     peak_amplitude_(peak_amplitude_arg),
     init_(false),
-    segment_(new vector<float>(0))
+    seg_type_(seg_type_arg),
+    segment_(0)
 {}
 
 Segment::~Segment() {}
@@ -31,16 +35,16 @@ Segment::~Segment() {}
 //------------------------------------------------------------------------
 // 2. GENERAL USER INTERFACE 
 //------------------------------------------------------------------------
-shared_ptr< const vector<float> > Segment::GetSegment()
+vector<float> Segment::GetSegment()
 {
     // No need to reinitialise.
-    if (!segment_->empty() && init_)
+    if (!segment_.empty() && init_)
     {
         return segment_;
     }
 
     // If the segment_ is empty but init_ is true then something is wrong
-    if (segment_->empty() && init_)
+    if (segment_.empty() && init_)
     {
         throw SegmentInitialisationException();
     }
@@ -60,8 +64,9 @@ shared_ptr< const vector<float> > Segment::GetSegment()
 //------------------------------------------------------------------------
 LinearSegment::LinearSegment(
         float peak_amplitude_arg, 
-        size_t number_of_steps_arg) :
-    Segment(peak_amplitude_arg, number_of_steps_arg)
+        size_t number_of_steps_arg,
+        SegmentType seg_type_arg) :
+    Segment(peak_amplitude_arg, number_of_steps_arg, seg_type_arg)
 {}
 
 LinearSegment::~LinearSegment() 
@@ -73,16 +78,27 @@ LinearSegment::~LinearSegment()
 void LinearSegment::GenerateSegment(
         size_t number_of_steps,
         float peak_amplitude,
-        shared_ptr< vector<float> >output_segment)
+        vector<float> &output_segment)
 {
-    output_segment->reserve(number_of_steps);
+    output_segment.reserve(number_of_steps + 1);
     double volume = 0;
-    const double increment = peak_amplitude / number_of_steps;
+    double increment = 0; 
+
+    if (seg_type() == kIncline)
+    {
+        increment = peak_amplitude / number_of_steps;
+        volume = 0;
+    } else
+    {
+        increment = -(static_cast<double>(peak_amplitude) / number_of_steps);
+        volume = peak_amplitude;
+    }
+
     vector<float>::iterator it;
 
     for (size_t idx = 0; idx < number_of_steps; idx++)
     {
-        output_segment->push_back(volume);
+        output_segment.push_back(volume);
         volume += increment;
     }
 
@@ -90,7 +106,13 @@ void LinearSegment::GenerateSegment(
     // peak_amplitude. Force it to be equal.
     if (number_of_steps > 0)
     {
-        (*output_segment)[number_of_steps] = peak_amplitude;
+        if (seg_type() == kIncline)
+        {
+            output_segment.push_back(peak_amplitude);
+        } else
+        {
+            output_segment.push_back(0);
+        }
     }
 }
 
