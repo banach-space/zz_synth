@@ -17,24 +17,26 @@
 #include <common/segment.h>
 #include <common/zz_global.h>
 
+using namespace std;
+
 //========================================================================
 // UTILITIES 
 //========================================================================
 void ValidateSegmentIncline(
         float peak_amplitude_expected, 
         size_t size_expected,
-        const vector<float> &segment);
+        LinearSegment &segment);
 void ValidateSegmentDecline(
         float peak_amplitude_expected, 
         size_t size_expected,
-        const vector<float> &segment);
+        LinearSegment &segment);
 
 void ValidateSegmentIncline(
         float peak_amplitude_expected, 
         size_t size_expected,
-        const vector<float> &segment)
+        LinearSegment &segment)
 {
-        EXPECT_EQ(segment.size(), size_expected + 1);
+        EXPECT_EQ(segment.number_of_steps(), size_expected);
         EXPECT_EQ(segment[0], 0);
         EXPECT_EQ(segment[size_expected], peak_amplitude_expected);
         EXPECT_LE(fabs(segment[size_expected/2]- peak_amplitude_expected/2), kEps);
@@ -43,9 +45,9 @@ void ValidateSegmentIncline(
 void ValidateSegmentDecline(
         float peak_amplitude_expected, 
         size_t size_expected,
-        const vector<float> &segment)
+        LinearSegment &segment)
 {
-        EXPECT_EQ(segment.size(), size_expected + 1);
+        EXPECT_EQ(segment.number_of_steps(), size_expected);
         EXPECT_EQ(segment[size_expected], 0);
         EXPECT_EQ(segment[0], peak_amplitude_expected);
         EXPECT_LE(fabs(segment[size_expected/2]- peak_amplitude_expected/2), kEps);
@@ -64,9 +66,7 @@ TEST(LinearSegmentTest, HandleEmptySegment)
 
     LinearSegment segment(peak_amplitude, number_of_steps, kIncline); 
 
-    const vector<float> segment_data = segment.GetSegment();
-
-    EXPECT_EQ(segment_data.empty(), true);
+    EXPECT_EQ(segment.IsEmpty(), true);
 }
 
 TEST(LinearSegmentTest, HandleDifferentLengthsIncline)
@@ -81,9 +81,7 @@ TEST(LinearSegmentTest, HandleDifferentLengthsIncline)
     for (size_t idx = 0; idx < 4; idx++) 
     {
         LinearSegment segment(peak_amplitude, number_of_steps[idx], kIncline); 
-        const vector<float> segment_data = segment.GetSegment();
-
-        ValidateSegmentIncline(peak_amplitude, number_of_steps[idx], segment_data);
+        ValidateSegmentIncline(peak_amplitude, number_of_steps[idx], segment);
     }
 }
 
@@ -99,8 +97,7 @@ TEST(LinearSegmentTest, HandleDifferentVolumesIncline)
     for (size_t idx = 0; idx < 4; idx++) 
     {
         LinearSegment segment(peak_amplitude[idx], number_of_steps, kIncline); 
-        const vector<float> segment_data = segment.GetSegment();
-        ValidateSegmentIncline(peak_amplitude[idx], number_of_steps, segment_data);
+        ValidateSegmentIncline(peak_amplitude[idx], number_of_steps, segment);
 
     }
 }
@@ -117,9 +114,7 @@ TEST(LinearSegmentTest, HandleDifferentLengthsDecline)
     for (size_t idx = 3; idx < 4; idx++) 
     {
         LinearSegment segment(peak_amplitude, number_of_steps[idx], kDecline); 
-        const vector<float> segment_data = segment.GetSegment();
-
-        ValidateSegmentDecline(peak_amplitude, number_of_steps[idx], segment_data);
+        ValidateSegmentDecline(peak_amplitude, number_of_steps[idx], segment);
     }
 }
 
@@ -135,9 +130,7 @@ TEST(LinearSegmentTest, HandleDifferentVolumesDecline)
     for (size_t idx = 0; idx < 4; idx++) 
     {
         LinearSegment segment(peak_amplitude[idx], number_of_steps, kDecline); 
-        const vector<float> segment_data = segment.GetSegment();
-
-        ValidateSegmentDecline(peak_amplitude[idx], number_of_steps, segment_data);
+        ValidateSegmentDecline(peak_amplitude[idx], number_of_steps, segment);
     }
 }
 

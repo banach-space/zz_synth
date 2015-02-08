@@ -39,7 +39,7 @@ public:
     // come bac here later.
     explicit Segment(
             float peak_amplitude_arg, 
-            size_t number_of_steps_arg,
+            std::size_t number_of_steps_arg,
             SegmentType seg_type_arg);
     virtual ~Segment() = 0;
     explicit Segment(const Segment& rhs) = delete;
@@ -50,8 +50,12 @@ public:
     //--------------------------------------------------------------------
     // 2. GENERAL USER INTERFACE 
     //--------------------------------------------------------------------
-    vector<float> GetSegment();
+    std::vector<float> GetSegment();
     SegmentType seg_type() {return seg_type_;};
+    const float& operator[](const std::size_t position) const;
+    float& operator[](const std::size_t position);
+    bool IsEmpty() const;
+    std::size_t number_of_steps() const;
 
     //--------------------------------------------------------------------
     // 3. ACCESSORS
@@ -63,21 +67,20 @@ private:
     // 4. PRIVATE METHODS 
     //--------------------------------------------------------------------
     virtual void GenerateSegment(
-        size_t number_of_samples,
         float peak_amplitude,
-        vector<float> &output_segment) = 0;
+        std::vector<float> &output_segment) = 0;
 
     //--------------------------------------------------------------------
     // 5. DATA MEMMBERS 
     //--------------------------------------------------------------------
-    size_t number_of_steps_;
+    std::size_t number_of_steps_;
     float peak_amplitude_;
     // The init_ variable is set by default set to 'false' and then changed to
     // 'true' once the segment_ vector is set. This is done by the Init()
     // function.
     bool init_;
     SegmentType seg_type_;
-    vector<float> segment_;
+    std::vector<float> segment_;
 };
 
 //========================================================================
@@ -101,6 +104,8 @@ public:
     //--------------------------------------------------------------------
     // 2. GENERAL USER INTERFACE 
     //--------------------------------------------------------------------
+    const float& operator[](const std::size_t position) const;
+    float& operator[](const std::size_t position);
 
     //--------------------------------------------------------------------
     // 3. ACCESSORS
@@ -112,14 +117,12 @@ private:
     // 4. PRIVATE METHODS 
     //--------------------------------------------------------------------
     void GenerateSegment(
-        size_t number_of_samples,
         float peak_amplitude,
-        vector<float> &output_segment);
+        std::vector<float> &output_segment);
 
     //--------------------------------------------------------------------
     // 5. DATA MEMMBERS 
     //--------------------------------------------------------------------
-    size_t number_of_steps_;
     float peak_amplitude_;
 };
 
@@ -127,7 +130,7 @@ private:
 //  CLASS: SegmentInitialisationException 
 //
 // DESCRIPTION:
-//  Exception class. Thrown when the corresponding segment is not initialised
+//  Exception thrown when the corresponding segment is not initialised
 //  correctly. This can be detected by checking init_ agains the 'emptiness' 
 //  of the segment.
 //========================================================================

@@ -13,6 +13,10 @@
 
 #include <common/segment.h>
 
+#include <common/zz_global_include.h>
+
+using namespace std;
+
 //========================================================================
 // CLASS: Segment
 //========================================================================
@@ -49,11 +53,40 @@ vector<float> Segment::GetSegment()
         throw SegmentInitialisationException();
     }
 
-    GenerateSegment(number_of_steps_, peak_amplitude_, segment_);
+    GenerateSegment(peak_amplitude_, segment_);
 
     init_ = true;
 
     return segment_; 
+}
+
+const float& Segment::operator[](const size_t position) const
+{
+    assert(position <= number_of_steps_);
+
+    return segment_[position];
+}
+
+float& Segment::operator[](const size_t position)
+{
+    assert(position <= number_of_steps_);
+    if (!init_)
+    {
+        GenerateSegment(peak_amplitude_, segment_);
+        init_ = true;
+        
+    }
+    return segment_[position];
+}
+
+bool Segment::IsEmpty() const
+{
+    return segment_.empty();
+}
+
+size_t Segment::number_of_steps() const
+{
+    return number_of_steps_;
 }
 
 //========================================================================
@@ -76,27 +109,26 @@ LinearSegment::~LinearSegment()
 // 2. GENERAL USER INTERFACE 
 //------------------------------------------------------------------------
 void LinearSegment::GenerateSegment(
-        size_t number_of_steps,
         float peak_amplitude,
         vector<float> &output_segment)
 {
-    output_segment.reserve(number_of_steps + 1);
+    output_segment.reserve(number_of_steps() + 1);
     double volume = 0;
     double increment = 0; 
 
     if (seg_type() == kIncline)
     {
-        increment = peak_amplitude / number_of_steps;
+        increment = peak_amplitude / number_of_steps();
         volume = 0;
     } else
     {
-        increment = -(static_cast<double>(peak_amplitude) / number_of_steps);
+        increment = -(static_cast<double>(peak_amplitude) / number_of_steps());
         volume = peak_amplitude;
     }
 
     vector<float>::iterator it;
 
-    for (size_t idx = 0; idx < number_of_steps; idx++)
+    for (size_t idx = 0; idx < number_of_steps(); idx++)
     {
         output_segment.push_back(volume);
         volume += increment;
@@ -104,7 +136,7 @@ void LinearSegment::GenerateSegment(
 
     // Due to rounding error the last entry might be different from 
     // peak_amplitude. Force it to be equal.
-    if (number_of_steps > 0)
+    if (number_of_steps() > 0)
     {
         if (seg_type() == kIncline)
         {
@@ -114,6 +146,16 @@ void LinearSegment::GenerateSegment(
             output_segment.push_back(0);
         }
     }
+}
+
+const float& LinearSegment::operator[](const size_t position) const
+{
+    return Segment::operator[](position);
+}
+
+float& LinearSegment::operator[](const size_t position)
+{
+    return Segment::operator[](position);
 }
 
 //=============================================================

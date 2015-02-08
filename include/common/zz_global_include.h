@@ -23,6 +23,7 @@ using namespace::std;
 //=============================================================
 #include <cstdint>
 #include <cmath>
+#include <cassert>
 
 //=============================================================
 // C++ standard library
