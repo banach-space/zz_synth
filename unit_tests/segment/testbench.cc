@@ -39,7 +39,14 @@ void ValidateSegmentIncline(
         EXPECT_EQ(segment.number_of_steps(), size_expected);
         EXPECT_EQ(segment[0], 0);
         EXPECT_EQ(segment[size_expected-1], peak_amplitude_expected);
-        EXPECT_LE(fabs(segment[(size_expected-1)/2]- peak_amplitude_expected/2), kEps);
+        if ((size_expected % 2))
+        {
+            EXPECT_LE(fabs(segment[(size_expected-1)/2]- peak_amplitude_expected/2), kEps);
+        } else
+        {
+            double temp = (segment[(size_expected-1)/2] + segment[(size_expected+1)/2])/2;
+            EXPECT_LE(fabs(temp- peak_amplitude_expected/2), kEps);
+        }
 }
 
 void ValidateSegmentDecline(
@@ -50,7 +57,14 @@ void ValidateSegmentDecline(
         EXPECT_EQ(segment.number_of_steps(), size_expected);
         EXPECT_EQ(segment[size_expected-1], 0);
         EXPECT_EQ(segment[0], peak_amplitude_expected);
-        EXPECT_LE(fabs(segment[(size_expected-1)/2]- peak_amplitude_expected/2), kEps);
+        if ((size_expected % 2))
+        {
+            EXPECT_LE(fabs(segment[(size_expected-1)/2]- peak_amplitude_expected/2), kEps);
+        } else
+        {
+            double temp = (segment[(size_expected-1)/2] + segment[(size_expected+1)/2])/2;
+            EXPECT_LE(fabs(temp- peak_amplitude_expected/2), kEps);
+        }
 }
 //========================================================================
 // TESTS
@@ -71,7 +85,7 @@ TEST(LinearSegmentTest, HandleEmptySegment)
 
 TEST(LinearSegmentTest, HandleDifferentLengthsIncline)
 {
-    size_t number_of_steps[] = {3, 41, 101, 1001};
+    size_t number_of_steps[] = {4, 41, 101, 1001, 2000};
     float peak_amplitude = 1 << 15;
 
     // Initialise the synthesiser
@@ -104,7 +118,7 @@ TEST(LinearSegmentTest, HandleDifferentVolumesIncline)
 
 TEST(LinearSegmentTest, HandleDifferentLengthsDecline)
 {
-    size_t number_of_steps[] = {3, 41, 101, 1001};
+    size_t number_of_steps[] = {2, 41, 101, 1001, 2000};
     float peak_amplitude = 1 << 15;
 
     // Initialise the synthesiser
