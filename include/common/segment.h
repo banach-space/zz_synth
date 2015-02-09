@@ -35,12 +35,7 @@ public:
     //--------------------------------------------------------------------
     // 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
     //--------------------------------------------------------------------
-    // TODO!!! This constructor will only work for linear segments. Need to
-    // come bac here later.
-    explicit Segment(
-            float peak_amplitude_arg, 
-            std::size_t number_of_steps_arg,
-            SegmentType seg_type_arg);
+    explicit Segment();
     virtual ~Segment() = 0;
     explicit Segment(const Segment& rhs) = delete;
     explicit Segment(Segment&& rhs) = delete;
@@ -50,12 +45,10 @@ public:
     //--------------------------------------------------------------------
     // 2. GENERAL USER INTERFACE 
     //--------------------------------------------------------------------
-    std::vector<float> GetSegment();
-    SegmentType seg_type() {return seg_type_;};
-    const float& operator[](const std::size_t position) const;
-    float& operator[](const std::size_t position);
-    bool IsEmpty() const;
-    std::size_t number_of_steps() const;
+    virtual std::vector<float> GetSegment() = 0;
+    virtual const float& operator[](const std::size_t position) const = 0;
+    virtual float& operator[](const std::size_t position) = 0;
+    virtual bool IsEmpty() const = 0;
 
     //--------------------------------------------------------------------
     // 3. ACCESSORS
@@ -66,21 +59,10 @@ private:
     //--------------------------------------------------------------------
     // 4. PRIVATE METHODS 
     //--------------------------------------------------------------------
-    virtual void GenerateSegment(
-        float peak_amplitude,
-        std::vector<float> &output_segment) = 0;
 
     //--------------------------------------------------------------------
     // 5. DATA MEMMBERS 
     //--------------------------------------------------------------------
-    std::size_t number_of_steps_;
-    float peak_amplitude_;
-    // The init_ variable is set by default set to 'false' and then changed to
-    // 'true' once the segment_ vector is set. This is done by the Init()
-    // function.
-    bool init_;
-    SegmentType seg_type_;
-    std::vector<float> segment_;
 };
 
 //========================================================================
@@ -104,8 +86,12 @@ public:
     //--------------------------------------------------------------------
     // 2. GENERAL USER INTERFACE 
     //--------------------------------------------------------------------
+    std::vector<float> GetSegment();
     const float& operator[](const std::size_t position) const;
     float& operator[](const std::size_t position);
+    SegmentType seg_type() {return seg_type_;};
+    bool IsEmpty() const;
+    std::size_t number_of_steps() const;
 
     //--------------------------------------------------------------------
     // 3. ACCESSORS
@@ -116,14 +102,15 @@ private:
     //--------------------------------------------------------------------
     // 4. PRIVATE METHODS 
     //--------------------------------------------------------------------
-    void GenerateSegment(
-        float peak_amplitude,
-        std::vector<float> &output_segment);
+    // None
 
     //--------------------------------------------------------------------
     // 5. DATA MEMMBERS 
     //--------------------------------------------------------------------
+    std::size_t number_of_steps_;
     float peak_amplitude_;
+    SegmentType seg_type_;
+    std::vector<float> segment_;
 };
 
 //========================================================================
