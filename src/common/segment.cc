@@ -44,15 +44,15 @@ LinearSegment::LinearSegment(
 {
     double volume = 0;
     double increment = 0; 
-    segment_.reserve(number_of_steps_arg + 1);
+    segment_.reserve(number_of_steps_);
 
     if (seg_type_ == kIncline)
     {
-        increment = peak_amplitude_ / number_of_steps_;
+        increment = static_cast<double>(peak_amplitude_) / static_cast<double>(number_of_steps_ - 1);
         volume = 0;
     } else
     {
-        increment = -(static_cast<double>(peak_amplitude_) / number_of_steps_);
+        increment = - static_cast<double>(peak_amplitude_) / static_cast<double>(number_of_steps_ - 1);
         volume = peak_amplitude_;
     }
 
@@ -70,10 +70,10 @@ LinearSegment::LinearSegment(
     {
         if (seg_type_ == kIncline)
         {
-            segment_.push_back(peak_amplitude_);
+            segment_[number_of_steps_-1] = peak_amplitude_;
         } else
         {
-            segment_.push_back(0);
+            segment_[number_of_steps_-1] = 0;
         }
     }
 }

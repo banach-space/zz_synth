@@ -38,8 +38,8 @@ void ValidateSegmentIncline(
 {
         EXPECT_EQ(segment.number_of_steps(), size_expected);
         EXPECT_EQ(segment[0], 0);
-        EXPECT_EQ(segment[size_expected], peak_amplitude_expected);
-        EXPECT_LE(fabs(segment[size_expected/2]- peak_amplitude_expected/2), kEps);
+        EXPECT_EQ(segment[size_expected-1], peak_amplitude_expected);
+        EXPECT_LE(fabs(segment[(size_expected-1)/2]- peak_amplitude_expected/2), kEps);
 }
 
 void ValidateSegmentDecline(
@@ -48,9 +48,9 @@ void ValidateSegmentDecline(
         LinearSegment &segment)
 {
         EXPECT_EQ(segment.number_of_steps(), size_expected);
-        EXPECT_EQ(segment[size_expected], 0);
+        EXPECT_EQ(segment[size_expected-1], 0);
         EXPECT_EQ(segment[0], peak_amplitude_expected);
-        EXPECT_LE(fabs(segment[size_expected/2]- peak_amplitude_expected/2), kEps);
+        EXPECT_LE(fabs(segment[(size_expected-1)/2]- peak_amplitude_expected/2), kEps);
 }
 //========================================================================
 // TESTS
@@ -71,7 +71,7 @@ TEST(LinearSegmentTest, HandleEmptySegment)
 
 TEST(LinearSegmentTest, HandleDifferentLengthsIncline)
 {
-    size_t number_of_steps[] = {2, 40, 100, 1000};
+    size_t number_of_steps[] = {3, 41, 101, 1001};
     float peak_amplitude = 1 << 15;
 
     // Initialise the synthesiser
@@ -87,7 +87,7 @@ TEST(LinearSegmentTest, HandleDifferentLengthsIncline)
 
 TEST(LinearSegmentTest, HandleDifferentVolumesIncline)
 {
-    size_t number_of_steps = 100;
+    size_t number_of_steps = 101;
     float peak_amplitude[] = {0, 1, 1000, 1 << 15};
 
     // Initialise the synthesiser
@@ -104,7 +104,7 @@ TEST(LinearSegmentTest, HandleDifferentVolumesIncline)
 
 TEST(LinearSegmentTest, HandleDifferentLengthsDecline)
 {
-    size_t number_of_steps[] = {2, 40, 100, 1000};
+    size_t number_of_steps[] = {3, 41, 101, 1001};
     float peak_amplitude = 1 << 15;
 
     // Initialise the synthesiser
@@ -120,7 +120,7 @@ TEST(LinearSegmentTest, HandleDifferentLengthsDecline)
 
 TEST(LinearSegmentTest, HandleDifferentVolumesDecline)
 {
-    size_t number_of_steps = 100;
+    size_t number_of_steps = 101;
     float peak_amplitude[] = {0, 1, 1000, 1 << 15};
 
     // Initialise the synthesiser

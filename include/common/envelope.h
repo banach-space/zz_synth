@@ -29,8 +29,6 @@ public:
     //--------------------------------------------------------------------
     // 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
     //--------------------------------------------------------------------
-    // Make this class pure abstract and block copy constructor, assignment
-    // operator and the corresponding move operators.
     explicit Envelope();
     virtual ~Envelope() = 0;
     explicit Envelope(const Envelope& rhs) = delete;
