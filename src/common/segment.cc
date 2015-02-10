@@ -37,6 +37,7 @@ LinearSegment::LinearSegment(
         float peak_amplitude_arg, 
         size_t number_of_steps_arg,
         LinearSegmentType seg_type_arg) :
+    Segment(),
     number_of_steps_(number_of_steps_arg),
     peak_amplitude_(peak_amplitude_arg),
     seg_type_(seg_type_arg),

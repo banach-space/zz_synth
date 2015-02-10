@@ -39,7 +39,21 @@ public:
     //--------------------------------------------------------------------
     // 2. GENERAL USER INTERFACE 
     //--------------------------------------------------------------------
-    // None
+    //--------------------------------------------------------------------
+    //  NAME:
+    //      ApplyEnvelope()
+    //  
+    //  DESCRIPTION:
+    //      Apply the envelope represented by this object to the signal
+    //      passed as input.
+    //  INPUT:
+    //      Vector of samples on which the envelope will be applied.
+    //      This input vector has to be longer or equal to the sum
+    //      of lengths of segments correspoding to this envelope.
+    //  OUTPUT:
+    //      None
+    //--------------------------------------------------------------------
+    virtual void ApplyEnvelope(std::vector<int16_t> &samples) const = 0;
 
     //--------------------------------------------------------------------
     // 3. ACCESSORS
@@ -73,19 +87,35 @@ public:
     //--------------------------------------------------------------------
     // 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
     //--------------------------------------------------------------------
+    //--------------------------------------------------------------------
+    //  NAME:
+    //      ArEnvelope()
+    //  
+    //  DESCRIPTION:
+    //      Constructor
+    //  INPUT:
+    //      synthesiser         - A reference to the current synthesiser
+    //      peak_amplitude_arg  - The peak amplitude value (the level value
+    //                            during the 'sustain' stage) 
+    //      attack_duration_arg - Duration of the attack in seconds (rounded
+    //                            to the nearest integer number of samples). 
+    //                            Has to be non-negative number.
+    //      decay_duration_arg  - Duration of the decay in seconds (rounded
+    //                            to the nearest integer number of samples).
+    //                            Has to be non-negative number.
+    //--------------------------------------------------------------------
     explicit ArEnvelope(
             SynthConfig& synthesiser,
-            int32_t peak_amplitude_arg,
-            uint32_t attack_duration_arg,
-            uint32_t decay_duration_arg
+            float peak_amplitude_arg,
+            double attack_duration_arg,
+            double decay_duration_arg
             );
     virtual ~ArEnvelope() = default;
 
     //--------------------------------------------------------------------
     // 2. GENERAL USER INTERFACE 
     //--------------------------------------------------------------------
-    vector<float> GenerateAttack() const;
-    vector<float> GenerateDecay() const;
+    void ApplyEnvelope(std::vector<int16_t> &samples) const;
 
     //--------------------------------------------------------------------
     // 3. ACCESSORS
@@ -102,8 +132,8 @@ private:
     //--------------------------------------------------------------------
     // 5. DATA MEMMBERS 
     //--------------------------------------------------------------------
-    size_t attack_number_of_samples_;
-    size_t decay_number_of_samples_;
+    std::size_t attack_number_of_samples_;
+    std::size_t decay_number_of_samples_;
     LinearSegment decay_segment_;
     LinearSegment attack_segment_;
     
