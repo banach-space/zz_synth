@@ -51,13 +51,17 @@ ArEnvelope::ArEnvelope(
         double decay_duration_arg
         ) :
     Envelope(),
+    attack_number_of_samples_(
+            static_cast<size_t>(synthesiser.sampling_rate() * attack_duration_arg + 0.5)),
+    decay_number_of_samples_(
+            static_cast<size_t>(synthesiser.sampling_rate() * decay_duration_arg + 0.5)),
     decay_segment_(
             peak_amplitude_arg, 
-            static_cast<size_t>(synthesiser.sampling_rate() * decay_duration_arg + 0.5),
+            decay_number_of_samples_,
             kDecline),
     attack_segment_(
             peak_amplitude_arg, 
-            static_cast<size_t>(synthesiser.sampling_rate() * attack_duration_arg + 0.5),
+            attack_number_of_samples_,
             kIncline)
 {
 }
@@ -68,21 +72,28 @@ ArEnvelope::ArEnvelope(
 void ArEnvelope::ApplyEnvelope(std::vector<int16_t> &samples) const
 {
     // 1. Attack
-    vector<float>::const_iterator it = attack_segment_.segment_.begin();
-    vector<float>::const_iterator it_end = attack_segment_.segment_.end();
+    vector<float>::const_iterator it_seg = attack_segment_.segment_.begin();
+    vector<float>::const_iterator it_seg_end = attack_segment_.segment_.end();
+    vector<int16_t>::iterator it_data = samples.begin();
+    vector<int16_t>::const_iterator it_data_end = samples.begin() 
+        + static_cast<vector<int16_t>::difference_type>(attack_number_of_samples_);
 
-    for ( it; it != it_end; it++)
+    for ( ; it_seg != it_seg_end && it_data != it_data_end; it_seg++, it_data++)
     {
-       // TODO 
+
+       *it_data = (*it_seg * *it_data); 
     }
 
     // 2. Decay
-    it = decay_segment_.segment_.begin();
-    it_end = decay_segment_.segment_.end();
+    it_seg = decay_segment_.segment_.begin();
+    it_seg_end = decay_segment_.segment_.end();
+    it_data = samples.end()
+        - static_cast<vector<int16_t>::difference_type>(decay_number_of_samples_);
+    it_data_end = samples.end();
 
-    for ( it; it != it_end; it++)
+    for ( ; it_seg != it_seg_end && it_data != it_data_end; it_seg++, it_data++)
     {
-       // TODO 
+       *it_data = (*it_seg * *it_data); 
     }
 }
 
