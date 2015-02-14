@@ -6,14 +6,17 @@
 #   zimzum@github 
 #
 # DESCRIPTION:
-#   This is a sub-makefile for the Envelope testbench. Note that
-#   this Makefile will not work unless the specified dependencies from
-#   other directories are already built. Otherwise this testbench should
-#   be build from the root directory by calling:
+#   This is a makefile for the src/unit_tests/envelope directory. Note
+#   that this Makefile was not designed to be used as a standalone
+#   build script and will not work unless the specified dependencies from
+#   other directories are already built. Instead, you can build the
+#   testbench specified here by typing the following in the root
+#   directory by:
 #
 #   ~/zz_synth$ make unit_tests/envelope
 #
-#   This the reccomended way. Check the main Makefile for available options.
+#   This is the recommended way of using this script. Check the main
+#   Makefile for available options.
 #
 # License: GNU GPL v2.0 
 #========================================================================

@@ -1,4 +1,4 @@
-#=============================================================
+#========================================================================
 # FILE:
 #   src/unit_tests/segment/Makefile
 #
@@ -6,11 +6,20 @@
 #   zimzum@github 
 #
 # DESCRIPTION:
-#   "make new" rebuilds all executables
-#   "make clean" removes the executable images from $(BSBIN)
+#   This is a makefile for the src/unit_tests/segment directory. Note
+#   that this Makefile was not designed to be used as a standalone
+#   build script and will not work unless the specified dependencies from
+#   other directories are already built. Instead, you can build the
+#   testbench specified here by typing the following in the root
+#   directory by:
+#
+#   ~/zz_synth$ make unit_tests/segment
+#
+#   This is the recommended way of using this script. Check the main
+#   Makefile for available options.
 #
 # License: GNU GPL v2.0 
-#=============================================================
+#========================================================================
 ZZDIR = ~/github/zz_synth
 include ../../include/zz_synth.mk
 
@@ -21,7 +30,7 @@ include ../../include/zz_synth.mk
 #-----------------------
 source_files = testbench.cc
 libraries = $(ZZDIR)/lib/libcommon.a
-testbench = $(ZZBIN)/testbench$(EXE)
+testbench = $(ZZBIN)/testbench_segment$(EXE)
 
 include ../../include/zz_synth_rules.mk
 
