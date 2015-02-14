@@ -71,7 +71,13 @@ ArEnvelope::ArEnvelope(
 //------------------------------------------------------------------------
 void ArEnvelope::ApplyEnvelope(std::vector<int16_t> &samples) const
 {
-    // 1. Attack
+    // 0. Do nothing if there are no samples 
+    if (samples.empty())
+    {
+        return;
+    }
+
+    // 1. Apply attack
     vector<float>::const_iterator it_seg = attack_segment_.segment_.begin();
     vector<float>::const_iterator it_seg_end = attack_segment_.segment_.end();
     vector<int16_t>::iterator it_data = samples.begin();
@@ -84,7 +90,7 @@ void ArEnvelope::ApplyEnvelope(std::vector<int16_t> &samples) const
        *it_data = (*it_seg * *it_data); 
     }
 
-    // 2. Decay
+    // 2. Apply decay
     it_seg = decay_segment_.segment_.begin();
     it_seg_end = decay_segment_.segment_.end();
     it_data = samples.end()

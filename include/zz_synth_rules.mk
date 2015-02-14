@@ -32,7 +32,7 @@ CPPFLAGS += -pedantic -Wall -Wextra -Wcast-align -Wcast-qual\
    	-Wswitch-default -Wundef -Werror -Wno-unused
 $(info Pedantic compile flags...)
 else ifeq "$(COMPILE_FLAGS)" "DEBUG"
-CPPFLAGS += -g
+CPPFLAGS += -g -ggdb
 $(info Debuggin compile flags...)
 endif
 

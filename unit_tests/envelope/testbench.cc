@@ -217,15 +217,22 @@ TEST(ArEnvelopeGenerationTest, HandleDifferentOveralDuration)
 
         // 2. Create a copy of the generated samples and apply the envelope
         vector<int16_t> samples_post_envelope  = samples_pre_envelope;
-        //envelope.ApplyEnvelope(samples_post_envelope);
+        envelope.ApplyEnvelope(samples_post_envelope);
 
         // 3. Validate the application of the envelope by comapring the pre- 
         // and post- enevelope samples
-        //ComparePreAndPostEnvelope(
-                //attack_length, 
-                //decay_length,
-                //samples_pre_envelope,
-                //samples_post_envelope);
+        if (
+                (samples_pre_envelope.begin() == samples_pre_envelope.end()) 
+                && (samples_post_envelope.begin() == samples_post_envelope.end())
+                && (duration[duration_id] == 0))
+        {
+            continue;
+        }
+        ComparePreAndPostEnvelope(
+                attack_length, 
+                decay_length,
+                samples_pre_envelope,
+                samples_post_envelope);
     }
 }
 
