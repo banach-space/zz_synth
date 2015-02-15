@@ -47,24 +47,24 @@ void CompareWaveHeaders(WaveFileOut &wf_out, WaveFileIn &wf_in)
 //========================================================================
 TEST(ReadWriteWaveFileTest, HandleDifferentPitches)
 {
-    size_t pitch[] = {0, kNumberOfFrequencies/size_t(2), kNumberOfFrequencies - 1}; 
-    int32_t volume = 1 << 15;
-    uint32_t number_of_seconds = 5;
-    const string file_name("test_pitch.wav");
+    vector<size_t> pitch = {0, kNumberOfFrequencies/size_t(2), kNumberOfFrequencies - 1};
+    int32_t volume       = 1 << 15;
+    uint32_t duration    = 5;
     double initial_phase = 0;
+    const string file_name("test_pitch.wav");
 
     // Initialise the synthesiser
     SynthConfig &synthesiser  = SynthConfig::getInstance();
     synthesiser.Init();	
 
-    for (size_t pitch_id = 0; pitch_id < 3; pitch_id++)
+    for (vector<size_t>::iterator it = pitch.begin(); it != pitch.end(); it++)
     {
         // 1. Generate the samples 
-        Oscillator osc(synthesiser, volume, initial_phase, pitch[pitch_id]);
-        vector<int16_t> samples_out = osc(number_of_seconds);
+        Oscillator osc(synthesiser, volume, initial_phase, *it);
+        vector<int16_t> samples_out = osc(duration);
 
         // 2. Save the generated samples to the file 
-        WaveFileOut wf_out(number_of_seconds);
+        WaveFileOut wf_out(duration);
         wf_out.SaveBufferToFile(file_name, samples_out);
 
         // 3. Read the file saved in Step 2 into a WaveFileIn file
@@ -80,24 +80,24 @@ TEST(ReadWriteWaveFileTest, HandleDifferentPitches)
 
 TEST(ReadWriteWaveFileTest, HandleDifferentVolumes)
 {
-    uint32_t pitch = 48; 
-    int32_t volume[] = {0, 1 << 7, 1 << 15};
-    uint32_t number_of_seconds = 5;
+    uint32_t pitch             = 48;
+    vector<int32_t> volume     = {0, 1 << 7, 1 << 15};
+    uint32_t duration = 5;
+    double initial_phase       = 0;
     const string file_name("test_volume.wav");
-    double initial_phase = 0;
 
     // Initialise the synthesiser
     SynthConfig &synthesiser  = SynthConfig::getInstance();
     synthesiser.Init();	
 
-    for (size_t volume_id = 0; volume_id < 3; volume_id++)
+    for (vector<int32_t>::iterator it = volume.begin(); it != volume.end(); it++)
     {
         // 1. Generate the samples 
-        Oscillator osc(synthesiser, volume[volume_id], initial_phase, pitch);
-        vector<int16_t> samples_out = osc(number_of_seconds);
+        Oscillator osc(synthesiser,*it, initial_phase, pitch);
+        vector<int16_t> samples_out = osc(duration);
 
         // 2. Save the generated samples to the file 
-        WaveFileOut wf_out(number_of_seconds);
+        WaveFileOut wf_out(duration);
         wf_out.SaveBufferToFile(file_name, samples_out);
 
         // 3. Read the file saved in Step 2 into a WaveFileIn file
@@ -113,24 +113,24 @@ TEST(ReadWriteWaveFileTest, HandleDifferentVolumes)
 
 TEST(ReadWriteWaveFileTest, HandleDifferentDuration)
 {
-    uint32_t pitch = 48; 
-    int32_t volume = 1 << 15;
-    uint32_t number_of_seconds[] = {0, 1, 5};
+    uint32_t pitch            = 48;
+    int32_t volume            = 1 << 15;
+    vector<uint32_t> duration = {0, 5, 10};
+    double initial_phase      = 0;
     const string file_name("test_duration.wav");
-    double initial_phase = 0;
 
     // Initialise the synthesiser
     SynthConfig &synthesiser  = SynthConfig::getInstance();
     synthesiser.Init();	
 
-    for (size_t duration_idx = 0; duration_idx < 3; duration_idx++)
+    for (vector<uint32_t>::iterator it = duration.begin(); it != duration.end(); it++)
     {
         // 1. Generate the samples 
         Oscillator osc(synthesiser, volume, initial_phase, pitch);
-        vector<int16_t> samples_out = osc(number_of_seconds[duration_idx]);
+        vector<int16_t> samples_out = osc(*it);
 
         // 2. Save the generated samples to the file 
-        WaveFileOut wf_out(number_of_seconds[duration_idx]);
+        WaveFileOut wf_out(*it);
         wf_out.SaveBufferToFile(file_name, samples_out);
 
         // 3. Read the file saved in Step 2 into a WaveFileIn file

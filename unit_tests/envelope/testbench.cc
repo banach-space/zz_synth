@@ -98,7 +98,7 @@ void ComparePreAndPostEnvelope(
 //========================================================================
 TEST(ArEnvelopeGenerationTest, HandleDifferentPitches)
 {
-    size_t pitch[]         = {0, kNumberOfFrequencies/size_t(2), kNumberOfFrequencies - 1};
+    vector<size_t> pitch   = {0, kNumberOfFrequencies/size_t(2), kNumberOfFrequencies - 1};
     int32_t volume         = 1 << 15;
     uint32_t duration      = 5;
     double initial_phase   = 0;
@@ -120,10 +120,10 @@ TEST(ArEnvelopeGenerationTest, HandleDifferentPitches)
     vector<int16_t>::difference_type decay_length  = 
         static_cast<vector<int16_t>::difference_type>(decay_duration * synthesiser.sampling_rate());
 
-    for (size_t pitch_id = 0; pitch_id < 3; pitch_id++)
+    for (vector<size_t>::iterator it = pitch.begin(); it != pitch.end(); it++)
     {
         // 1. Generate the samples and apply the envelope
-        Oscillator osc(synthesiser, volume , initial_phase, pitch[pitch_id]);
+        Oscillator osc(synthesiser, volume , initial_phase, *it);
         vector<int16_t> samples_pre_envelope  = osc(duration);
 
         // 2. Create a copy of the generated samples and apply the envelope
@@ -144,7 +144,7 @@ TEST(ArEnvelopeGenerationTest, HandleDifferentPitches)
 TEST(ArEnvelopeGenerationTest, HandleDifferentVolumes)
 {
     size_t pitch           = kNumberOfFrequencies/size_t(2);
-    int32_t volume[]       = {0, 1 << 7, 1 << 15};
+    vector<int32_t> volume = {0, 1 << 7, 1 << 15};
     uint32_t duration      = 5;
     double initial_phase   = 0;
     double peak_amplitude  = 1;
@@ -165,10 +165,10 @@ TEST(ArEnvelopeGenerationTest, HandleDifferentVolumes)
     vector<int16_t>::difference_type decay_length  = 
         static_cast<vector<int16_t>::difference_type>(decay_duration * synthesiser.sampling_rate());
 
-    for (size_t volume_id = 0; volume_id < 3; volume_id++)
+    for (vector<int32_t>::iterator it = volume.begin(); it != volume.end(); it++)
     {
         // 1. Generate the samples and apply the envelope
-        Oscillator osc(synthesiser, volume[volume_id] , initial_phase, pitch);
+        Oscillator osc(synthesiser, *it , initial_phase, pitch);
         vector<int16_t> samples_pre_envelope  = osc(duration);
 
         // 2. Create a copy of the generated samples and apply the envelope
@@ -187,13 +187,13 @@ TEST(ArEnvelopeGenerationTest, HandleDifferentVolumes)
 
 TEST(ArEnvelopeGenerationTest, HandleDifferentOveralDuration)
 {
-    size_t pitch           = kNumberOfFrequencies/size_t(2);
-    int32_t volume         = 1 << 7;
-    uint32_t duration[]    = {0, 5, 10};
-    double initial_phase   = 0;
-    double peak_amplitude  = 1;
-    double decay_duration  = 1;
-    double attack_duration = 1;
+    size_t pitch              = kNumberOfFrequencies/size_t(2);
+    int32_t volume            = 1 << 7;
+    vector<uint32_t> duration = {0, 5, 10};
+    double initial_phase      = 0;
+    double peak_amplitude     = 1;
+    double decay_duration     = 1;
+    double attack_duration    = 1;
     const string file_name("test_pitch.wav");
 
     // Initialise the synthesiser
@@ -209,11 +209,11 @@ TEST(ArEnvelopeGenerationTest, HandleDifferentOveralDuration)
     vector<int16_t>::difference_type decay_length  = 
         static_cast<vector<int16_t>::difference_type>(decay_duration * synthesiser.sampling_rate());
 
-    for (size_t duration_id = 0; duration_id < 3; duration_id++)
+    for (vector<uint32_t>::iterator it = duration.begin(); it != duration.end(); it++)
     {
         // 1. Generate the samples and apply the envelope
         Oscillator osc(synthesiser, volume , initial_phase, pitch);
-        vector<int16_t> samples_pre_envelope  = osc(duration[duration_id]);
+        vector<int16_t> samples_pre_envelope  = osc(*it);
 
         // 2. Create a copy of the generated samples and apply the envelope
         vector<int16_t> samples_post_envelope  = samples_pre_envelope;
@@ -224,7 +224,7 @@ TEST(ArEnvelopeGenerationTest, HandleDifferentOveralDuration)
         if (
                 (samples_pre_envelope.begin() == samples_pre_envelope.end()) 
                 && (samples_post_envelope.begin() == samples_post_envelope.end())
-                && (duration[duration_id] == 0))
+                && (*it == 0))
         {
             continue;
         }
