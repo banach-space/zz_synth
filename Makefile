@@ -1,4 +1,4 @@
-#=============================================================
+#========================================================================
 # FILE:
 #   Makefile
 #
@@ -6,20 +6,49 @@
 #   zimzum@github 
 #
 # DESCRIPTION:
-#   The master Makefile
+#   The master Makefile script for the zz_synth library. The build
+#   system for for this synthesiser is recursive and this is the top
+#   script that should be invoked whenever trying to build any of
+#   the compononents of the library. Sample usage:
+#
+#   ~/zz_synth$ make [sub-directory to build]
+#
+#   All output is moved to the bin/ sub-directory. Target type can be
+#   specified by definitning the TARGET variable, for example:
+#
+#   ~/zz_synth$ make [sub-directory to build] TARGET=target_type
+#
+#   Target type can be any of:
+#       - new
+#       - clean
+#       - all
+#
+#   It is also possible to specify compiler flags by defining the 
+#   COMPILE_FLAGS variable, for instance:
+#
+#   ~/zz_synth/$ make [sub-directory to build] COMPILE_FLAGS=compile_flag
+#
+#   Compile flag can be any of:
+#       - PEDANTIC
+#       - DEBUG
+#
+#   There is one special target defined here, TAGS, that is used for
+#   creating a ctags file for Vim. Very useful if Vim is your default
+#   editor.
 #
 # License: GNU GPL v2.0 
-#=============================================================
+#========================================================================
 ZZDIR = ~/github/zz_synth
 include include/zz_synth.mk
 
-lib_common  := src/common
-libraries   := $(lib_common)
+lib_common     := src/common
+libraries      := $(lib_common)
 lib_common_bin := $(lib_common)/libcommon.a
 
 unit_test_rww := unit_tests/read_write_wav
 unit_test_env := unit_tests/envelope
 unit_test_seg := unit_tests/segment
+unit_tests    := unit_tests/
 
 .PHONY:				\
 	all				\
@@ -27,9 +56,7 @@ unit_test_seg := unit_tests/segment
 	$(libraries)	\
 	$(lib_common)	\
 	TAGS			\
-	clean			\
-	$(unit_test_rww)\
-	$(unit_test_env)
+	clean			
 
 #-----------------------
 #  TARGETS 
@@ -59,6 +86,8 @@ $(unit_test_seg): $(libraries)
 	$(if $(TARGET), $(MAKE) $(TARGET))
 
 $(lib_common_bin): $(lib_common)
+
+$(unit_tests): $(unit_test_rww) $(unit_test_env) $(unit_test_seg)
 
 TAGS: 
 	@$(build-msg)
