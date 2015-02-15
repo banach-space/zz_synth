@@ -5,7 +5,14 @@ This library adheres to Google's C++ coding style:
 
 http://google-styleguide.googlecode.com/svn/trunk/cppguide.html#Function_Names
 
-For consistency, two template files are provided:
+Known divergences from the above standard:
+- Line lengths must not be longer than 120 characters, but it is recommended
+  that they don't exceed 100 characters;
+- Indentation is 4 spaces at a time;
+- other?
+
+For consistency, three template files are provided:
 - /templates/class_name.h
 - /templates/class_name.cc
-These files should be used when defining new classes.
+- /templates/testbench.cc
+These files should be used when defining new classes or adding a testbench.

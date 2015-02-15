@@ -9,12 +9,12 @@
 #   The master Makefile script for the zz_synth library. The build
 #   system for for this synthesiser is recursive and this is the top
 #   script that should be invoked whenever trying to build any of
-#   the compononents of the library. Sample usage:
+#   the components of the library. Sample usage:
 #
 #   ~/zz_synth$ make [sub-directory to build]
 #
 #   All output is moved to the bin/ sub-directory. Target type can be
-#   specified by definitning the TARGET variable, for example:
+#   specified by defining the TARGET variable, for example:
 #
 #   ~/zz_synth$ make [sub-directory to build] TARGET=target_type
 #
