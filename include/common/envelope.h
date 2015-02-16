@@ -49,7 +49,8 @@ public:
     //  INPUT:
     //      Vector of samples on which the envelope will be applied.
     //      This input vector has to be longer or equal to the sum
-    //      of lengths of segments correspoding to this envelope.
+    //      of lengths of segments correspoding to this envelope and
+    //      has to be non-empty.
     //  OUTPUT:
     //      None
     //--------------------------------------------------------------------

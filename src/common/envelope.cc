@@ -71,11 +71,8 @@ ArEnvelope::ArEnvelope(
 //------------------------------------------------------------------------
 void ArEnvelope::ApplyEnvelope(std::vector<int16_t> &samples) const
 {
-    // 0. Do nothing if there are no samples 
-    if (samples.empty())
-    {
-        return;
-    }
+    assert(samples.size() >= (attack_number_of_samples_ + decay_number_of_samples_));
+    assert(!samples.empty());
 
     // 1. Apply attack
     vector<float>::const_iterator it_seg = attack_segment_.segment_.begin();
