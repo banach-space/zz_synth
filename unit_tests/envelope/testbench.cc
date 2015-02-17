@@ -14,7 +14,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-#include <common/envelope.h>
+#include <envelope/envelope.h>
 #include <common/synth_config.h>
 #include <common/oscillator.h>
 

@@ -11,7 +11,7 @@
 //  License: GNU GPL v2.0 
 //========================================================================
 
-#include <common/segment.h>
+#include <envelope/segment.h>
 
 #include <common/zz_global_include.h>
 

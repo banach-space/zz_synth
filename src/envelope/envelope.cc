@@ -11,7 +11,7 @@
 //  License: GNU GPL v2.0 
 //========================================================================
 
-#include <common/envelope.h>
+#include <envelope/envelope.h>
 
 //========================================================================
 // CLASS: Envelope
@@ -64,6 +64,8 @@ ArEnvelope::ArEnvelope(
             attack_number_of_samples_,
             kIncline)
 {
+    assert(attack_duration_arg >= 0);
+    assert(decay_duration_arg >= 0);
 }
 
 //------------------------------------------------------------------------

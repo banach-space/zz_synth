@@ -15,7 +15,7 @@
 #define _ENVELOPE_H_
 
 #include <common/zz_global_include.h>
-#include <common/segment.h>
+#include <envelope/segment.h>
 
 //========================================================================
 // CLASS: Envelope
@@ -98,12 +98,10 @@ public:
     //      synthesiser         - A reference to the current synthesiser
     //      peak_amplitude_arg  - The peak amplitude value (the level value
     //                            during the 'sustain' stage) 
-    //      attack_duration_arg - Duration of the attack in seconds (rounded
-    //                            to the nearest integer number of samples). 
-    //                            Has to be non-negative number.
-    //      decay_duration_arg  - Duration of the decay in seconds (rounded
-    //                            to the nearest integer number of samples).
-    //                            Has to be non-negative number.
+    //      attack_duration_arg - Duration of the attack in seconds. Has 
+    //                            to be non-negative.
+    //      decay_duration_arg  - Duration of the decay in seconds. Has 
+    //                            to be non-negative.
     //--------------------------------------------------------------------
     explicit ArEnvelope(
             SynthConfig& synthesiser,

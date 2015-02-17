@@ -14,7 +14,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
-#include <common/segment.h>
+#include <envelope/segment.h>
 #include <common/zz_global.h>
 
 using namespace std;

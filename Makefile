@@ -41,9 +41,11 @@
 ZZDIR = ~/github/zz_synth
 include include/zz_synth.mk
 
-lib_common     := src/common
-libraries      := $(lib_common)
-lib_common_bin := $(lib_common)/libcommon.a
+lib_common       := src/common
+lib_envelope     := src/envelope
+libraries        := $(lib_common) $(lib_envelope)
+lib_common_bin   := $(lib_common)/libcommon.a
+lib_envelope_bin := $(lib_envelope)/libcommon.a
 
 unit_test_rww := unit_tests/read_write_wav
 unit_test_env := unit_tests/envelope
@@ -70,7 +72,12 @@ $(lib_common):
 	$(MAKE) --directory=$@ $(TARGET)
 	$(if $(TARGET), $(MAKE) $(TARGET))
 
-$(unit_test_rww): $(libraries)
+$(lib_envelope):
+	@$(build-msg)
+	$(MAKE) --directory=$@ $(TARGET)
+	$(if $(TARGET), $(MAKE) $(TARGET))
+
+$(unit_test_rww): $(lib_common)
 	@$(build-msg)
 	$(MAKE) --directory=$@ $(TARGET)
 	$(if $(TARGET), $(MAKE) $(TARGET))
@@ -86,6 +93,8 @@ $(unit_test_seg): $(libraries)
 	$(if $(TARGET), $(MAKE) $(TARGET))
 
 $(lib_common_bin): $(lib_common)
+
+$(lib_envelope_bin): $(lib_envelope)
 
 $(unit_tests): $(unit_test_rww) $(unit_test_env) $(unit_test_seg)
 

@@ -29,7 +29,7 @@ include ../../include/zz_synth.mk
 #  SOURCE/OBJECT FILES 
 #-----------------------
 source_files = testbench.cc
-libraries = $(ZZDIR)/lib/libcommon.a
+libraries = $(ZZDIR)/lib/libcommon.a $(ZZDIR)/lib/libenvelope.a
 testbench = $(ZZBIN)/testbench_segment$(EXE)
 
 include ../../include/zz_synth_rules.mk
@@ -51,5 +51,5 @@ chkdirs:
 #  DEPENDENCIES 
 #-----------------------
 testbench.cc: \
-	$(ZZINC)/common/segment.h\
+	$(ZZINC)/envelope/segment.h\
     $(ZZINC)/common/synth_config.h
