@@ -100,7 +100,8 @@ static void ComparePreAndPostEnvelopeBasic(
     EXPECT_EQ(*(samples_post_envelope.begin() + attack_length), *(samples_pre_envelope.begin() + attack_length));
 
     // 7. The element at the beginning of decay should be equal to the original one
-    EXPECT_EQ(*(samples_post_envelope.end() - decay_length), *(samples_pre_envelope.end() - decay_length));
+    if (decay_length > 0)
+        EXPECT_EQ(*(samples_post_envelope.end() - decay_length), *(samples_pre_envelope.end() - decay_length));
 
     // 8. The second element in the attack segment should be different from the original one. Note that 
     // special care have to be taken if the original sample was equal to 0. To be more precise, if 
@@ -311,59 +312,59 @@ TEST(ArEnvelopeGenerationTest, HandleDifferentOveralDuration)
     }
 }
 
-//TEST(ArEnvelopeGenerationTest, HandleDifferentDecaykDuration)
-//{
-    //size_t pitch                   = kNumberOfFrequencies/size_t(2);
-    //int32_t volume                 = 1 << 7;
-    //uint32_t duration              = 5;
-    //double initial_phase           = 0;
-    //double peak_amplitude          = 1;
-    //double attack_duration          = 1;
-    //vector<double> decay_duration = {0, 1, 2.3, 3, 4};
-    //const string file_name("test_pitch.wav");
+TEST(ArEnvelopeGenerationTest, HandleDifferentDecayDuration)
+{
+    size_t pitch                  = kNumberOfFrequencies/size_t(2);
+    int32_t volume                = 1 << 7;
+    uint32_t duration             = 5;
+    double initial_phase          = 0;
+    double peak_amplitude         = 1;
+    double attack_duration        = 1;
+    vector<double> decay_duration = {0, 1, 2.3, 3, 4};
+    const string file_name("test_pitch.wav");
 
-    //// Initialise the synthesiser
-    //SynthConfig &synthesiser  = SynthConfig::getInstance();
-    //synthesiser.Init();	
+    // Initialise the synthesiser
+    SynthConfig &synthesiser  = SynthConfig::getInstance();
+    synthesiser.Init();	
 
 
-    //for (vector<double>::iterator it = decay_duration.begin(), it_end = decay_duration.end(); 
-            //it != it_end; 
-            //it++)
-    //{
-        //// 1. Initialise the envelope
-        //ArEnvelope envelope(synthesiser, peak_amplitude, attack_duration, *it);
+    for (vector<double>::iterator it = decay_duration.begin(), it_end = decay_duration.end(); 
+            it != it_end; 
+            it++)
+    {
+        // 1. Initialise the envelope
+        ArEnvelope envelope(synthesiser, peak_amplitude, attack_duration, *it);
 
-        //// The length of attack and decay
-        //vector<int16_t>::difference_type attack_length = 
-            //static_cast<vector<int16_t>::difference_type>(attack_duration * synthesiser.sampling_rate());
-        //vector<int16_t>::difference_type decay_length  = 
-            //static_cast<vector<int16_t>::difference_type>(*it * synthesiser.sampling_rate());
+        // The length of attack and decay
+        vector<int16_t>::difference_type attack_length = 
+            static_cast<vector<int16_t>::difference_type>(attack_duration * synthesiser.sampling_rate());
+        vector<int16_t>::difference_type decay_length  = 
+            static_cast<vector<int16_t>::difference_type>(*it * synthesiser.sampling_rate());
 
-        //// 2. Generate the samples and apply the envelope
-        //Oscillator osc(synthesiser, volume , initial_phase, pitch);
-        //vector<int16_t> samples_pre_envelope  = osc(duration);
+        // 2. Generate the samples and apply the envelope
+        Oscillator osc(synthesiser, volume , initial_phase, pitch);
+        vector<int16_t> samples_pre_envelope  = osc(duration);
 
-        //// 3. Create a copy of the generated samples and apply the envelope
-        //vector<int16_t> samples_post_envelope  = samples_pre_envelope;
-        //envelope.ApplyEnvelope(samples_post_envelope);
+        // 3. Create a copy of the generated samples and apply the envelope
+        vector<int16_t> samples_post_envelope  = samples_pre_envelope;
+        envelope.ApplyEnvelope(samples_post_envelope);
 
-        //// 4. Validate the application of the envelope by comapring the pre- 
-        //// and post- enevelope samples
-        //if (
-                //(samples_pre_envelope.begin() == samples_pre_envelope.end()) 
-                //&& (samples_post_envelope.begin() == samples_post_envelope.end())
-                //&& (*it == 0))
-        //{
-            //continue;
-        //}
-        //ComparePreAndPostEnvelopeBasic(
-                //attack_length, 
-                //decay_length,
-                //samples_pre_envelope,
-                //samples_post_envelope);
-    //}
-//}
+        // 4. Validate the application of the envelope by comapring the pre- 
+        // and post- enevelope samples
+        if (
+                (samples_pre_envelope.begin() == samples_pre_envelope.end()) 
+                && (samples_post_envelope.begin() == samples_post_envelope.end())
+                && (*it == 0))
+        {
+            continue;
+        }
+        ComparePreAndPostEnvelopeBasic(
+                attack_length, 
+                decay_length,
+                samples_pre_envelope,
+                samples_post_envelope);
+    }
+}
 
 TEST(ArEnvelopeGenerationTest, HandleDifferentAttackDuration)
 {

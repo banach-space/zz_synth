@@ -52,9 +52,9 @@ ArEnvelope::ArEnvelope(
         ) :
     Envelope(),
     attack_number_of_samples_(
-            static_cast<size_t>(synthesiser.sampling_rate() * attack_duration_arg + 0.5)),
+            static_cast<size_t>(synthesiser.sampling_rate() * attack_duration_arg)),
     decay_number_of_samples_(
-            static_cast<size_t>(synthesiser.sampling_rate() * decay_duration_arg + 0.5)),
+            static_cast<size_t>(synthesiser.sampling_rate() * decay_duration_arg)),
     decay_segment_(
             peak_amplitude_arg, 
             decay_number_of_samples_,
@@ -93,6 +93,7 @@ void ArEnvelope::ApplyEnvelope(std::vector<int16_t> &samples) const
     it_data = samples.end()
         - static_cast<vector<int16_t>::difference_type>(decay_number_of_samples_);
     it_data_end = samples.end();
+
 
     for ( ; it_seg != it_seg_end && it_data != it_data_end; it_seg++, it_data++)
     {

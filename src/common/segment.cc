@@ -47,6 +47,8 @@ LinearSegment::LinearSegment(
     double increment = 0; 
     segment_.reserve(number_of_steps_);
 
+    // Step 1: Calculate the starting value and the increment that will be used
+    //         to step through the segment.
     if (seg_type_ == kIncline)
     {
         increment = static_cast<double>(peak_amplitude_) / static_cast<double>(number_of_steps_ - 1);
@@ -57,16 +59,16 @@ LinearSegment::LinearSegment(
         volume = peak_amplitude_;
     }
 
-    vector<float>::iterator it;
-
+    // Step 2: Walk through the segment and propagate with the right values
     for (size_t idx = 0; idx < number_of_steps_; idx++)
     {
         segment_.push_back(volume);
         volume += increment;
     }
 
-    // Due to rounding error the last entry might be different from 
-    // peak_amplitude. Force it to be equal.
+    // Step 3: Fix what's at the beginning/end as due to rounding error
+    //         the last/first (incline/decline) entry might be different from
+    //         peak_amplitude. Force it to be equal.
     if (number_of_steps_ > 0)
     {
         if (seg_type_ == kIncline)
