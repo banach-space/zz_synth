@@ -6,7 +6,7 @@
 #   zimzum@github 
 #
 # DESCRIPTION:
-#   This is a makefile for the src/unit_tests/envelope directory. Note
+#   This is a makefile for the unit_tests/envelope directory. Note
 #   that this Makefile was not designed to be used as a standalone
 #   build script and will not work unless the specified dependencies from
 #   other directories are already built. Instead, you can build the
