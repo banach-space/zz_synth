@@ -11,21 +11,21 @@
 #   script that should be invoked whenever trying to build any of
 #   the components of the library. 
 #
-#   -----------------
-#	[1] Sample usage
-#   -----------------
-#	To build type the following in the root directory:
+#   -------------------------------------
+#   [1] Sample usage
+#   -------------------------------------
+#   To build type the following in the root directory:
 #
 #   ~/zz_synth$ make [sub-directory to build]
 #
 #   All output is moved to the bin/ (binary files) and lib/ (libraries)
 #	sub-directories. 
 #	
-#   --------------------------
-#	[2] The type of the target 
-#   --------------------------
-#	To specify the target type define TARGET when invoking make,
-#	for example:
+#   -------------------------------------
+#   [2] The type of the target 
+#   -------------------------------------
+#   To specify the target type define TARGET when invoking make,
+#   for example:
 #
 #   ~/zz_synth$ make [sub-directory to build] TARGET=target_type
 #
@@ -35,14 +35,14 @@
 #       - new		(clean+all)
 #
 #   -------------------------------------
-#	[3] Recursive make clean and make all 
+#   [3] Recursive make clean and make all 
 #   -------------------------------------
-#	In order to run 'make clean (or all)' recursively, type:
+#   In order to run 'make clean (or all)' recursively, type:
 #
 #   ~/zz_synth$ make clean_recursively (all_recursively) 
 #
 #   -------------------------------------
-#	[4] Compiler flags 
+#   [4] Compiler flags 
 #   -------------------------------------
 #   It is possible to specify compiler flags by defining the 
 #   COMPILE_FLAGS variable, for instance:
@@ -54,7 +54,7 @@
 #       - PEDANTIC	(very harsh and resrtictive compiler flags)
 #
 #   -------------------------------------
-#	[5] Vim tags 
+#   [5] Vim tags 
 #   -------------------------------------
 #   There is one special target defined here, TAGS, that is used for
 #   creating a ctags file for Vim. Very useful if Vim is your default
