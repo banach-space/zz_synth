@@ -9,29 +9,53 @@
 #   The master Makefile script for the zz_synth library. The build
 #   system for for this synthesiser is recursive and this is the top
 #   script that should be invoked whenever trying to build any of
-#   the components of the library. Sample usage:
+#   the components of the library. 
+#
+#   -----------------
+#	[1] Sample usage
+#   -----------------
+#	To build type the following in the root directory:
 #
 #   ~/zz_synth$ make [sub-directory to build]
 #
-#   All output is moved to the bin/ sub-directory. Target type can be
-#   specified by defining the TARGET variable, for example:
+#   All output is moved to the bin/ (binary files) and lib/ (libraries)
+#	sub-directories. 
+#	
+#   --------------------------
+#	[2] The type of the target 
+#   --------------------------
+#	To specify the target type define TARGET when invoking make,
+#	for example:
 #
 #   ~/zz_synth$ make [sub-directory to build] TARGET=target_type
 #
-#   Target type can be any of:
-#       - new
-#       - clean
-#       - all
+#   target_type can be any of:
+#       - clean		(deletes existing binaries/libraries)
+#       - all		(builds everything)
+#       - new		(clean+all)
 #
-#   It is also possible to specify compiler flags by defining the 
+#   -------------------------------------
+#	[3] Recursive make clean and make all 
+#   -------------------------------------
+#	In order to run 'make clean (or all)' recursively, type:
+#
+#   ~/zz_synth$ make clean_recursively (all_recursively) 
+#
+#   -------------------------------------
+#	[4] Compiler flags 
+#   -------------------------------------
+#   It is possible to specify compiler flags by defining the 
 #   COMPILE_FLAGS variable, for instance:
 #
 #   ~/zz_synth/$ make [sub-directory to build] COMPILE_FLAGS=compile_flag
 #
-#   Compile flag can be any of:
-#       - PEDANTIC
-#       - DEBUG
+#   Supported options:
+#       - DEBUG		(debug flags)
+#       - PEDANTIC	(very harsh and resrtictive compiler flags)
 #
+#   -------------------------------------
+#	[5] Vim tags 
+#   -------------------------------------
 #   There is one special target defined here, TAGS, that is used for
 #   creating a ctags file for Vim. Very useful if Vim is your default
 #   editor.
@@ -54,6 +78,8 @@ unit_tests    := unit_tests/
 
 .PHONY:				\
 	all				\
+	all_recursive	\
+	clean_recursive	\
 	new				\
 	$(libraries)	\
 	$(lib_common)	\
@@ -65,7 +91,14 @@ unit_tests    := unit_tests/
 #-----------------------
 clean new:
 	@$(build-msg)
-	#@printf "#\n# [Make:] Root directory, nothing to clean\\ build.\n#\n"
+
+all_recursive: $(libraries) $(unit_tests)
+	@$(build-msg)
+	$(MAKE) $^ TARGET=all 
+
+clean_recursive: $(libraries) $(unit_tests)
+	@$(build-msg)
+	$(MAKE) $^ TARGET=clean 
 
 $(lib_common):
 	@$(build-msg)

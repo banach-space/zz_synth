@@ -32,7 +32,7 @@ INCLUDES += -lm
 #-----------------------
 #  TARGETS 
 #-----------------------
-all: chkdirs $(library)
+all: clean chkdirs $(library)
 
 clean:
 	@$(RM) $(object_files)
