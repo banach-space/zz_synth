@@ -92,7 +92,7 @@ TEST(LinearSegmentTest, HandleDifferentLengthsIncline)
     SynthConfig &synthesiser  = SynthConfig::getInstance();
     synthesiser.Init();	
 
-    for (vector<size_t>::iterator it = number_of_steps.begin(); it != number_of_steps.end(); it++) 
+    for (auto it = number_of_steps.begin(); it != number_of_steps.end(); it++) 
     {
         LinearSegment segment(peak_amplitude, *it, kIncline); 
         ValidateSegmentIncline(peak_amplitude, *it, segment);
@@ -108,7 +108,7 @@ TEST(LinearSegmentTest, HandleDifferentVolumesIncline)
     SynthConfig &synthesiser  = SynthConfig::getInstance();
     synthesiser.Init();	
 
-    for (vector<float>::iterator it = peak_amplitude.begin(); it != peak_amplitude.end(); it++) 
+    for (auto it = peak_amplitude.begin(); it != peak_amplitude.end(); it++) 
     {
         LinearSegment segment(*it, number_of_steps, kIncline); 
         ValidateSegmentIncline(*it, number_of_steps, segment);
@@ -125,7 +125,7 @@ TEST(LinearSegmentTest, HandleDifferentLengthsDecline)
     SynthConfig &synthesiser  = SynthConfig::getInstance();
     synthesiser.Init();	
 
-    for (vector<size_t>::iterator it = number_of_steps.begin(); it != number_of_steps.end(); it++) 
+    for (auto it = number_of_steps.begin(); it != number_of_steps.end(); it++) 
     {
         LinearSegment segment(peak_amplitude, *it, kDecline); 
         ValidateSegmentDecline(peak_amplitude, *it, segment);
@@ -141,7 +141,7 @@ TEST(LinearSegmentTest, HandleDifferentVolumesDecline)
     SynthConfig &synthesiser  = SynthConfig::getInstance();
     synthesiser.Init();	
 
-    for (vector<float>::iterator it = peak_amplitude.begin(); it != peak_amplitude.end(); it++) 
+    for (auto it = peak_amplitude.begin(); it != peak_amplitude.end(); it++) 
     {
         LinearSegment segment(*it, number_of_steps, kDecline); 
         ValidateSegmentDecline(*it, number_of_steps, segment);

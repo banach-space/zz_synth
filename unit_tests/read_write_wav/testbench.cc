@@ -57,7 +57,7 @@ TEST(ReadWriteWaveFileTest, HandleDifferentPitches)
     SynthConfig &synthesiser  = SynthConfig::getInstance();
     synthesiser.Init();	
 
-    for (vector<size_t>::iterator it = pitch.begin(); it != pitch.end(); it++)
+    for (auto it = pitch.begin(); it != pitch.end(); it++)
     {
         // 1. Generate the samples 
         Oscillator osc(synthesiser, volume, initial_phase, *it);
@@ -90,7 +90,7 @@ TEST(ReadWriteWaveFileTest, HandleDifferentVolumes)
     SynthConfig &synthesiser  = SynthConfig::getInstance();
     synthesiser.Init();	
 
-    for (vector<int32_t>::iterator it = volume.begin(); it != volume.end(); it++)
+    for (auto it = volume.begin(); it != volume.end(); it++)
     {
         // 1. Generate the samples 
         Oscillator osc(synthesiser,*it, initial_phase, pitch);
@@ -123,7 +123,7 @@ TEST(ReadWriteWaveFileTest, HandleDifferentDuration)
     SynthConfig &synthesiser  = SynthConfig::getInstance();
     synthesiser.Init();	
 
-    for (vector<uint32_t>::iterator it = duration.begin(); it != duration.end(); it++)
+    for (auto it = duration.begin(); it != duration.end(); it++)
     {
         // 1. Generate the samples 
         Oscillator osc(synthesiser, volume, initial_phase, pitch);

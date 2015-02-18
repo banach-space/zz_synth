@@ -196,7 +196,7 @@ TEST(ArEnvelopeGenerationTest, HandleDifferentPitches)
     vector<int16_t>::difference_type decay_length  = 
         static_cast<vector<int16_t>::difference_type>(decay_duration * synthesiser.sampling_rate());
 
-    for (vector<size_t>::iterator it = pitch.begin(); it != pitch.end(); it++)
+    for (auto it = pitch.begin(); it != pitch.end(); it++)
     {
         // 1. Generate the samples and apply the envelope
         Oscillator osc(synthesiser, volume , initial_phase, *it);
@@ -241,7 +241,7 @@ TEST(ArEnvelopeGenerationTest, HandleDifferentVolumes)
     vector<int16_t>::difference_type decay_length  = 
         static_cast<vector<int16_t>::difference_type>(decay_duration * synthesiser.sampling_rate());
 
-    for (vector<int32_t>::iterator it = volume.begin(); it != volume.end(); it++)
+    for (auto it = volume.begin(); it != volume.end(); it++)
     {
         // 1. Generate the samples and apply the envelope
         Oscillator osc(synthesiser, *it , initial_phase, pitch);
@@ -285,7 +285,7 @@ TEST(ArEnvelopeGenerationTest, HandleDifferentOveralDuration)
     vector<int16_t>::difference_type decay_length  = 
         static_cast<vector<int16_t>::difference_type>(decay_duration * synthesiser.sampling_rate());
 
-    for (vector<uint32_t>::iterator it = duration.begin(); it != duration.end(); it++)
+    for (auto it = duration.begin(); it != duration.end(); it++)
     {
         // 1. Generate the samples and apply the envelope
         Oscillator osc(synthesiser, volume , initial_phase, pitch);
@@ -328,9 +328,7 @@ TEST(ArEnvelopeGenerationTest, HandleDifferentDecayDuration)
     synthesiser.Init();	
 
 
-    for (vector<double>::iterator it = decay_duration.begin(), it_end = decay_duration.end(); 
-            it != it_end; 
-            it++)
+    for (auto it = decay_duration.begin(); it != decay_duration.end(); it++)
     {
         // 1. Initialise the envelope
         ArEnvelope envelope(synthesiser, peak_amplitude, attack_duration, *it);
@@ -382,9 +380,7 @@ TEST(ArEnvelopeGenerationTest, HandleDifferentAttackDuration)
     synthesiser.Init();	
 
 
-    for (vector<double>::iterator it = attack_duration.begin(), it_end = attack_duration.end(); 
-            it != it_end; 
-            it++)
+    for (auto it = attack_duration.begin(); it != attack_duration.end(); it++)
     {
         // 1. Initialise the envelope
         ArEnvelope envelope(synthesiser, peak_amplitude, *it, decay_duration);
