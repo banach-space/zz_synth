@@ -27,18 +27,18 @@ class ArEnvelope;
 //========================================================================
 //------------------------------------------------------------------------
 //  NAME: 
-//      LinearSegmentType
+//      SegmentGradient
 //
 //  DESCRIPTION:
 //      Enum used for differentiating between two types of linear
 //      segments:
-//          - kIncline represents attack (positive 'a')
-//          - kDecline represents decay (negative 'a')
+//          - kIncline represents attack (positive gradient, i.e. 'a')
+//          - kDecline represents decay (negative gradient, i.e. 'a')
 //------------------------------------------------------------------------
-enum LinearSegmentType
+enum class SegmentGradient
 {
-    kDecline = 0,
-    kIncline = 1
+    kDecline,
+    kIncline
 };
 
 //========================================================================
@@ -148,12 +148,12 @@ public:
     //                            (kDecline) or the last value (kIncline)
     //      number_of_steps_arg - the total number of steps/samples in this
     //                            segment (including the peak value and 0)
-    //      seg_type_arg        - either kDecline or kIncline
+    //      seg_gradient_arg        - either kDecline or kIncline
     //--------------------------------------------------------------------
     explicit LinearSegment(
             float peak_amplitude_arg, 
             size_t number_of_steps_arg,
-            LinearSegmentType seg_type_arg);
+            SegmentGradient seg_gradient_arg);
     ~LinearSegment();
 
     //--------------------------------------------------------------------
@@ -196,7 +196,7 @@ private:
     //--------------------------------------------------------------------
     std::size_t number_of_steps_;
     float peak_amplitude_;
-    LinearSegmentType seg_type_;
+    SegmentGradient seg_gradient_;
     std::vector<float> segment_;
     friend ArEnvelope;
 };

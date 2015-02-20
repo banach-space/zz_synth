@@ -58,11 +58,11 @@ ArEnvelope::ArEnvelope(
     decay_segment_(
             peak_amplitude_arg, 
             decay_number_of_samples_,
-            kDecline),
+            SegmentGradient::kDecline),
     attack_segment_(
             peak_amplitude_arg, 
             attack_number_of_samples_,
-            kIncline)
+            SegmentGradient::kIncline)
 {
     assert(attack_duration_arg >= 0);
     assert(decay_duration_arg >= 0);

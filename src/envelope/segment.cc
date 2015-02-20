@@ -36,11 +36,11 @@ Segment::~Segment() {}
 LinearSegment::LinearSegment(
         float peak_amplitude_arg, 
         size_t number_of_steps_arg,
-        LinearSegmentType seg_type_arg) :
+        SegmentGradient seg_gradient_arg) :
     Segment(),
     number_of_steps_(number_of_steps_arg),
     peak_amplitude_(peak_amplitude_arg),
-    seg_type_(seg_type_arg),
+    seg_gradient_(seg_gradient_arg),
     segment_(0)
 {
     double volume = 0;
@@ -49,7 +49,7 @@ LinearSegment::LinearSegment(
 
     // Step 1: Calculate the starting value and the increment that will be used
     //         to step through the segment.
-    if (seg_type_ == kIncline)
+    if (seg_gradient_ == SegmentGradient::kIncline)
     {
         increment = static_cast<double>(peak_amplitude_) / static_cast<double>(number_of_steps_ - 1);
         volume = 0;
@@ -71,7 +71,7 @@ LinearSegment::LinearSegment(
     //         peak_amplitude. Force it to be equal.
     if (number_of_steps_ > 0)
     {
-        if (seg_type_ == kIncline)
+        if (seg_gradient_ == SegmentGradient::kIncline)
         {
             segment_[number_of_steps_-1] = peak_amplitude_;
         } else
