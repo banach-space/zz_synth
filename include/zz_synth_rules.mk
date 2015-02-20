@@ -71,3 +71,4 @@ $(library): $(object_files)
 
 $(testbench): $(object_files) $(libraries)
 	$(LINK.cc) $(INCLUDES_UT) $^ -o $@
+	-rm $(object_files)

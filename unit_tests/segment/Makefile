@@ -29,8 +29,8 @@ include ../../include/zz_synth.mk
 #  SOURCE/OBJECT FILES 
 #-----------------------
 source_files = testbench.cc
-libraries = $(ZZDIR)/lib/libcommon.a $(ZZDIR)/lib/libenvelope.a
-testbench = $(ZZBIN)/testbench_segment$(EXE)
+libraries    = $(ZZDIR)/lib/libcommon.a $(ZZDIR)/lib/libenvelope.a
+testbench    = $(ZZBIN)/testbench_segment$(EXE)
 
 include ../../include/zz_synth_rules.mk
 
