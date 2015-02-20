@@ -21,6 +21,7 @@
 // FORWARD DECLARATIONS 
 //========================================================================
 class ArEnvelope;
+class AdsrEnvelope;
 
 //========================================================================
 // PRIVATE DATA TYPES
@@ -199,6 +200,83 @@ private:
     SegmentGradient seg_gradient_;
     std::vector<float> segment_;
     friend ArEnvelope;
+};
+
+//========================================================================
+// CLASS: ExponentialSegment
+//
+// DESCRIPTION:
+//      An exponential segment in an envelope. Mathematically it is defined
+//      by: y = a*x^b + c. The segment is guaranteed to be 0 at one end and
+//      the specified peak amplitude at the other.
+//========================================================================
+class ExponentialSegment : public Segment
+{
+public:
+    //--------------------------------------------------------------------
+    // 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
+    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------
+    //  NAME:
+    //      ExponentialSegment()
+    //  
+    //  DESCRIPTION:
+    //      Constructor
+    //  INPUT:
+    //      amplitude_start_arg - amplitude at the start of the segment
+    //      amplitude_end_arg   - amplitude at the end of the segment
+    //      number_of_steps_arg - the total number of steps/samples in this
+    //                            segment
+    //--------------------------------------------------------------------
+    explicit ExponentialSegment(
+            float amplitude_start_arg, 
+            float amplitude_end_arg, 
+            size_t number_of_steps_arg);
+    ~ExponentialSegment();
+
+    //--------------------------------------------------------------------
+    // 2. GENERAL USER INTERFACE 
+    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------
+    // Virtual functions/operators
+    //--------------------------------------------------------------------
+    std::vector<float> GetSegment();
+    const float& operator[](const std::size_t position) const;
+    float& operator[](const std::size_t position);
+    bool IsEmpty() const;
+
+    //--------------------------------------------------------------------
+    //  NAME:
+    //      number_of_steps() 
+    //  
+    //  DESCRIPTION:
+    //      Accessor
+    //  INPUT:
+    //      None
+    //  OUTPUT:
+    //      number_of_steps_ 
+    //--------------------------------------------------------------------
+    std::size_t number_of_steps() const;
+
+    //--------------------------------------------------------------------
+    // 3. ACCESSORS
+    //--------------------------------------------------------------------
+    // None
+
+private:
+    //--------------------------------------------------------------------
+    // 4. PRIVATE METHODS 
+    //--------------------------------------------------------------------
+    // None
+
+    //--------------------------------------------------------------------
+    // 5. DATA MEMMBERS 
+    //--------------------------------------------------------------------
+    std::size_t number_of_steps_;
+    float amplitude_start_; 
+    float amplitude_end_; 
+    std::vector<float> segment_;
+    friend AdsrEnvelope;
 };
 
 //========================================================================
