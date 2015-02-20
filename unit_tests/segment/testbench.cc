@@ -78,7 +78,7 @@ TEST(LinearSegmentTest, HandleEmptySegment)
     SynthConfig &synthesiser  = SynthConfig::getInstance();
     synthesiser.Init();	
 
-    LinearSegment segment(peak_amplitude, number_of_steps, kIncline); 
+    LinearSegment segment(peak_amplitude, number_of_steps, SegmentGradient::kIncline); 
 
     EXPECT_EQ(segment.IsEmpty(), true);
 }
@@ -94,7 +94,7 @@ TEST(LinearSegmentTest, HandleDifferentLengthsIncline)
 
     for (auto it = number_of_steps.begin(); it != number_of_steps.end(); it++) 
     {
-        LinearSegment segment(peak_amplitude, *it, kIncline); 
+        LinearSegment segment(peak_amplitude, *it, SegmentGradient::kIncline); 
         ValidateSegmentIncline(peak_amplitude, *it, segment);
     }
 }
@@ -110,7 +110,7 @@ TEST(LinearSegmentTest, HandleDifferentVolumesIncline)
 
     for (auto it = peak_amplitude.begin(); it != peak_amplitude.end(); it++) 
     {
-        LinearSegment segment(*it, number_of_steps, kIncline); 
+        LinearSegment segment(*it, number_of_steps, SegmentGradient::kIncline); 
         ValidateSegmentIncline(*it, number_of_steps, segment);
 
     }
@@ -127,7 +127,7 @@ TEST(LinearSegmentTest, HandleDifferentLengthsDecline)
 
     for (auto it = number_of_steps.begin(); it != number_of_steps.end(); it++) 
     {
-        LinearSegment segment(peak_amplitude, *it, kDecline); 
+        LinearSegment segment(peak_amplitude, *it, SegmentGradient::kDecline); 
         ValidateSegmentDecline(peak_amplitude, *it, segment);
     }
 }
@@ -143,7 +143,7 @@ TEST(LinearSegmentTest, HandleDifferentVolumesDecline)
 
     for (auto it = peak_amplitude.begin(); it != peak_amplitude.end(); it++) 
     {
-        LinearSegment segment(*it, number_of_steps, kDecline); 
+        LinearSegment segment(*it, number_of_steps, SegmentGradient::kDecline); 
         ValidateSegmentDecline(*it, number_of_steps, segment);
     }
 }
