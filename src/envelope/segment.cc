@@ -134,21 +134,29 @@ ExponentialSegment::ExponentialSegment(
     exponent_(exponent_arg),
     segment_(0)
 {
+    // ALGORITHM: This segment is calculated using the following equation:
+    //      y = a*x^b + c 
+    //  The 'a' and 'c' coefficients are calculated using the value for 
+    //  the starting and the final amplitude: amplitude_start_ and amplitude_end_.
+    //  The time variable, 'x', is assumed to be in the range [0, 1]. This way
+    //  the starting amplitude is guaranteed to be amplitude_start_, and the value
+    //  at the end will be amplitude_end_.
     double volume = 0;
     double time = 0;
     double time_increment = 0;
 
     segment_.reserve(number_of_steps_);
 
-    // Algorithm: This segment is calculated using the y = x^b equation, i.e.
-    //            'a' and 'c' are assummed to be 1 and 0, respectively. The time
-    //            variable, 'x', is assumed to be in the range [0, 1]. This way
-    //            the starting amplitude is guaranteed to be 0, and the value
-    //            at the end will be 1.
-    //
-    // TODO: Extend this so that the starting and ending values are arbitrary.
-    time_increment = 1.0 / number_of_steps_;
+    // Step 1: Calculate 'a' and 'c'. This is based on rather straighforward
+    //         Maths.
+    double coefficient_c = amplitude_end_;
+    double coefficient_a = amplitude_end_ - amplitude_start_;
 
+    // Step 2: Time step-size. Recall that time is assumed to vary from 0 to 1
+    //  and that it's split into number_of_steps_ steps.
+    time_increment = 1.0 / (number_of_steps_ - 1);
+
+    // Step 3: Walk through the segment and propagate with the right values
     for (size_t idx = 0; idx < number_of_steps_; idx++)
     {
         volume = std::pow(time, exponent_);
