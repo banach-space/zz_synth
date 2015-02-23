@@ -163,10 +163,10 @@ public:
     //--------------------------------------------------------------------
     // Virtual functions/operators
     //--------------------------------------------------------------------
-    std::vector<float> GetSegment();
-    const float& operator[](const std::size_t position) const;
-    float& operator[](const std::size_t position);
-    bool IsEmpty() const;
+    std::vector<float> GetSegment() override;
+    const float& operator[](const std::size_t position) const override;
+    float& operator[](const std::size_t position) override;
+    bool IsEmpty() const override;
 
     //--------------------------------------------------------------------
     //  NAME:
@@ -231,6 +231,7 @@ public:
     explicit ExponentialSegment(
             float amplitude_start_arg, 
             float amplitude_end_arg, 
+            float exponent_arg, 
             size_t number_of_steps_arg);
     ~ExponentialSegment();
 
@@ -240,10 +241,10 @@ public:
     //--------------------------------------------------------------------
     // Virtual functions/operators
     //--------------------------------------------------------------------
-    std::vector<float> GetSegment();
-    const float& operator[](const std::size_t position) const;
-    float& operator[](const std::size_t position);
-    bool IsEmpty() const;
+    std::vector<float> GetSegment() override;
+    const float& operator[](const std::size_t position) const override;
+    float& operator[](const std::size_t position) override;
+    bool IsEmpty() const override;
 
     //--------------------------------------------------------------------
     //  NAME:
@@ -275,6 +276,7 @@ private:
     std::size_t number_of_steps_;
     float amplitude_start_; 
     float amplitude_end_; 
+    float exponent_; 
     std::vector<float> segment_;
     friend AdsrEnvelope;
 };

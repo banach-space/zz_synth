@@ -116,6 +116,84 @@ size_t LinearSegment::number_of_steps() const
     return number_of_steps_;
 }
 
+//========================================================================
+// CLASS: ExponentialSegment
+//========================================================================
+//------------------------------------------------------------------------
+// 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
+//------------------------------------------------------------------------
+ExponentialSegment::ExponentialSegment(
+        float amplitude_start_arg, 
+        float amplitude_end_arg, 
+        float exponent_arg, 
+        size_t number_of_steps_arg) :
+    Segment(),
+    number_of_steps_(number_of_steps_arg),
+    amplitude_start_(amplitude_start_arg),
+    amplitude_end_(amplitude_end_arg),
+    exponent_(exponent_arg),
+    segment_(0)
+{
+    double volume = 0;
+    double time = 0;
+    double time_increment = 0;
+
+    segment_.reserve(number_of_steps_);
+
+    // Algorithm: This segment is calculated using the y = x^b equation, i.e.
+    //            'a' and 'c' are assummed to be 1 and 0, respectively. The time
+    //            variable, 'x', is assumed to be in the range [0, 1]. This way
+    //            the starting amplitude is guaranteed to be 0, and the value
+    //            at the end will be 1.
+    //
+    // TODO: Extend this so that the starting and ending values are arbitrary.
+    time_increment = 1.0 / number_of_steps_;
+
+    for (size_t idx = 0; idx < number_of_steps_; idx++)
+    {
+        volume = std::pow(time, exponent_);
+        segment_.push_back(volume);
+
+        time += time_increment;
+    }
+
+    segment_[number_of_steps_-1] = 1;
+}
+
+ExponentialSegment::~ExponentialSegment() 
+{}
+
+//------------------------------------------------------------------------
+// 2. GENERAL USER INTERFACE 
+//------------------------------------------------------------------------
+const float& ExponentialSegment::operator[](const size_t position) const
+{
+    assert(position <= number_of_steps_);
+
+    return segment_[position];
+}
+
+float& ExponentialSegment::operator[](const size_t position)
+{
+    assert(position <= number_of_steps_);
+
+    return segment_[position];
+}
+
+vector<float> ExponentialSegment::GetSegment()
+{
+    return segment_; 
+}
+
+bool ExponentialSegment::IsEmpty() const
+{
+    return segment_.empty();
+}
+
+size_t ExponentialSegment::number_of_steps() const
+{
+    return number_of_steps_;
+}
 
 //=============================================================
 //  CLASS: SegmentInitialisationException 
