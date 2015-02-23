@@ -159,7 +159,7 @@ ExponentialSegment::ExponentialSegment(
     // Step 3: Walk through the segment and propagate with the right values
     for (size_t idx = 0; idx < number_of_steps_; idx++)
     {
-        volume = std::pow(time, exponent_);
+        volume = pow(time, exponent_);
         segment_.push_back(volume);
 
         time += time_increment;
