@@ -31,6 +31,13 @@ void ValidateSegmentDecline(
         size_t size_expected,
         LinearSegment &segment);
 
+void ValidateSegmentExponential(
+        float amplitude_start_expected, 
+        float amplitude_end_expected, 
+        float exponent,
+        size_t size_expected,
+        ExponentialSegment &segment);
+
 void ValidateSegmentIncline(
         float peak_amplitude_expected, 
         size_t size_expected,
@@ -66,9 +73,25 @@ void ValidateSegmentDecline(
             EXPECT_LE(fabs(temp- peak_amplitude_expected/2), kEps);
         }
 }
+
+void ValidateSegmentExponential(
+        float amplitude_start_expected, 
+        float amplitude_end_expected, 
+        float exponent,
+        size_t size_expected,
+        ExponentialSegment &segment)
+{
+        EXPECT_EQ(segment.number_of_steps(), size_expected);
+        EXPECT_EQ(segment[0], amplitude_start_expected);
+        EXPECT_EQ(segment[size_expected-1], amplitude_end_expected);
+
+}
 //========================================================================
 // TESTS
 //========================================================================
+//------------------------------------------------------------------------
+// LinearSegment 
+//------------------------------------------------------------------------
 TEST(LinearSegmentTest, HandleEmptySegment)
 {
     size_t number_of_steps = 0;
@@ -145,6 +168,27 @@ TEST(LinearSegmentTest, HandleDifferentVolumesDecline)
     {
         LinearSegment segment(*it, number_of_steps, SegmentGradient::kDecline); 
         ValidateSegmentDecline(*it, number_of_steps, segment);
+    }
+}
+
+//------------------------------------------------------------------------
+// ExponentialSegment 
+//------------------------------------------------------------------------
+TEST(ExponentialSegmentTest, HandleDifferentVolumesDecline)
+{
+    size_t number_of_steps = 101;
+    vector<float> amplitude_start = {0}; 
+    float amplitude_end = 1; 
+    float exponent = 2; 
+
+    // Initialise the synthesiser
+    SynthConfig &synthesiser  = SynthConfig::getInstance();
+    synthesiser.Init();	
+
+    for (auto it = amplitude_start.begin(); it != amplitude_start.end(); it++) 
+    {
+        ExponentialSegment segment(*it, amplitude_end, exponent, number_of_steps); 
+        ValidateSegmentExponential(*it, amplitude_end, exponent, number_of_steps, segment);
     }
 }
 
