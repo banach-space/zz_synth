@@ -22,11 +22,19 @@ using namespace std;
 //========================================================================
 // UTILITIES 
 //========================================================================
-void ValidateSegmentIncline(
+//------------------------------------------------------------------------
+// Declaration (required by gtest)
+//------------------------------------------------------------------------
+void ValidateConstantSegment(
+        float amplitude_expected, 
+        size_t size_expected,
+        ConstantSegment &segment);
+
+void ValidateLinearSegmentIncline(
         float peak_amplitude_expected, 
         size_t size_expected,
         LinearSegment &segment);
-void ValidateSegmentDecline(
+void ValidateLinearSegmentDecline(
         float peak_amplitude_expected, 
         size_t size_expected,
         LinearSegment &segment);
@@ -38,7 +46,20 @@ void ValidateSegmentExponential(
         size_t size_expected,
         ExponentialSegment &segment);
 
-void ValidateSegmentIncline(
+//------------------------------------------------------------------------
+// Definitions
+//------------------------------------------------------------------------
+void ValidateConstantSegment(
+        float amplitude_expected, 
+        size_t size_expected,
+        ConstantSegment &segment)
+{
+        EXPECT_EQ(segment.number_of_steps(), size_expected);
+        EXPECT_EQ(segment[0], amplitude_expected);
+        EXPECT_EQ(segment[size_expected-1], amplitude_expected);
+        EXPECT_EQ(segment[(size_expected-1)/2], amplitude_expected);
+}
+void ValidateLinearSegmentIncline(
         float peak_amplitude_expected, 
         size_t size_expected,
         LinearSegment &segment)
@@ -56,7 +77,7 @@ void ValidateSegmentIncline(
         }
 }
 
-void ValidateSegmentDecline(
+void ValidateLinearSegmentDecline(
         float peak_amplitude_expected, 
         size_t size_expected,
         LinearSegment &segment)
@@ -90,22 +111,72 @@ void ValidateSegmentExponential(
 // TESTS
 //========================================================================
 //------------------------------------------------------------------------
-// LinearSegment 
+// All types of segments 
 //------------------------------------------------------------------------
-TEST(LinearSegmentTest, HandleEmptySegment)
+TEST(AllSegmentTypesTest, HandleEmptySegment)
 {
     size_t number_of_steps = 0;
     float peak_amplitude = 1 << 15;
+    float amplitude_start = 1 << 15;
+    float amplitude_end = 1;
+    float exponent = 100;
     
     // Initialise the synthesiser
     SynthConfig &synthesiser  = SynthConfig::getInstance();
     synthesiser.Init();	
 
-    LinearSegment segment(peak_amplitude, number_of_steps, SegmentGradient::kIncline); 
+    // Constant segment
+    ConstantSegment segment_c(peak_amplitude, number_of_steps); 
+    EXPECT_EQ(segment_c.IsEmpty(), true);
 
-    EXPECT_EQ(segment.IsEmpty(), true);
+    // Linear segment
+    LinearSegment segment_l(peak_amplitude, number_of_steps, SegmentGradient::kIncline); 
+    EXPECT_EQ(segment_l.IsEmpty(), true);
+
+    // Exponential segment
+    ExponentialSegment segment_e(amplitude_start, amplitude_end, exponent, number_of_steps); 
+    EXPECT_EQ(segment_e.IsEmpty(), true);
 }
 
+//------------------------------------------------------------------------
+// ConstantSegment 
+//------------------------------------------------------------------------
+TEST(ConsantSegmentTest, HandleDifferentLengths)
+{
+    vector<size_t> number_of_steps = {4, 41, 101, 1001, 2000};
+    float amplitude = 1 << 15;
+
+    // Initialise the synthesiser
+    SynthConfig &synthesiser  = SynthConfig::getInstance();
+    synthesiser.Init();	
+
+    for (auto it = number_of_steps.begin(); it != number_of_steps.end(); it++) 
+    {
+        ConstantSegment segment(amplitude, *it); 
+        ValidateConstantSegment(amplitude, *it, segment);
+    }
+}
+
+TEST(ConstantSegmentTest, HandleDifferentVolumes)
+{
+    size_t number_of_steps = 101;
+    vector<float> amplitude = {0, 1, 1000, 1 << 15};
+
+    // Initialise the synthesiser
+    SynthConfig &synthesiser  = SynthConfig::getInstance();
+    synthesiser.Init();	
+
+    for (auto it = amplitude.begin(); it != amplitude.end(); it++) 
+    {
+        ConstantSegment segment(*it, number_of_steps); 
+        ValidateConstantSegment(*it, number_of_steps, segment);
+
+    }
+}
+
+//------------------------------------------------------------------------
+// LinearSegment 
+//------------------------------------------------------------------------
 TEST(LinearSegmentTest, HandleDifferentLengthsIncline)
 {
     vector<size_t> number_of_steps = {4, 41, 101, 1001, 2000};
@@ -118,7 +189,7 @@ TEST(LinearSegmentTest, HandleDifferentLengthsIncline)
     for (auto it = number_of_steps.begin(); it != number_of_steps.end(); it++) 
     {
         LinearSegment segment(peak_amplitude, *it, SegmentGradient::kIncline); 
-        ValidateSegmentIncline(peak_amplitude, *it, segment);
+        ValidateLinearSegmentIncline(peak_amplitude, *it, segment);
     }
 }
 
@@ -134,7 +205,7 @@ TEST(LinearSegmentTest, HandleDifferentVolumesIncline)
     for (auto it = peak_amplitude.begin(); it != peak_amplitude.end(); it++) 
     {
         LinearSegment segment(*it, number_of_steps, SegmentGradient::kIncline); 
-        ValidateSegmentIncline(*it, number_of_steps, segment);
+        ValidateLinearSegmentIncline(*it, number_of_steps, segment);
 
     }
 }
@@ -151,7 +222,7 @@ TEST(LinearSegmentTest, HandleDifferentLengthsDecline)
     for (auto it = number_of_steps.begin(); it != number_of_steps.end(); it++) 
     {
         LinearSegment segment(peak_amplitude, *it, SegmentGradient::kDecline); 
-        ValidateSegmentDecline(peak_amplitude, *it, segment);
+        ValidateLinearSegmentDecline(peak_amplitude, *it, segment);
     }
 }
 
@@ -167,7 +238,7 @@ TEST(LinearSegmentTest, HandleDifferentVolumesDecline)
     for (auto it = peak_amplitude.begin(); it != peak_amplitude.end(); it++) 
     {
         LinearSegment segment(*it, number_of_steps, SegmentGradient::kDecline); 
-        ValidateSegmentDecline(*it, number_of_steps, segment);
+        ValidateLinearSegmentDecline(*it, number_of_steps, segment);
     }
 }
 
