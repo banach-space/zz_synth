@@ -245,10 +245,10 @@ TEST(LinearSegmentTest, HandleDifferentVolumesDecline)
 //------------------------------------------------------------------------
 // ExponentialSegment 
 //------------------------------------------------------------------------
-TEST(ExponentialSegmentTest, HandleDifferentVolumesDecline)
+TEST(ExponentialSegmentTest, HandleDifferentVolumesStart)
 {
     size_t number_of_steps = 101;
-    vector<float> amplitude_start = {0}; 
+    vector<float> amplitude_start = {0, 1, 1000, 1 << 15};
     float amplitude_end = 1; 
     float exponent = 2; 
 
@@ -260,6 +260,60 @@ TEST(ExponentialSegmentTest, HandleDifferentVolumesDecline)
     {
         ExponentialSegment segment(*it, amplitude_end, exponent, number_of_steps); 
         ValidateSegmentExponential(*it, amplitude_end, exponent, number_of_steps, segment);
+    }
+}
+
+TEST(ExponentialSegmentTest, HandleDifferentVolumesEnd)
+{
+    size_t number_of_steps = 101;
+    vector<float> amplitude_end = {0, 1, 1000, 1 << 15};
+    float amplitude_start = 1; 
+    float exponent = 2; 
+
+    // Initialise the synthesiser
+    SynthConfig &synthesiser  = SynthConfig::getInstance();
+    synthesiser.Init();	
+
+    for (auto it = amplitude_end.begin(); it != amplitude_end.end(); it++) 
+    {
+        ExponentialSegment segment(amplitude_start, *it, exponent, number_of_steps); 
+        ValidateSegmentExponential(amplitude_start, *it, exponent, number_of_steps, segment);
+    }
+}
+
+TEST(ExponentialSegmentTest, HandleDifferentLengths)
+{
+    vector<size_t> number_of_steps = {2, 41, 101, 1001, 2000};
+    float amplitude_start = 13; 
+    float amplitude_end = 1313; 
+    float exponent = 2; 
+
+    // Initialise the synthesiser
+    SynthConfig &synthesiser  = SynthConfig::getInstance();
+    synthesiser.Init();	
+
+    for (auto it = number_of_steps.begin(); it != number_of_steps.end(); it++) 
+    {
+        ExponentialSegment segment(amplitude_start, amplitude_end, exponent, *it); 
+        ValidateSegmentExponential(amplitude_start, amplitude_end, exponent, *it, segment);
+    }
+}
+
+TEST(ExponentialSegmentTest, HandleDifferentExponents)
+{
+    size_t number_of_steps = 101;
+    float amplitude_start = 13; 
+    float amplitude_end = 1313; 
+    vector<float> exponent = {0.0001, 0.001, 0.01, 0.1, 1, 10, 100, 1000, 10000}; 
+
+    // Initialise the synthesiser
+    SynthConfig &synthesiser  = SynthConfig::getInstance();
+    synthesiser.Init();	
+
+    for (auto it = exponent.begin(); it != exponent.end(); it++) 
+    {
+        ExponentialSegment segment(amplitude_start, amplitude_end, *it, number_of_steps); 
+        ValidateSegmentExponential(amplitude_start, amplitude_end, *it, number_of_steps, segment);
     }
 }
 
