@@ -124,12 +124,73 @@ private:
 };
 
 //========================================================================
+// CLASS: ConstantSegment
+//
+// DESCRIPTION:
+//      A constant segment in an envelope. Mathematically it is defined
+//      by: y = a, where 'a' is the amplitude_. Due to its simplicity,
+//      there's no need to pre-calculate and store the values of
+//      this segment. This will improve memory footprint.
+//========================================================================
+class ConstantSegment : public Segment
+{
+public:
+    //--------------------------------------------------------------------
+    // 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
+    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------
+    //  NAME:
+    //      ConstantSegment()
+    //  
+    //  DESCRIPTION:
+    //      Constructor
+    //  INPUT:
+    //      amplitude_arg       - the value of the segment
+    //      number_of_steps_arg - the total number of steps/samples in this
+    //                            segment 
+    //--------------------------------------------------------------------
+    explicit ConstantSegment(
+            float amplitude_arg, 
+            size_t number_of_steps_arg);
+    ~ConstantSegment();
+
+    //--------------------------------------------------------------------
+    // 2. GENERAL USER INTERFACE 
+    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------
+    // Virtual functions/operators
+    //--------------------------------------------------------------------
+    std::vector<float> GetSegment() override;
+    const float& operator[](const std::size_t position) const override;
+    float& operator[](const std::size_t position) override;
+    bool IsEmpty() const override;
+
+    //--------------------------------------------------------------------
+    // 3. ACCESSORS
+    //--------------------------------------------------------------------
+    std::size_t number_of_steps() const;
+
+private:
+    //--------------------------------------------------------------------
+    // 4. PRIVATE METHODS 
+    //--------------------------------------------------------------------
+    // None
+
+    //--------------------------------------------------------------------
+    // 5. DATA MEMMBERS 
+    //--------------------------------------------------------------------
+    std::size_t number_of_steps_;
+    float amplitude_;
+    friend AdsrEnvelope;
+    friend ArEnvelope;
+};
+//========================================================================
 // CLASS: LinearSegment
 //
 // DESCRIPTION:
 //      A linear segment in an envelope. Mathematically it is defined
 //      by: y = a*x + b. The segment is guaranteed to be 0 at one end and
-//      the specified peak amplitude at the other.
+//      the specified peak amplitude at the other. 
 //========================================================================
 class LinearSegment : public Segment
 {
@@ -169,22 +230,9 @@ public:
     bool IsEmpty() const override;
 
     //--------------------------------------------------------------------
-    //  NAME:
-    //      number_of_steps() 
-    //  
-    //  DESCRIPTION:
-    //      Accessors
-    //  INPUT:
-    //      None
-    //  OUTPUT:
-    //      number_of_steps_ 
-    //--------------------------------------------------------------------
-    std::size_t number_of_steps() const;
-
-    //--------------------------------------------------------------------
     // 3. ACCESSORS
     //--------------------------------------------------------------------
-    // None
+    std::size_t number_of_steps() const;
 
 private:
     //--------------------------------------------------------------------

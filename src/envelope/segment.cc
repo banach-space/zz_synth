@@ -26,6 +26,56 @@ using namespace std;
 Segment::Segment() {}
 Segment::~Segment() {}
 
+//========================================================================
+// CLASS: ConstantSegment
+//========================================================================
+//------------------------------------------------------------------------
+// 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
+//------------------------------------------------------------------------
+ConstantSegment::ConstantSegment(
+            float amplitude_arg, 
+            size_t number_of_steps_arg):
+    Segment(),
+    number_of_steps_(number_of_steps_arg),
+    amplitude_(amplitude_arg)
+{
+}
+
+ConstantSegment::~ConstantSegment() 
+{}
+
+//------------------------------------------------------------------------
+// 2. GENERAL USER INTERFACE 
+//------------------------------------------------------------------------
+const float& ConstantSegment::operator[](const size_t position) const
+{
+    assert(position <= number_of_steps_);
+
+    return amplitude_;
+}
+
+float& ConstantSegment::operator[](const size_t position)
+{
+    assert(position <= number_of_steps_);
+
+    return amplitude_;
+}
+
+vector<float> ConstantSegment::GetSegment()
+{
+    vector<float> segment(number_of_steps_, amplitude_);
+    return segment; 
+}
+
+bool ConstantSegment::IsEmpty() const
+{
+    return (number_of_steps_ == 0);
+}
+
+size_t ConstantSegment::number_of_steps() const
+{
+    return number_of_steps_;
+}
 
 //========================================================================
 // CLASS: LinearSegment
@@ -165,7 +215,14 @@ ExponentialSegment::ExponentialSegment(
         time += time_increment;
     }
 
-    segment_[number_of_steps_-1] = 1;
+    // Step 3: Fix what's at the beginning/end as due to rounding error
+    //         the first/last entry might be different from amplitude_start and
+    //         amplitude_end, respecitvely. Force it to be equal.
+    if (number_of_steps_ > 0)
+    {
+        segment_[0] = amplitude_start_;
+        segment_[number_of_steps_-1] = amplitude_end_;
+    }
 }
 
 ExponentialSegment::~ExponentialSegment() 
