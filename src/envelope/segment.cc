@@ -77,6 +77,11 @@ size_t ConstantSegment::number_of_steps() const
     return number_of_steps_;
 }
 
+size_t ConstantSegment::Length() const
+{
+    return number_of_steps();
+}
+
 //========================================================================
 // CLASS: LinearSegment
 //========================================================================
@@ -164,6 +169,11 @@ bool LinearSegment::IsEmpty() const
 size_t LinearSegment::number_of_steps() const
 {
     return number_of_steps_;
+}
+
+size_t LinearSegment::Length() const
+{
+    return number_of_steps();
 }
 
 //========================================================================
@@ -258,6 +268,11 @@ bool ExponentialSegment::IsEmpty() const
 size_t ExponentialSegment::number_of_steps() const
 {
     return number_of_steps_;
+}
+
+size_t ExponentialSegment::Length() const
+{
+    return number_of_steps();
 }
 
 //=============================================================

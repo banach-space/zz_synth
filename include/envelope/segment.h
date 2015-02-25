@@ -80,6 +80,7 @@ public:
     //      The segment
     //--------------------------------------------------------------------
     virtual std::vector<float> GetSegment() = 0;
+
     //--------------------------------------------------------------------
     //  NAME:
     //      operator[] 
@@ -93,6 +94,7 @@ public:
     //--------------------------------------------------------------------
     virtual const float& operator[](const std::size_t position) const = 0;
     virtual float& operator[](const std::size_t position) = 0;
+
     //--------------------------------------------------------------------
     //  NAME:
     //      IsEmpty() 
@@ -105,6 +107,19 @@ public:
     //      True if the segment is empty, false otherwise. 
     //--------------------------------------------------------------------
     virtual bool IsEmpty() const = 0;
+
+    //--------------------------------------------------------------------
+    //  NAME:
+    //      Length() 
+    //  
+    //  DESCRIPTION:
+    //      Returns the length of this Segment expressed in samples.
+    //  INPUT:
+    //      None
+    //  OUTPUT:
+    //      The length of this Segment expressed in samples.
+    //--------------------------------------------------------------------
+    virtual std::size_t Length() const = 0;
 
     //--------------------------------------------------------------------
     // 3. ACCESSORS
@@ -164,6 +179,7 @@ public:
     const float& operator[](const std::size_t position) const override;
     float& operator[](const std::size_t position) override;
     bool IsEmpty() const override;
+    std::size_t Length() const override;
 
     //--------------------------------------------------------------------
     // 3. ACCESSORS
@@ -228,6 +244,7 @@ public:
     const float& operator[](const std::size_t position) const override;
     float& operator[](const std::size_t position) override;
     bool IsEmpty() const override;
+    std::size_t Length() const override;
 
     //--------------------------------------------------------------------
     // 3. ACCESSORS
@@ -293,6 +310,7 @@ public:
     const float& operator[](const std::size_t position) const override;
     float& operator[](const std::size_t position) override;
     bool IsEmpty() const override;
+    std::size_t Length() const override;
 
     //--------------------------------------------------------------------
     //  NAME:
