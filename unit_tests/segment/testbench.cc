@@ -33,18 +33,18 @@ void ValidateConstantSegment(
 void ValidateLinearSegmentIncline(
         float peak_amplitude_expected, 
         size_t size_expected,
-        LinearSegment &segment);
+        Segment &segment);
 void ValidateLinearSegmentDecline(
         float peak_amplitude_expected, 
         size_t size_expected,
-        LinearSegment &segment);
+        Segment &segment);
 
 void ValidateSegmentExponential(
         float amplitude_start_expected, 
         float amplitude_end_expected, 
         float exponent,
         size_t size_expected,
-        ExponentialSegment &segment);
+        Segment &segment);
 
 //------------------------------------------------------------------------
 // Definitions
@@ -63,7 +63,7 @@ void ValidateConstantSegment(
 void ValidateLinearSegmentIncline(
         float peak_amplitude_expected, 
         size_t size_expected,
-        LinearSegment &segment)
+        Segment &segment)
 {
         EXPECT_EQ(segment.Length(), size_expected);
         EXPECT_EQ(segment[0], 0);
@@ -81,7 +81,7 @@ void ValidateLinearSegmentIncline(
 void ValidateLinearSegmentDecline(
         float peak_amplitude_expected, 
         size_t size_expected,
-        LinearSegment &segment)
+        Segment &segment)
 {
         EXPECT_EQ(segment.Length(), size_expected);
         EXPECT_EQ(segment[size_expected-1], 0);
@@ -101,7 +101,7 @@ void ValidateSegmentExponential(
         float amplitude_end_expected, 
         float exponent,
         size_t size_expected,
-        ExponentialSegment &segment)
+        Segment &segment)
 {
         EXPECT_EQ(segment.Length(), size_expected);
         EXPECT_EQ(segment[0], amplitude_start_expected);
@@ -330,7 +330,26 @@ TEST(ExponentialSegmentTest, ExponentEqualZero)
     synthesiser.Init();	
 
     ExponentialSegment segment(amplitude_start, amplitude_end, exponent, number_of_steps); 
-    ValidateConstantSegment(2*amplitude_end,  number_of_steps, segment);
+
+    // Exponent is 0, so expect this segment to be constant
+    ValidateConstantSegment(amplitude_end,  number_of_steps, segment);
+}
+
+TEST(ExponentialSegmentTest, ExponentEqualOne)
+{
+    size_t number_of_steps = 101;
+    float amplitude_start  = 0;
+    float amplitude_end    = 1;
+    float exponent         = 1;
+
+    // Initialise the synthesiser
+    SynthConfig &synthesiser  = SynthConfig::getInstance();
+    synthesiser.Init();	
+
+    ExponentialSegment segment(amplitude_start, amplitude_end, exponent, number_of_steps); 
+
+    // Exponent is 1, so expect this segment to be linear
+    ValidateLinearSegmentIncline(amplitude_end,  number_of_steps, segment);
 }
 
 //========================================================================

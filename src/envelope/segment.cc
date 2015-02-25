@@ -209,29 +209,47 @@ ExponentialSegment::ExponentialSegment(
 
     // Step 1: Calculate 'a' and 'c'. This is based on rather straighforward
     //         Maths.
-    double coefficient_c = amplitude_end_;
+    double coefficient_c = amplitude_start_;
     double coefficient_a = amplitude_end_ - amplitude_start_;
 
     // Step 2: Time step-size. Recall that time is assumed to vary from 0 to 1
-    //  and that it's split into number_of_steps_ steps.
+    //         and that it's split into number_of_steps_ steps.
     time_increment = 1.0 / (number_of_steps_ - 1);
 
-    // Step 3: Walk through the segment and propagate with the right values
-    for (size_t idx = 0; idx < number_of_steps_; idx++)
+    // Step 3: Walk through the segment and propagate it with the right values
+    if (number_of_steps_ != 0)
     {
-        volume = pow(time, exponent_);
+        /* Need to take special care when calculating 0^0. Here it is assumed that 0^0 = 1.*/
+        if (exponent_ != 0)
+        {
+            volume = coefficient_a*pow(time, exponent_) + coefficient_c;
+
+        } else
+        {
+            volume = coefficient_a + coefficient_c;
+        }
+
         segment_.push_back(volume);
-
         time += time_increment;
-    }
 
-    // Step 3: Fix what's at the beginning/end as due to rounding error
-    //         the first/last entry might be different from amplitude_start and
-    //         amplitude_end, respecitvely. Force it to be equal.
-    if (number_of_steps_ > 0)
-    {
-        segment_[0] = amplitude_start_;
-        segment_[number_of_steps_-1] = amplitude_end_;
+
+        /* The rest of the segment is calculate using the following generic algorithm.*/
+        for (size_t idx = 1; idx < number_of_steps_; idx++)
+        {
+            volume = coefficient_a*pow(time, exponent_) + coefficient_c;
+            segment_.push_back(volume);
+
+            time += time_increment;
+        }
+
+        // Fix what's at the beginning/end as due to rounding error
+        // the first/last entry might be different from amplitude_start and
+        // amplitude_end, respecitvely. Force it to be equal.
+        if (exponent_ != 0)
+        {
+            segment_[0] = amplitude_start_;
+            segment_[number_of_steps_-1] = amplitude_end_;
+        }
     }
 }
 
