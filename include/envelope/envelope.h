@@ -146,7 +146,10 @@ private:
 // DESCRIPTION:
 //      ADSR (Attack/Decay/Sustain/Release) envelope. Every segment 
 //      within this envelope can be of any available type (i.e. constant,
-//      linear or exponential).
+//      linear or exponential). Note that for this type of envelopes
+//      there are no gaps between segments and hence it can't be applied
+//      to signals the length of which isn't equal to the sum of lengths
+//      of the segments. 
 //========================================================================
 class AdsrEnvelope : public Envelope
 {
@@ -162,18 +165,17 @@ public:
     //      Constructor. Note that all of the member segments have to
     //      constructed before calling this constructor.
     //  INPUT:
-    //      synthesiser          - A reference to the current synthesiser
+    //      synthesiser          -A reference to the current synthesiser
     //      attack_segment_arg   -Pointer to the attack segment
     //      decay_segment_arg    -Pointer to the decay segment
     //      sustatin_segment_arg -Pointer to the sustain segment
     //      release_segment_arg  -Pointer to the release segment
     //--------------------------------------------------------------------
     explicit AdsrEnvelope(
-            SynthConfig& synthesiser,
             std::unique_ptr<Segment> attack_segment_arg,
             std::unique_ptr<Segment> decay_segment_arg,
             std::unique_ptr<Segment> sustain_segment_arg,
-            std::unique_ptr<Segment> release_segment_arg,
+            std::unique_ptr<Segment> release_segment_arg
             );
     virtual ~AdsrEnvelope() = default;
 
@@ -201,6 +203,7 @@ private:
     std::unique_ptr<Segment> decay_segment_;
     std::unique_ptr<Segment> sustain_segment_;
     std::unique_ptr<Segment> release_segment_;
+    std::size_t length_;
     
 };
 

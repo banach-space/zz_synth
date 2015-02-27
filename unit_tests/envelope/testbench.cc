@@ -26,26 +26,6 @@
 //      ComparePreAndPostEnvelopeBasic
 //  
 //  DESCRIPTION:
-//      Compares the pre- and post- envelope samples and checks conditions
-//      that have to be satisfied for every AR envelope. 
-//  INPUT:
-//      attack_length         - the length of the attack segment
-//      decay_length          - the length of the decay segment
-//      samples_pre_envelope  - samples before applying the envelope
-//      samples_post_envelope - samples after applying the envelope
-//  OUTPUT:
-//      None
-//------------------------------------------------------------------------
-static void ComparePreAndPostEnvelopeBasic(
-        vector<int16_t>::difference_type attack_length, 
-        vector<int16_t>::difference_type decay_length,
-        vector<int16_t> &samples_pre_envelope,
-        vector<int16_t> &samples_post_envelope);
-//------------------------------------------------------------------------
-//  NAME:
-//      ComparePreAndPostEnvelopeBasic
-//  
-//  DESCRIPTION:
 //      By comparing the pre- and post- envelope samples, this function
 //      verifies that conditions that have to be satisfied for an AR
 //      envelope are indeed met.
@@ -57,11 +37,11 @@ static void ComparePreAndPostEnvelopeBasic(
 //  OUTPUT:
 //      None
 //------------------------------------------------------------------------
-static void ComparePreAndPostEnvelopeBasic(
-        vector<int16_t>::difference_type attack_length, 
-        vector<int16_t>::difference_type decay_length,
-        vector<int16_t> &samples_pre_envelope,
-        vector<int16_t> &samples_post_envelope);
+//static void ComparePreAndPostEnvelopeBasic(
+        //vector<int16_t>::difference_type attack_length, 
+        //vector<int16_t>::difference_type decay_length,
+        //vector<int16_t> &samples_pre_envelope,
+        //vector<int16_t> &samples_post_envelope);
 static void ComparePreAndPostEnvelopeBasic(
         vector<int16_t>::difference_type attack_length, 
         vector<int16_t>::difference_type decay_length,
