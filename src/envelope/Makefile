@@ -34,7 +34,6 @@ source_files = \
 			   segment.cc
 
 include ../../include/zz_synth_rules.mk
-INCLUDES += -lm
 
 #-----------------------
 #  TARGETS 

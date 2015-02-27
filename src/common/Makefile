@@ -27,7 +27,6 @@ source_files = \
                oscillator.cc
 
 include ../../include/zz_synth_rules.mk
-INCLUDES += -lm
 
 #-----------------------
 #  TARGETS 

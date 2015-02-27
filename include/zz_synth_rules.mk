@@ -21,28 +21,31 @@
 #  COMPILATION VARIABLES 
 #-----------------------
 CPPFLAGS = $(OPTFLAG) -std=c++11
+CXX      = g++ -fdiagnostics-show-option
+#CXX      = clang-3.6
+
+ifeq "$(CXX)" "clang-3.6"
+  include $(ZZINC)/compiler_flags_clang.mk
+else
+  include $(ZZINC)/compiler_flags_gcc.mk
+endif
 
 ifeq "$(COMPILE_FLAGS)" "PEDANTIC"
-#CPPFLAGS += -Wall -pedantic -Wextra
-CPPFLAGS += -pedantic -Wall -Wextra -Wcast-align -Wcast-qual\
-   	-Wctor-dtor-privacy -Wdisabled-optimization -Wformat=2 -Winit-self\
-   	-Wlogical-op -Wmissing-declarations -Wmissing-include-dirs -Wnoexcept\
-   	-Wold-style-cast -Woverloaded-virtual -Wredundant-decls -Wshadow\
-   	-Wsign-conversion -Wsign-promo -Wstrict-null-sentinel -Wstrict-overflow=5\
-   	-Wswitch-default -Wundef -Werror -Wno-unused
-$(info Pedantic compile flags...)
+  CPPFLAGS += $(CPPFLAGS_PEDANTIC)
+  $(info Pedantic compile flags...)
 else ifeq "$(COMPILE_FLAGS)" "DEBUG"
-CPPFLAGS += -g -ggdb
-$(info Debuggin compile flags...)
+  CPPFLAGS += $(CPPFLAGS_DEBUG )
+  $(info Debuggin compile flags...)
 endif
 
 INCLUDES    = -I $(ZZINC)
-CXX         = g++ -fdiagnostics-show-option
 COMPILE.cpp = $(CXX) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) $(TARGET_ARCH) -c
+
+LIBS = -lm
 
 # The following are extra include flags needed by the Google Unit Testing
 # framework.
-INCLUDES_UT = -lgtest -lgtest_main -lpthread
+LIBS_UNIT_TESTS = -lgtest -lgtest_main -lpthread
 
 #-----------------------
 #  SHELL COMMANDS 
@@ -70,5 +73,5 @@ $(library): $(object_files)
 	@$(RANLIB) $@
 
 $(testbench): $(object_files) $(libraries)
-	$(LINK.cc) $(INCLUDES_UT) $^ -o $@
+	$(LINK.cc) $(LIBS_UNIT_TESTS) $(LIBS) $^ -o $@
 	-rm $(object_files)
