@@ -79,8 +79,10 @@ private:
 // CLASS: ArEnvelope
 //
 // DESCRIPTION:
-//      AR envelope (attack/sustain/release) with the sustain level set
-//      automatically to 100%.
+//      AR envelope (Aattack/Release). It also contains a sustain segment
+//      in between the attack and release segments, and which is
+//      automatically set to 100%. In other words, this envelope doesn't
+//      modify what's outside the attack and release segments.
 //========================================================================
 class ArEnvelope : public Envelope
 {
@@ -135,6 +137,70 @@ private:
     std::size_t decay_number_of_samples_;
     LinearSegment decay_segment_;
     LinearSegment attack_segment_;
+    
+};
+
+//========================================================================
+// CLASS: AdsrEnvelope
+//
+// DESCRIPTION:
+//      ADSR (Attack/Decay/Sustain/Release) envelope. Every segment 
+//      within this envelope can be of any available type (i.e. constant,
+//      linear or exponential).
+//========================================================================
+class AdsrEnvelope : public Envelope
+{
+public:
+    //--------------------------------------------------------------------
+    // 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
+    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------
+    //  NAME:
+    //      AdsrEnvelope()
+    //  
+    //  DESCRIPTION:
+    //      Constructor. Note that all of the member segments have to
+    //      constructed before calling this constructor.
+    //  INPUT:
+    //      synthesiser          - A reference to the current synthesiser
+    //      attack_segment_arg   -Pointer to the attack segment
+    //      decay_segment_arg    -Pointer to the decay segment
+    //      sustatin_segment_arg -Pointer to the sustain segment
+    //      release_segment_arg  -Pointer to the release segment
+    //--------------------------------------------------------------------
+    explicit AdsrEnvelope(
+            SynthConfig& synthesiser,
+            std::unique_ptr<Segment> attack_segment_arg,
+            std::unique_ptr<Segment> decay_segment_arg,
+            std::unique_ptr<Segment> sustain_segment_arg,
+            std::unique_ptr<Segment> release_segment_arg,
+            );
+    virtual ~AdsrEnvelope() = default;
+
+    //--------------------------------------------------------------------
+    // 2. GENERAL USER INTERFACE 
+    //--------------------------------------------------------------------
+    void ApplyEnvelope(std::vector<int16_t> &samples) const;
+
+    //--------------------------------------------------------------------
+    // 3. ACCESSORS
+    //--------------------------------------------------------------------
+    // None
+
+protected:
+    //--------------------------------------------------------------------
+    // 4. MUTATORS
+    //--------------------------------------------------------------------
+    // None
+
+private:
+    //--------------------------------------------------------------------
+    // 5. DATA MEMMBERS 
+    //--------------------------------------------------------------------
+    std::unique_ptr<Segment> attack_segment_;
+    std::unique_ptr<Segment> decay_segment_;
+    std::unique_ptr<Segment> sustain_segment_;
+    std::unique_ptr<Segment> release_segment_;
     
 };
 
