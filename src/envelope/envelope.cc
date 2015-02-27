@@ -13,6 +13,8 @@
 
 #include <envelope/envelope.h>
 
+using namespace std;
+
 //========================================================================
 // CLASS: Envelope
 //========================================================================
@@ -86,7 +88,7 @@ void ArEnvelope::ApplyEnvelope(std::vector<int16_t> &samples) const
     for ( ; it_seg != it_seg_end && it_data != it_data_end; it_seg++, it_data++)
     {
 
-       *it_data = (*it_seg * *it_data); 
+       *it_data = static_cast<int16_t>(*it_seg * static_cast<float>(*it_data)); 
     }
 
     // 2. Apply decay
@@ -99,7 +101,7 @@ void ArEnvelope::ApplyEnvelope(std::vector<int16_t> &samples) const
 
     for ( ; it_seg != it_seg_end && it_data != it_data_end; it_seg++, it_data++)
     {
-       *it_data = (*it_seg * *it_data); 
+       *it_data = static_cast<int16_t>(*it_seg * static_cast<float>(*it_data)); 
     }
 }
 
@@ -155,7 +157,7 @@ void AdsrEnvelope::ApplyEnvelope(std::vector<int16_t> &samples) const
 
     for ( ; it_seg != it_seg_end && it_data != it_data_end; it_seg++, it_data++)
     {
-        *it_data = (*it_seg * *it_data); 
+        *it_data = static_cast<int16_t>(*it_seg * static_cast<float>(*it_data)); 
     }
 
     // 2. Apply decay
@@ -169,7 +171,7 @@ void AdsrEnvelope::ApplyEnvelope(std::vector<int16_t> &samples) const
 
     for ( ; it_seg != it_seg_end && it_data != it_data_end; it_seg++, it_data++)
     {
-        *it_data = (*it_seg * *it_data); 
+        *it_data = static_cast<int16_t>(*it_seg * static_cast<float>(*it_data)); 
     }
 
     // 3. Apply sustain
@@ -183,7 +185,7 @@ void AdsrEnvelope::ApplyEnvelope(std::vector<int16_t> &samples) const
 
     for ( ; it_seg != it_seg_end && it_data != it_data_end; it_seg++, it_data++)
     {
-        *it_data = (*it_seg * *it_data); 
+        *it_data = static_cast<int16_t>(*it_seg * static_cast<float>(*it_data)); 
     }
 
     // 4. Apply release
@@ -197,7 +199,7 @@ void AdsrEnvelope::ApplyEnvelope(std::vector<int16_t> &samples) const
 
     for ( ; it_seg != it_seg_end && it_data != it_data_end; it_seg++, it_data++)
     {
-        *it_data = (*it_seg * *it_data); 
+        *it_data = static_cast<int16_t>(*it_seg * static_cast<float>(*it_data)); 
     }
 }
 

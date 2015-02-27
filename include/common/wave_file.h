@@ -11,8 +11,8 @@
 //  License: GNU GPL v2.0 
 //=============================================================
 
-#ifndef _WAVEFILE_H_
-#define _WAVEFILE_H_
+#ifndef WAVEFILE_H
+#define WAVEFILE_H
 
 #include "zz_global_include.h" 
 #include <vector>
@@ -172,7 +172,7 @@ public:
     //      Vector containing read samples.
     // 
     //--------------------------------------------------------------
-    void SaveBufferToFile(const string& file_name, vector<int16_t> &samples);
+    void SaveBufferToFile(const std::string& file_name, std::vector<int16_t> &samples);
 
 };
 
@@ -191,7 +191,7 @@ public:
     //--------------------------------------------------------------
     // 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
     //--------------------------------------------------------------
-    explicit WaveFileIn() {};
+    explicit WaveFileIn() {}
     ~WaveFileIn() = default;
 
     //--------------------------------------------------------------
@@ -215,7 +215,7 @@ public:
     //      BufferToSmallException, std::ofstream::failure
     // 
     //--------------------------------------------------------------
-    std::vector<int16_t> ReadBufferFromFile(const string& file_name);
+    std::vector<int16_t> ReadBufferFromFile(const std::string& file_name);
 };
 
 //=============================================================
@@ -225,8 +225,8 @@ public:
 //  Exception class. Thrown when the number of samples passed is
 //  smaller than expected.
 //=============================================================
-class BufferToSmallException : public exception
+class BufferToSmallException : public std::exception
 {
-    virtual const char* what() const throw();
+    virtual const char* what() const noexcept;
 };
 #endif /* #define _WAVEFILE_H_ */

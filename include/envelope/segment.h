@@ -11,8 +11,8 @@
 //  License: GNU GPL v2.0 
 //========================================================================
 
-#ifndef _SEGMENT_H_
-#define _SEGMENT_H_
+#ifndef SEGMENT_H
+#define SEGMENT_H
 
 #include <common/zz_global_include.h>
 
@@ -355,9 +355,9 @@ private:
 //  correctly. This can be detected by checking init_ agains the 'emptiness' 
 //  of the segment.
 //========================================================================
-class SegmentInitialisationException : public exception
+class SegmentInitialisationException : public std::exception
 {
-    virtual const char* what() const throw();
+    virtual const char* what() const noexcept;
 };
 
 #endif /* #define _SEGMENT_H_ */

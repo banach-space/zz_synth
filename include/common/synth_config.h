@@ -16,16 +16,13 @@
 // License: GNU GPL v2.0 
 //=============================================================
 
-#ifndef _SYNTH_CONFIG_H_
-#define _SYNTH_CONFIG_H_
+#ifndef SYNTH_CONFIG_H
+#define SYNTH_CONFIG_H
 
 #include "zz_global_include.h"
 #include "zz_global.h"
 #include <cmath>
 #include <vector>
-
-
-using namespace std;
 
 //=============================================================
 // CLASS: SynthConfig
@@ -85,18 +82,18 @@ public:
     //--------------------------------------------------------------
     // 3. ACCESSORS
     //--------------------------------------------------------------
-    double frequency_table(vector<double>::size_type pitch) const;
+    double frequency_table(std::vector<double>::size_type pitch) const;
     uint32_t sampling_rate() const;
     double phase_increment_per_sample() const;
 
 private:
     // The default constructor used implicitly in getInstance(). Not to
     // be called by external users.
-    SynthConfig() : frequency_table_(kNumberOfFrequencies) {};
+    SynthConfig() : frequency_table_(kNumberOfFrequencies) {}
 
     // The frequency table based on equal-tempered scale with
     // middle C at index 48 (i.e. frequencies[48]). 
-    vector<double> frequency_table_;
+	std::vector<double> frequency_table_;
     uint32_t sampling_rate_;
     // Maximum representable frequency according to Nyquist
     float nyquist_limit_;

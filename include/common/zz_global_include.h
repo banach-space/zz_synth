@@ -10,13 +10,8 @@
 //
 // License: GNU GPL v2.0 
 //=============================================================
-#ifndef _GLOBAL_INCLUDE_H_
-#define _GLOBAL_INCLUDE_H_
-
-//=============================================================
-// Namespaces 
-//=============================================================
-using namespace::std;
+#ifndef GLOBAL_INCLUDE_H
+#define GLOBAL_INCLUDE_H
 
 //=============================================================
 // C standard library

@@ -11,8 +11,8 @@
 //  License: GNU GPL v2.0 
 //========================================================================
 
-#ifndef _OSCILLATOR_H_
-#define _OSCILLATOR_H_
+#ifndef OSCILLATOR_H
+#define OSCILLATOR_H
 
 #include <common/zz_global_include.h>
 #include <common/synth_config.h>
@@ -35,7 +35,7 @@ public:
             const SynthConfig& synthesiser,
             int16_t peak_amplitude = static_cast<uint16_t>(1 << 14), 
             double initial_phase = 0,
-            size_t pitch_id = 48);
+            std::size_t pitch_id = 48);
     virtual ~Oscillator() = default;
     explicit Oscillator(const Oscillator& rhs) = delete;
     explicit Oscillator(Oscillator&& rhs) = delete;
@@ -45,7 +45,7 @@ public:
     //--------------------------------------------------------------------
     // 2. GENERAL USER INTERFACE 
     //--------------------------------------------------------------------
-    vector<int16_t> operator()(uint32_t number_of_seconds);
+	std::vector<int16_t> operator()(uint32_t number_of_seconds);
 
     //--------------------------------------------------------------------
     // 3. ACCESSORS

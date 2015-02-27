@@ -18,6 +18,8 @@
 #include <common/synth_config.h>
 #include <common/oscillator.h>
 
+using namespace std;
+
 //========================================================================
 // UTILITIES 
 //========================================================================
@@ -155,10 +157,10 @@ static void ComparePreAndPostEnvelopeNonZeroAttack(
 TEST(ArEnvelopeGenerationTest, HandleDifferentPitches)
 {
     vector<size_t> pitch   = {0, kNumberOfFrequencies/size_t(2), kNumberOfFrequencies - 1};
-    int32_t volume         = 1 << 15;
+    int16_t volume         = 1 << 14;
     uint32_t duration      = 5;
     double initial_phase   = 0;
-    double peak_amplitude  = 1;
+    float peak_amplitude   = 1;
     double decay_duration  = 1;
     double attack_duration = 1;
     const string file_name("test_pitch.wav");

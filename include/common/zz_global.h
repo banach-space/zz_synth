@@ -12,12 +12,10 @@
 // License: GNU GPL v2.0 
 //=============================================================
 
-#ifndef _GLOBAL_H_
-#define _GLOBAL_H_
+#ifndef GLOBAL_H
+#define GLOBAL_H
 
 #include <cstdint>
-
-using namespace std;
 
 //=============================================================
 // Floating point globals
@@ -60,7 +58,7 @@ extern const uint16_t kNumberOfChannelsStereo;
 //-------------------------------------------------------------
 // SynthConfig 
 //-------------------------------------------------------------
-extern const size_t kNumberOfFrequencies;
+extern const std::size_t kNumberOfFrequencies;
 
 //-------------------------------------------------------------
 // General 

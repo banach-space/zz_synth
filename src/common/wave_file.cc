@@ -341,7 +341,7 @@ WaveFileIn::ReadBufferFromFile(const std::string& file_name)
 // 2. GENERAL USER INTERFACE 
 //--------------------------------------------------------------
 // None
-const char* BufferToSmallException::what() const throw()
+const char* BufferToSmallException::what() const noexcept 
 {
     return "WaveFile: Buffer to small Exception happened";
 }

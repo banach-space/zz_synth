@@ -117,7 +117,7 @@ LinearSegment::LinearSegment(
     // Step 2: Walk through the segment and propagate with the right values
     for (size_t idx = 0; idx < number_of_steps_; idx++)
     {
-        segment_.push_back(volume);
+        segment_.push_back(static_cast<float>(volume));
         volume += increment;
     }
 
@@ -305,7 +305,7 @@ size_t ExponentialSegment::Length() const
 // 2. GENERAL USER INTERFACE 
 //--------------------------------------------------------------
 // None
-const char* SegmentInitialisationException::what() const throw()
+const char* SegmentInitialisationException::what() const noexcept 
 {
     return "Segment initialised inccorectly.";
 }

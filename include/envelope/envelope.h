@@ -11,8 +11,8 @@
 //  License: GNU GPL v2.0 
 //========================================================================
 
-#ifndef _ENVELOPE_H_
-#define _ENVELOPE_H_
+#ifndef ENVELOPE_H
+#define ENVELOPE_H
 
 #include <common/zz_global_include.h>
 #include <envelope/segment.h>
