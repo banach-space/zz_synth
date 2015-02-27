@@ -21,10 +21,10 @@
 #  COMPILATION VARIABLES 
 #-----------------------
 CPPFLAGS = $(OPTFLAG) -std=c++11
-CXX      = g++ -fdiagnostics-show-option
-#CXX      = clang-3.6
+#CXX      = g++ -fdiagnostics-show-option
+CXX      = clang-3.5
 
-ifeq "$(CXX)" "clang-3.6"
+ifeq "$(CXX)" "clang-3.5"
   include $(ZZINC)/compiler_flags_clang.mk
 else
   include $(ZZINC)/compiler_flags_gcc.mk
@@ -38,10 +38,10 @@ else ifeq "$(COMPILE_FLAGS)" "DEBUG"
   $(info Debuggin compile flags...)
 endif
 
-INCLUDES    = -I $(ZZINC)
+INCLUDES    = -I $(ZZINC) -I /usr/lib/x86_64-linux-gnu/ #-I /usr/include/x86_64-linux-gnu/c++/4.9/bits/c++config.h
 COMPILE.cpp = $(CXX) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) $(TARGET_ARCH) -c
 
-LIBS = -lm
+LIBS = -lm -lstdc++
 
 # The following are extra include flags needed by the Google Unit Testing
 # framework.
