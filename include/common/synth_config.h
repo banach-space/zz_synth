@@ -39,7 +39,7 @@ public:
     SynthConfig(SynthConfig&& copy) = delete;
     SynthConfig& operator=(SynthConfig const& copy) = delete;
     SynthConfig& operator=(SynthConfig&&) = delete;
-    ~SynthConfig() = default;
+    ~SynthConfig();
 
     //--------------------------------------------------------------
     // 2. GENERAL USER INTERFACE 

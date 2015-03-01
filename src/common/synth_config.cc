@@ -22,7 +22,7 @@ using namespace std;
 //--------------------------------------------------------------
 // 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
 //--------------------------------------------------------------
-// None
+SynthConfig::~SynthConfig() = default;
 
 //--------------------------------------------------------------
 // 2. GENERAL USER INTERFACE 

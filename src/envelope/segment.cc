@@ -201,8 +201,8 @@ ExponentialSegment::ExponentialSegment(
     //  The time variable, 'x', is assumed to be in the range [0, 1]. This way
     //  the starting amplitude is guaranteed to be amplitude_start_, and the value
     //  at the end will be amplitude_end_.
-    double volume = 0;
-    double time = 0;
+    double volume         = 0;
+    double time           = 0;
     double time_increment = 0;
 
     segment_.reserve(number_of_steps_);
@@ -220,7 +220,7 @@ ExponentialSegment::ExponentialSegment(
     if (number_of_steps_ != 0)
     {
         /* Need to take special care when calculating 0^0. Here it is assumed that 0^0 = 1.*/
-        if (exponent_ != 0)
+        if (fabs(exponent_) > kEps)
         {
             volume = coefficient_a*pow(time, exponent_) + coefficient_c;
 
@@ -229,7 +229,7 @@ ExponentialSegment::ExponentialSegment(
             volume = coefficient_a + coefficient_c;
         }
 
-        segment_.push_back(volume);
+        segment_.push_back(static_cast<float>(volume));
         time += time_increment;
 
 
@@ -237,7 +237,7 @@ ExponentialSegment::ExponentialSegment(
         for (size_t idx = 1; idx < number_of_steps_; idx++)
         {
             volume = coefficient_a*pow(time, exponent_) + coefficient_c;
-            segment_.push_back(volume);
+            segment_.push_back(static_cast<float>(volume));
 
             time += time_increment;
         }
@@ -245,7 +245,7 @@ ExponentialSegment::ExponentialSegment(
         // Fix what's at the beginning/end as due to rounding error
         // the first/last entry might be different from amplitude_start and
         // amplitude_end, respecitvely. Force it to be equal.
-        if (exponent_ != 0)
+        if (fabs(exponent_) > kEps)
         {
             segment_[0] = amplitude_start_;
             segment_[number_of_steps_-1] = amplitude_end_;

@@ -42,8 +42,7 @@ WaveFile::WaveFile()
     chunk_size_ = kWaveFileHeaderSize + subchunk_2_size_;
     byte_rate_  = sample_rate_ * num_channels_ * bits_per_sample_
         / kNumberOfBitsPerByte;
-    block_align_= static_cast<uint32_t>(num_channels_ * bits_per_sample_) 
-        / kNumberOfBitsPerByte;
+    block_align_= (num_channels_ * bits_per_sample_) / kNumberOfBitsPerByte;
 }
 
 WaveFile::~WaveFile() = default;
@@ -98,9 +97,9 @@ WaveFileOut::~WaveFileOut() = default;
 //--------------------------------------------------------------
 // 2. GENERAL USER INTERFACE 
 //--------------------------------------------------------------
-WaveFileOut::WaveFileOut(size_t number_of_seconds)
+WaveFileOut::WaveFileOut(uint32_t number_of_seconds)
 {
-    size_t temp_size;
+    uint32_t temp_size;
 
     temp_size = WaveFile::sample_rate() * WaveFile::num_channels()
         * WaveFile::bits_per_sample() / kNumberOfBitsPerByte;

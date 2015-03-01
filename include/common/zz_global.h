@@ -35,7 +35,7 @@ extern const double kEps;
 //-------------------------------------------------------------
 // Wave File Related
 //-------------------------------------------------------------
-extern const uint32_t kNumberOfBitsPerByte;
+extern const uint16_t kNumberOfBitsPerByte;
 extern const uint8_t kNumberOfBitsPerSample;
 
 extern const uint8_t kWaveFileHeaderSize;

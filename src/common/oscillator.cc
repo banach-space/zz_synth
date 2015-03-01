@@ -54,7 +54,7 @@ vector<int16_t> Oscillator::operator()(uint32_t number_of_seconds)
             it != samples.end(); 
             it++)
     {
-        *it = peak_amplitude_ * sin(phase);
+        *it = static_cast<int16_t>(peak_amplitude_ * sin(phase));
 
         if ((phase += phase_increment_) >= kTwoPi)
             phase -= kTwoPi;

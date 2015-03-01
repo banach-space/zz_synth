@@ -152,7 +152,7 @@ public:
     //--------------------------------------------------------------
     // 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
     //--------------------------------------------------------------
-    explicit WaveFileOut(size_t number_of_seconds);
+    explicit WaveFileOut(uint32_t number_of_seconds);
     ~WaveFileOut();
 
     //--------------------------------------------------------------

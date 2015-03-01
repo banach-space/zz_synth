@@ -39,7 +39,7 @@ const double kNoteC0 = 16.35;
 //------------------------------------------------------------------------
 // Wave File Related
 //------------------------------------------------------------------------
-const unsigned kNumberOfBitsPerByte = 8u;
+const uint16_t kNumberOfBitsPerByte = 8;
 const uint8_t kNumberOfBitsPerSample = 16;
 
 // The size of the header in the Canonical Wave File format. See

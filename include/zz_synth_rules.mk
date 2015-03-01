@@ -20,7 +20,7 @@
 #-----------------------
 #  COMPILATION VARIABLES 
 #-----------------------
-CPPFLAGS = $(OPTFLAG) -std=c++11
+CPPFLAGS = $(OPTFLAG) -std=c++11 -lstdc++
 #CXX      = g++ -fdiagnostics-show-option
 CXX      = clang-3.5
 
@@ -34,11 +34,11 @@ ifeq "$(COMPILE_FLAGS)" "PEDANTIC"
   CPPFLAGS += $(CPPFLAGS_PEDANTIC)
   $(info Pedantic compile flags...)
 else ifeq "$(COMPILE_FLAGS)" "DEBUG"
-  CPPFLAGS += $(CPPFLAGS_DEBUG )
+  CPPFLAGS += $(CPPFLAGS_DEBUG)
   $(info Debuggin compile flags...)
 endif
 
-INCLUDES    = -I $(ZZINC) -I /usr/lib/x86_64-linux-gnu/ #-I /usr/include/x86_64-linux-gnu/c++/4.9/bits/c++config.h
+INCLUDES    = -I $(ZZINC) -I /usr/lib/x86_64-linux-gnu
 COMPILE.cpp = $(CXX) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) $(TARGET_ARCH) -c
 
 LIBS = -lm -lstdc++

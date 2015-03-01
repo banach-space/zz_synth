@@ -17,6 +17,7 @@
 #include <envelope/envelope.h>
 #include <common/synth_config.h>
 #include <common/oscillator.h>
+#include <cmath>
 
 using namespace std;
 
@@ -39,11 +40,6 @@ using namespace std;
 //  OUTPUT:
 //      None
 //------------------------------------------------------------------------
-//static void ComparePreAndPostEnvelopeBasic(
-        //vector<int16_t>::difference_type attack_length, 
-        //vector<int16_t>::difference_type decay_length,
-        //vector<int16_t> &samples_pre_envelope,
-        //vector<int16_t> &samples_post_envelope);
 static void ComparePreAndPostEnvelopeBasic(
         vector<int16_t>::difference_type attack_length, 
         vector<int16_t>::difference_type decay_length,
@@ -128,28 +124,28 @@ static void ComparePreAndPostEnvelopeBasic(
 
 }
 
-static void ComparePreAndPostEnvelopeNonZeroAttack(
-        vector<int16_t>::difference_type attack_length, 
-        vector<int16_t>::difference_type decay_length,
-        vector<int16_t> &samples_pre_envelope,
-        vector<int16_t> &samples_post_envelope)
-{
-    // 1. Decalere the begining and end of the sustain segment
-    vector<int16_t>::const_iterator sustain_segment_begin;
-    vector<int16_t>::const_iterator sustain_segment_end; 
+//static void ComparePreAndPostEnvelopeNonZeroAttack(
+        //vector<int16_t>::difference_type attack_length, 
+        //vector<int16_t>::difference_type decay_length,
+        //vector<int16_t> &samples_pre_envelope,
+        //vector<int16_t> &samples_post_envelope)
+//{
+    //// 1. Decalere the begining and end of the sustain segment
+    //vector<int16_t>::const_iterator sustain_segment_begin;
+    //vector<int16_t>::const_iterator sustain_segment_end; 
 
-    // 2. The 'sustain segment' of the original sound WITHOUT envelope
-    sustain_segment_begin = samples_pre_envelope.begin() + attack_length;
-    sustain_segment_end   = samples_pre_envelope.end() - decay_length;
-    vector<int16_t> sustain_segment_without_envelope(sustain_segment_begin, sustain_segment_end);
+    //// 2. The 'sustain segment' of the original sound WITHOUT envelope
+    //sustain_segment_begin = samples_pre_envelope.begin() + attack_length;
+    //sustain_segment_end   = samples_pre_envelope.end() - decay_length;
+    //vector<int16_t> sustain_segment_without_envelope(sustain_segment_begin, sustain_segment_end);
 
-    // 3. The 'sustain segment' of the original sound WITH envelope
-    sustain_segment_begin = samples_post_envelope.begin() + attack_length;
-    sustain_segment_end   = samples_post_envelope.end() - decay_length;
-    vector<int16_t> sustain_segment_with_envelope(sustain_segment_begin, sustain_segment_end);
+    //// 3. The 'sustain segment' of the original sound WITH envelope
+    //sustain_segment_begin = samples_post_envelope.begin() + attack_length;
+    //sustain_segment_end   = samples_post_envelope.end() - decay_length;
+    //vector<int16_t> sustain_segment_with_envelope(sustain_segment_begin, sustain_segment_end);
 
 
-}
+//}
 
 //========================================================================
 // TESTS
@@ -202,10 +198,10 @@ TEST(ArEnvelopeGenerationTest, HandleDifferentPitches)
 TEST(ArEnvelopeGenerationTest, HandleDifferentVolumes)
 {
     size_t pitch           = kNumberOfFrequencies/size_t(2);
-    vector<int32_t> volume = {0, 1 << 7, 1 << 15};
+    vector<int16_t> volume = {0, 1 << 7, 1 << 14};
     uint32_t duration      = 5;
     double initial_phase   = 0;
-    double peak_amplitude  = 1;
+    float peak_amplitude   = 1;
     double decay_duration  = 1;
     double attack_duration = 1;
     const string file_name("test_pitch.wav");
@@ -246,10 +242,10 @@ TEST(ArEnvelopeGenerationTest, HandleDifferentVolumes)
 TEST(ArEnvelopeGenerationTest, HandleDifferentOveralDuration)
 {
     size_t pitch              = kNumberOfFrequencies/size_t(2);
-    int32_t volume            = 1 << 7;
+    int16_t volume            = 1 << 7;
     vector<uint32_t> duration = {2, 5, 10};
     double initial_phase      = 0;
-    double peak_amplitude     = 1;
+    float peak_amplitude      = 1;
     double decay_duration     = 1;
     double attack_duration    = 1;
     const string file_name("test_pitch.wav");
@@ -297,10 +293,10 @@ TEST(ArEnvelopeGenerationTest, HandleDifferentOveralDuration)
 TEST(ArEnvelopeGenerationTest, HandleDifferentDecayDuration)
 {
     size_t pitch                  = kNumberOfFrequencies/size_t(2);
-    int32_t volume                = 1 << 7;
+    int16_t volume                = 1 << 7;
     uint32_t duration             = 5;
     double initial_phase          = 0;
-    double peak_amplitude         = 1;
+    float peak_amplitude          = 1;
     double attack_duration        = 1;
     vector<double> decay_duration = {0, 1, 2.3, 3, 4};
     const string file_name("test_pitch.wav");
@@ -334,7 +330,7 @@ TEST(ArEnvelopeGenerationTest, HandleDifferentDecayDuration)
         if (
                 (samples_pre_envelope.begin() == samples_pre_envelope.end()) 
                 && (samples_post_envelope.begin() == samples_post_envelope.end())
-                && (*it == 0))
+                && (fabs(*it) < kEps))
         {
             continue;
         }
@@ -349,10 +345,10 @@ TEST(ArEnvelopeGenerationTest, HandleDifferentDecayDuration)
 TEST(ArEnvelopeGenerationTest, HandleDifferentAttackDuration)
 {
     size_t pitch                   = kNumberOfFrequencies/size_t(2);
-    int32_t volume                 = 1 << 7;
+    int16_t volume                 = 1 << 7;
     uint32_t duration              = 5;
     double initial_phase           = 0;
-    double peak_amplitude          = 1;
+    float peak_amplitude           = 1;
     double decay_duration          = 1;
     vector<double> attack_duration = {0, 1, 2.3, 3, 4};
     const string file_name("test_pitch.wav");
@@ -386,7 +382,7 @@ TEST(ArEnvelopeGenerationTest, HandleDifferentAttackDuration)
         if (
                 (samples_pre_envelope.begin() == samples_pre_envelope.end()) 
                 && (samples_post_envelope.begin() == samples_post_envelope.end())
-                && (*it == 0))
+                && (fabs(*it) < kEps))
         {
             continue;
         }
