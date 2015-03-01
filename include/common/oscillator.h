@@ -36,7 +36,7 @@ public:
             int16_t peak_amplitude = static_cast<uint16_t>(1 << 14), 
             double initial_phase = 0,
             std::size_t pitch_id = 48);
-    virtual ~Oscillator() = default;
+    virtual ~Oscillator();
     explicit Oscillator(const Oscillator& rhs) = delete;
     explicit Oscillator(Oscillator&& rhs) = delete;
     Oscillator& operator=(const Oscillator &rhs) = delete;

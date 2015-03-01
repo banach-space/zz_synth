@@ -32,10 +32,8 @@ public:
     //--------------------------------------------------------------
     // 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
     //--------------------------------------------------------------
-    // Make this class pure abstract and block copy constructor, assignment
-    // operator and the corresponding move operators.
     explicit WaveFile();
-    virtual ~WaveFile() = 0;
+    virtual ~WaveFile();
     explicit WaveFile(const WaveFile& rhs) = delete;
     explicit WaveFile(WaveFile&& rhs) = delete;
     WaveFile& operator=(const WaveFile &rhs) = delete;
@@ -155,7 +153,7 @@ public:
     // 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
     //--------------------------------------------------------------
     explicit WaveFileOut(size_t number_of_seconds);
-    ~WaveFileOut() = default;
+    ~WaveFileOut();
 
     //--------------------------------------------------------------
     // 2. GENERAL USER INTERFACE 
@@ -193,7 +191,7 @@ public:
     // 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
     //--------------------------------------------------------------
     explicit WaveFileIn() {}
-    ~WaveFileIn() = default;
+    ~WaveFileIn();
 
     //--------------------------------------------------------------
     // 2. GENERAL USER INTERFACE 
