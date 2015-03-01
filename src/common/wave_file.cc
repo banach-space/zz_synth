@@ -46,7 +46,7 @@ WaveFile::WaveFile()
         / kNumberOfBitsPerByte;
 }
 
-WaveFile::~WaveFile() {}
+WaveFile::~WaveFile() = default;
 
 //--------------------------------------------------------------
 // 2. GENERAL USER INTERFACE 
@@ -56,19 +56,19 @@ WaveFile::~WaveFile() {}
 //--------------------------------------------------------------
 // 3. ACCESSORS
 //--------------------------------------------------------------
-uint32_t WaveFile::chunk_id() {return chunk_id_;}
-uint32_t WaveFile::chunk_size() {return chunk_size_;}
-uint32_t WaveFile::format()    {return format_;}
-uint32_t WaveFile::subchunk_1_id() {return subchunk_1_id_;}
-uint32_t WaveFile::subchunk_1_size() {return subchunk_1_size_;}
-uint16_t WaveFile::audio_format() {return audio_format_;}
-uint16_t WaveFile::num_channels() {return num_channels_;}
-uint32_t WaveFile::sample_rate() {return sample_rate_;}
-uint32_t WaveFile::byte_rate() {return byte_rate_;}
-uint16_t WaveFile::block_align() {return block_align_;}
-uint16_t WaveFile::bits_per_sample() {return bits_per_sample_;}
-uint32_t WaveFile::subchunk_2_id() {return subchunk_2_id_;}
-uint32_t WaveFile::subchunk_2_size() {return subchunk_2_size_;}
+uint32_t WaveFile::chunk_id()        { return chunk_id_;}
+uint32_t WaveFile::chunk_size()      { return chunk_size_;}
+uint32_t WaveFile::format()          { return format_;}
+uint32_t WaveFile::subchunk_1_id()   { return subchunk_1_id_;}
+uint32_t WaveFile::subchunk_1_size() { return subchunk_1_size_;}
+uint16_t WaveFile::audio_format()    { return audio_format_;}
+uint16_t WaveFile::num_channels()    { return num_channels_;}
+uint32_t WaveFile::sample_rate()     { return sample_rate_;}
+uint32_t WaveFile::byte_rate()       { return byte_rate_;}
+uint16_t WaveFile::block_align()     { return block_align_;}
+uint16_t WaveFile::bits_per_sample() { return bits_per_sample_;}
+uint32_t WaveFile::subchunk_2_id()   { return subchunk_2_id_;}
+uint32_t WaveFile::subchunk_2_size() { return subchunk_2_size_;}
 
 //--------------------------------------------------------------
 // 4. MUTATORS
@@ -93,7 +93,7 @@ void WaveFile::set_subchunk_2_size(uint32_t value) {subchunk_2_size_ = value;}
 //--------------------------------------------------------------
 // 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
 //--------------------------------------------------------------
-// None
+WaveFileOut::~WaveFileOut() = default;
 
 //--------------------------------------------------------------
 // 2. GENERAL USER INTERFACE 
@@ -103,14 +103,14 @@ WaveFileOut::WaveFileOut(size_t number_of_seconds)
     size_t temp_size;
 
     temp_size = WaveFile::sample_rate() * WaveFile::num_channels()
-              * WaveFile::bits_per_sample() / kNumberOfBitsPerByte;
+        * WaveFile::bits_per_sample() / kNumberOfBitsPerByte;
 
     WaveFile::set_subchunk_2_size(temp_size * number_of_seconds);
 }
 
 void WaveFileOut::SaveBufferToFile(
-    const std::string &file_name, 
-    std::vector<int16_t> &samples)
+        const std::string &file_name, 
+        std::vector<int16_t> &samples)
 {
     uint32_t temp32;
     uint16_t temp16;
@@ -215,7 +215,7 @@ void WaveFileOut::SaveBufferToFile(
 //--------------------------------------------------------------
 // 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
 //--------------------------------------------------------------
-// None 
+WaveFileIn::~WaveFileIn() = default;
 
 //--------------------------------------------------------------
 // 2. GENERAL USER INTERFACE 
@@ -324,7 +324,7 @@ WaveFileIn::ReadBufferFromFile(const std::string& file_name)
     {
         std::cout << "Exception opening/reading/closing file\n";
     }
-    
+
     return samples;
 
 }

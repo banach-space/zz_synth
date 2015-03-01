@@ -56,7 +56,7 @@ public:
     // 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
     //--------------------------------------------------------------------
     explicit Segment();
-    virtual ~Segment() = 0;
+    virtual ~Segment();
     explicit Segment(const Segment& rhs) = delete;
     explicit Segment(Segment&& rhs) = delete;
     Segment& operator=(const Segment &rhs) = delete;

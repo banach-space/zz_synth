@@ -6,7 +6,8 @@
 //    zimzum@github 
 //
 //  DESCRIPTION:
-//      The definition of the WaveFile, WaveFileIn and WaveFileOut classes.
+//      The definition of the WaveFile, WaveFileIn and WaveFileOut
+//      classes.
 //
 //  License: GNU GPL v2.0 
 //=============================================================

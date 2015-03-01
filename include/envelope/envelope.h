@@ -21,7 +21,7 @@
 // CLASS: Envelope
 //
 // DESCRIPTION:
-//      Base class.
+//      Base class. Pure abstract class.
 //========================================================================
 class Envelope 
 {
@@ -30,7 +30,7 @@ public:
     // 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
     //--------------------------------------------------------------------
     explicit Envelope();
-    virtual ~Envelope() = 0;
+    virtual ~Envelope();
     explicit Envelope(const Envelope& rhs) = delete;
     explicit Envelope(Envelope&& rhs) = delete;
     Envelope& operator=(const Envelope &rhs) = delete;
