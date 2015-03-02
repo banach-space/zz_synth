@@ -205,8 +205,9 @@ private:
 //
 // DESCRIPTION:
 //      A linear segment in an envelope. Mathematically it is defined
-//      by: y = a*x + b. The segment is guaranteed to be 0 at one end and
-//      the specified peak amplitude at the other. 
+//      by: y = a*x. The segment is guaranteed to be 0 at one end and
+//      the specified peak amplitude at the other. In particular,
+//      this class is not suitable for segments described by: y = a*x +b.
 //========================================================================
 class LinearSegment : public Segment
 {
