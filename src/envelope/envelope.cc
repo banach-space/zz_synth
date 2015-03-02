@@ -122,10 +122,10 @@ void ArEnvelope::ApplyEnvelope(std::vector<int16_t> &samples) const
 // 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
 //------------------------------------------------------------------------
 AdsrEnvelope::AdsrEnvelope(
-        std::unique_ptr<Segment> attack_segment_arg,
-        std::unique_ptr<Segment> decay_segment_arg,
-        std::unique_ptr<Segment> sustain_segment_arg,
-        std::unique_ptr<Segment> release_segment_arg
+        std::unique_ptr<Segment> &attack_segment_arg,
+        std::unique_ptr<Segment> &decay_segment_arg,
+        std::unique_ptr<Segment> &sustain_segment_arg,
+        std::unique_ptr<Segment> &release_segment_arg
         ) :
     Envelope(),
     attack_segment_(std::move(attack_segment_arg)),

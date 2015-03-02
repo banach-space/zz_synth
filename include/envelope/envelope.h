@@ -172,10 +172,10 @@ public:
     //      release_segment_arg  -Pointer to the release segment
     //--------------------------------------------------------------------
     explicit AdsrEnvelope(
-            std::unique_ptr<Segment> attack_segment_arg,
-            std::unique_ptr<Segment> decay_segment_arg,
-            std::unique_ptr<Segment> sustain_segment_arg,
-            std::unique_ptr<Segment> release_segment_arg
+            std::unique_ptr<Segment> &attack_segment_arg,
+            std::unique_ptr<Segment> &decay_segment_arg,
+            std::unique_ptr<Segment> &sustain_segment_arg,
+            std::unique_ptr<Segment> &release_segment_arg
             );
     virtual ~AdsrEnvelope() = default;
 
