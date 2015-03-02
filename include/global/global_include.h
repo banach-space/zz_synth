@@ -32,8 +32,8 @@
 //=============================================================
 // zz_synth library
 //=============================================================
-#include "zz_global.h"
-#include "synth_config.h"
-#include "wave_file.h"
+#include "global/global_variables.h"
+#include "common/synth_config.h"
+#include "common/wave_file.h"
 
 #endif /* _GLOBAL_INCLUDE_H_ */

@@ -14,7 +14,7 @@
 #ifndef SEGMENT_H
 #define SEGMENT_H
 
-#include <common/zz_global_include.h>
+#include <global/global_include.h>
 
 
 //========================================================================

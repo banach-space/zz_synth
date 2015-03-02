@@ -14,7 +14,7 @@
 #ifndef ENVELOPE_H
 #define ENVELOPE_H
 
-#include <common/zz_global_include.h>
+#include <global/global_include.h>
 #include <envelope/segment.h>
 
 //========================================================================

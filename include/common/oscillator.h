@@ -14,7 +14,7 @@
 #ifndef OSCILLATOR_H
 #define OSCILLATOR_H
 
-#include <common/zz_global_include.h>
+#include <global/global_include.h>
 #include <common/synth_config.h>
 
 //========================================================================

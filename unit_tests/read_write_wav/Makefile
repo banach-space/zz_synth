@@ -29,7 +29,7 @@ include ../../include/zz_synth.mk
 #  SOURCE/OBJECT FILES 
 #-----------------------
 source_files = testbench.cc
-libraries = $(ZZDIR)/lib/libcommon.a
+libraries = $(ZZDIR)/lib/libcommon.a $(ZZDIR)/lib/libglobal.a
 testbench = $(ZZBIN)/testbench_rww$(EXE)
 
 include ../../include/zz_synth_rules.mk

@@ -1,19 +1,20 @@
 //========================================================================
 // FILE:
-//   src/common/zz_global.h
+//   src/global/global_variables.cc
 //
 // AUTHOR:
 //   zimzum@github 
 //
 // DESCRIPTION:
-//   Master header file for zz_synth common library. Contains
-//   library-wide defines and includes all the necessary 
-//   header files.
+//   Implementation of the global variables used in the synthesiser.
+//   All submodules are free to use this file.
+//
+//  TODO: Turn this into a namespace!
 //
 // License: GNU GPL v2.0 
 //========================================================================
 
-#include "common/zz_global.h"
+#include "global/global_variables.h"
 
 using namespace std;
 

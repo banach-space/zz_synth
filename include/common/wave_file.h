@@ -15,7 +15,7 @@
 #ifndef WAVEFILE_H
 #define WAVEFILE_H
 
-#include "zz_global_include.h" 
+#include <global/global_include.h>
 #include <vector>
 #include <exception>
 

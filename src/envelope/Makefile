@@ -55,8 +55,8 @@ chkdirs:
 envelope.cc: \
 	$(ZZINC)/envelope/envelope.h\
 	$(ZZSRC)/envelope/segment.cc\
-	$(ZZINC)/common/zz_global_include.h
+	$(ZZINC)/global/global_include.h
 
 segment.cc: \
 	$(ZZINC)/envelope/segment.h\
-	$(ZZINC)/common/zz_global_include.h\
+	$(ZZINC)/global/global_include.h\

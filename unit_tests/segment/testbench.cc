@@ -15,7 +15,7 @@
 #include <gmock/gmock.h>
 
 #include <envelope/segment.h>
-#include <common/zz_global.h>
+#include <global/global_variables.h>
 
 using namespace std;
 

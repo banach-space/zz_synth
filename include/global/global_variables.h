@@ -1,13 +1,13 @@
 //=============================================================
 // FILE:
-//   include/zz_global.h
+//   global/global_variables.h
 //
 // AUTHOR:
 //   zimzum@github 
 //
 // DESCRIPTION:
 //   Global variables - declarations. For definitions and 
-//   description go to src/common/zz_global.cc
+//   thorough descriptions go to src/global/global_variables.cc
 //
 // License: GNU GPL v2.0 
 //=============================================================

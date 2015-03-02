@@ -19,8 +19,8 @@
 #ifndef SYNTH_CONFIG_H
 #define SYNTH_CONFIG_H
 
-#include "zz_global_include.h"
-#include "zz_global.h"
+#include <global/global_include.h>
+#include <global/global_variables.h>
 #include <cmath>
 #include <vector>
 

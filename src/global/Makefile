@@ -1,12 +1,12 @@
 #=============================================================
 # FILE:
-#   src/common/Makefile
+#   src/global/Makefile
 #
 # AUTHOR:
 #   zimzum@github 
 #
 # DESCRIPTION:
-#   This is a makefile for the src/common directory. Note
+#   This is a makefile for the src/global directory. Note
 #   that this Makefile was not designed to be used as a standalone
 #   build script and will not work unless the specified dependencies from
 #   other directories are already built. Instead, you can build the
@@ -21,7 +21,7 @@
 # License: GNU GPL v2.0 
 #=============================================================
 ZZDIR   = ~/github/zz_synth
-library := $(ZZDIR)/lib/libcommon.a
+library := $(ZZDIR)/lib/libglobal.a
 include ../../include/zz_synth.mk
 
 .PHONY: all new clean chkdirs
@@ -29,10 +29,7 @@ include ../../include/zz_synth.mk
 #-----------------------
 #  SOURCE FILES -->  RULES 
 #-----------------------
-source_files = \
-               synth_config.cc\
-               wave_file.cc\
-               oscillator.cc
+source_files = global_variables.cc
 
 include ../../include/zz_synth_rules.mk
 
@@ -53,15 +50,5 @@ chkdirs:
 #-----------------------
 #  DEPENDENCIES 
 #-----------------------
-synth_config.cc: \
-	$(ZZINC)/common/synth_config.h\
-	$(ZZINC)/global/global_include.h
-
-wave_file.cc: \
-	$(ZZINC)/common/wave_file.h\
-	$(ZZINC)/global/global_include.h\
+global_variables.cc: \
 	$(ZZINC)/global/global_variables.h
-
-oscillator.cc: \
-	$(ZZINC)/common/oscillator.h\
-	$(ZZINC)/global/global_include.h

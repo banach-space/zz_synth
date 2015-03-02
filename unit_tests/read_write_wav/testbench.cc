@@ -11,7 +11,7 @@
 // License: GNU GPL v2.0 
 //========================================================================
 
-#include <common/zz_global.h>
+#include <global/global_variables.h>
 #include <common/wave_file.h>
 #include <common/synth_config.h>
 #include <common/oscillator.h>

@@ -13,7 +13,7 @@
 
 #include <envelope/segment.h>
 
-#include <common/zz_global_include.h>
+#include <global/global_include.h>
 
 using namespace std;
 
