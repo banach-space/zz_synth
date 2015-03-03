@@ -9,7 +9,7 @@ This is work in progress and will remain so for a while. I try to add new featur
 
 Technicalities
 --------------
-Developed and tested under Linux (3.16.0-4-amd64) with GCC (4.9.1) and Clang (3.5). No support for other platforms at this point.
+Developed and tested under Linux (3.16.0-4-amd64) with GCC (4.9.1) and Clang (3.4). No support for other platforms at this point.
 
 The unit testing is implemented with the aid of Google's mocking and unit-testing frameworks, gmock and gtest respectively. Otherwise, no external libraries are used.
 

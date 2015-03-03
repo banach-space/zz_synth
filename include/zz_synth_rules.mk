@@ -22,9 +22,9 @@
 #-----------------------
 CPPFLAGS = $(OPTFLAG) -std=c++11 -lstdc++
 #CXX      = g++ -fdiagnostics-show-option
-CXX      = clang-3.5
+CXX      = clang-3.4
 
-ifeq "$(CXX)" "clang-3.5"
+ifeq "$(CXX)" "clang-3.4"
   include $(ZZINC)/compiler_flags_clang.mk
 else
   include $(ZZINC)/compiler_flags_gcc.mk
