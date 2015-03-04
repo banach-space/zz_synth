@@ -75,7 +75,7 @@ static void ComparePreAndPostEnvelopeBasic(
     }
 
     // 6. The sample at the end of attack should be equal to the original one
-    EXPECT_EQ(*(samples_post_envelope.begin() + attack_length), *(samples_pre_envelope.begin() + attack_length));
+    EXPECT_EQ(*(samples_post_envelope.begin() + attack_length - 1), *(samples_pre_envelope.begin() + attack_length - 1));
 
     // 7. The element at the beginning of decay should be equal to the original one
     if (decay_length > 0)
@@ -132,11 +132,19 @@ static void ComparePreAndPostEnvelopeBasic(
 //      By comparing the pre- and post- envelope samples, this function
 //      verifies that conditions that have to be satisfied for an ADSR
 //      envelope are indeed met.
+//
+//      The following assumptions about the envelope are made:
+//      1) The sustain segment is constant with amplitude set to 1.0f
+//      2) There are no discontinuities
+//      3) The end amplitude for attack is 1.0f
+//      4) The start ampltiude for decay is 1.0f
+//      5) The 
 //  INPUT:
 //      attack_length         - the length of the attack segment
 //      decay_length          - the length of the decay segment
 //      sustain_length        - the length of the sustain segment
 //      release_length        - the length of the release segment
+//      sustain_level         - amplitude of the sustain level
 //      samples_pre_envelope  - samples before applying the envelope
 //      samples_post_envelope - samples after applying the envelope
 //  OUTPUT:
@@ -147,6 +155,7 @@ static void ComparePreAndPostAdsrEnvelope(
         vector<int16_t>::difference_type decay_length,
         vector<int16_t>::difference_type sustain_length, 
         vector<int16_t>::difference_type release_length,
+        double sustain_level,
         vector<int16_t> &samples_pre_envelope,
         vector<int16_t> &samples_post_envelope)
 {
@@ -157,76 +166,82 @@ static void ComparePreAndPostAdsrEnvelope(
     // 2. The 'sustain segment' of the original sound WITHOUT envelope
     sustain_segment_begin = samples_pre_envelope.begin() + attack_length + decay_length;
     sustain_segment_end   = samples_pre_envelope.begin() + attack_length + decay_length + sustain_length;
-
     vector<int16_t> sustain_segment_without_envelope(sustain_segment_begin, sustain_segment_end);
+    
+    // 3. The sustain segment is assumed to be constant, so by multiplying the original signal
+    // by constant we should get the same values as by using the envelope.
+    for (auto &value : sustain_segment_without_envelope)
+        value = static_cast<int16_t>(value*sustain_level);
 
-    // 3. The 'sustain segment' of the original sound WITH envelope
+    // 4. The 'sustain segment' of the original sound WITH envelope
     sustain_segment_begin = samples_post_envelope.begin() + attack_length + decay_length;
     sustain_segment_end   = samples_post_envelope.begin() + attack_length + decay_length + sustain_length;
 
     vector<int16_t> sustain_segment_with_envelope(sustain_segment_begin, sustain_segment_end);
 
-    // 4. Compare the sustain segments - should be identical
+    // 5. Compare the sustain segments - should be identical
     EXPECT_THAT(sustain_segment_with_envelope, 
             ::testing::ContainerEq(sustain_segment_without_envelope));
 
-    //// 5. The first and the last element of 'enveloped' samples should be identical and equal to 0.
-    ////
-    //// NOTE: This test makes only sense for AR envelopes with the attack and decay segments 
-    ////        longer than 0 samples
-    //if ((decay_length > 0) && (attack_length > 0))
-    //{
-        //EXPECT_EQ(samples_post_envelope.front(), samples_post_envelope.back());
-        //EXPECT_EQ(samples_post_envelope.front(), 0);
-    //}
+    // 6. The first and the last element of 'enveloped' samples should be identical and equal to 0.
+    //
+    // NOTE: This test makes only sense for AR envelopes with the attack and decay segments 
+    //        longer than 0 samples
+    if ((decay_length > 0) && (attack_length > 0))
+    {
+        EXPECT_EQ(samples_post_envelope.front(), samples_post_envelope.back());
+        EXPECT_EQ(samples_post_envelope.front(), 0);
+    }
 
-    //// 6. The sample at the end of attack should be equal to the original one
-    //EXPECT_EQ(*(samples_post_envelope.begin() + attack_length), *(samples_pre_envelope.begin() + attack_length));
+    // 7. The sample at the end of attack should be equal to the original one
+    EXPECT_EQ(*(samples_post_envelope.begin() + attack_length - 1), *(samples_pre_envelope.begin() + attack_length - 1));
 
-    //// 7. The element at the beginning of decay should be equal to the original one
-    //if (decay_length > 0)
-        //EXPECT_EQ(*(samples_post_envelope.end() - decay_length), *(samples_pre_envelope.end() - decay_length));
+    // 8. The element at the beginning of release should be equal to the original one
+    if (release_length > 0)
+        EXPECT_EQ(
+                *(samples_post_envelope.end() - release_length), 
+                static_cast<int16_t>(sustain_level*(*(samples_pre_envelope.end() - release_length))));
 
-    //// 8. The second element in the attack segment should be different from the original one. Note that 
-    //// special care have to be taken if the original sample was equal to 0. To be more precise, if 
-    //// the 2nd element in the attack segment (original samples), (samples_pre_envelope.begin() + 1), is equal
-    //// to 0 then we have to take (samples_post_envelope.begin() + 2) instead. If the second pick is also 0
-    //// then assume that the whole vector is filled with zeros and there's no point asserting for 'not equal'.
-    ////
-    //// NOTE: This test makes only sense for AR envelopes with the attack segment longer than 0 samples
-    //if (attack_length > 0)
-    //{
-        //if (*(samples_pre_envelope.begin() + 1) != 0)
-        //{
-            //EXPECT_NE(*(samples_post_envelope.begin() + 1), *(samples_pre_envelope.begin() + 1));
-        //}else if(*(samples_pre_envelope.begin() + 2) != 0 )
-        //{
-            //EXPECT_NE(*(samples_post_envelope.begin() + 2), *(samples_pre_envelope.begin() + 2));
-        //}
-    //}
+    // 9. The second element in the attack segment should be different from the original one. Note that 
+    // special care have to be taken if the original sample was equal to 0. To be more precise, if 
+    // the 2nd element in the attack segment (original samples), (samples_pre_envelope.begin() + 1), is equal
+    // to 0 then we have to take (samples_post_envelope.begin() + 2) instead. If the second pick is also 0
+    // then assume that the whole vector is filled with zeros and there's no point asserting for 'not equal'.
+    //
+    // NOTE: This test makes only sense for AR envelopes with the attack segment longer than 0 samples
+    if (attack_length > 0)
+    {
+        if (*(samples_pre_envelope.begin() + 1) != 0)
+        {
+            EXPECT_NE(*(samples_post_envelope.begin() + 1), *(samples_pre_envelope.begin() + 1));
+        }else if(*(samples_pre_envelope.begin() + 2) != 0 )
+        {
+            EXPECT_NE(*(samples_post_envelope.begin() + 2), *(samples_pre_envelope.begin() + 2));
+        }
+    }
 
-    //// 9. The second element in the decay segment should be different from the original one. Note that 
-    //// special care have to be taken if the original sample was equal to 0. To be more precise, if 
-    //// the 2nd element in the attack segment (original samples), (samples_pre_envelope.end() - decay_length + 1),
-    //// is equal to 0 then we have to take (samples_post_envelope.end() - decay_length + 2) instead. If the
-    //// second pick is also 0 then assume that the whole vector is filled with zeros and there's no point
-    //// asserting for 'not equal'.
-    ////
-    //// NOTE: This test makes only sense for AR envelopes with the decay segment longer than 0 samples
-    //if (decay_length > 0)
-    //{
-        //if (*(samples_pre_envelope.end() - decay_length + 1) != 0)
-        //{
-            //EXPECT_NE(
-                    //*(samples_post_envelope.end() - decay_length + 1), 
-                    //*(samples_pre_envelope.end() - decay_length + 1));
-        //}else if(*(samples_pre_envelope.end() - decay_length + 2) != 0 )
-        //{
-            //EXPECT_NE(
-                    //*(samples_post_envelope.end() - decay_length + 2), 
-                    //*(samples_pre_envelope.end() - decay_length + 2));
-        //}
-    //}
+    // 10. The second element in the release segment should be different from the original one. Note that 
+    // special care have to be taken if the original sample was equal to 0. To be more precise, if 
+    // the 2nd element in the relese segment (original samples), (samples_pre_envelope.end() - release_length + 1),
+    // is equal to 0 then we have to take (samples_post_envelope.end() - relese_length + 2) instead. If the
+    // second pick is also 0 then assume that the whole vector is filled with zeros and there's no point
+    // asserting for 'not equal'.
+    //
+    // NOTE: This test makes only sense for AR envelopes with the release segment longer than 0 samples
+    if (decay_length > 0)
+    {
+        if (*(samples_pre_envelope.end() - release_length + 1) != 0)
+        {
+            EXPECT_NE(
+                    *(samples_post_envelope.end() - release_length + 1), 
+                    *(samples_pre_envelope.end() - release_length + 1));
+        }else if(*(samples_pre_envelope.end() - release_length + 2) != 0 )
+        {
+            EXPECT_NE(
+                    *(samples_post_envelope.end() - release_length + 2), 
+                    *(samples_pre_envelope.end() - release_length + 2));
+        }
+    }
 
 }
 
@@ -483,96 +498,112 @@ TEST(ArEnvelopeGenerationTest, HandleDifferentAttackDuration)
 //------------------------------------------------------------------------
 //  ADSR envelope
 //------------------------------------------------------------------------
-TEST(AdsrEnvelopeGenerationTest, HandleDifferentAttackDuration)
+TEST(AdsrEnvelopeGenerationTest, HandleDifferentSustainLevels)
 {
-    size_t pitch                  = kNumberOfFrequencies/size_t(2);
-    int16_t volume                = 1 << 7;
-    uint32_t duration             = 4;
-    float exponent                = 0.0f;
-    double initial_phase          = 0;
-    float start_amplitude_attack  = 0;
-    float end_amplitude_attack    = 1;
-    float start_amplitude_decay   = 0.5;
-    float end_amplitude_decay     = 1.0;
-    float start_amplitude_sustain = 1.0;
-    float end_amplitude_sustain   = 1.0;
-    float start_amplitude_release = end_amplitude_sustain;
-    float end_amplitude_release   = 0.0;
-    double attack_duration        = 1.0;
-    double decay_duration         = 1.0;
-    double sustain_duration       = 1.0;
-    double release_duration       = 1.0;
+    size_t pitch                      = kNumberOfFrequencies/size_t(2);
+    int16_t volume                    = 1 << 7;
+    uint32_t duration                 = 4;
+    float exponent_adr                = 1.0f;
+    float exponent_s                  = 0.0f;
+    double initial_phase              = 0;
+    float start_amplitude_attack      = 0.0;
+    float end_amplitude_attack        = 1.0;
+    float start_amplitude_decay       = end_amplitude_attack;
+    vector<float> end_amplitude_decay = {0.0, 0.001953125f, 0.5, 1, 2, 100}; //, 1000.13f};
+    float start_amplitude_sustain     = 0;
+    float end_amplitude_release       = 0.0;
+    double adsr_segment_duration      = 1.0;
+    float end_amplitude_sustain; 
+    float start_amplitude_release; 
     size_t number_of_steps;
+
+    // NOTE: Amplitude are defined so that there are no discontinuities.
+    //       All segments are identical length. The attack, decay and
+    //       release segments are linear (exponent equal to 1), and
+    //       the sustain segment is constant. This is to satisfy the
+    //       requirements of ComparePreAndPostAdsrEnvelope. Note that
+    //       with this restrictions modifying the end_amplitude_decay
+    //       is equivalent to setting the sustain segment level.
 
     // Initialise the synthesiser
     SynthConfig &synthesiser  = SynthConfig::getInstance();
     synthesiser.Init();	
 
-    number_of_steps = synthesiser.sampling_rate() * 1;
+    // Number of samples in every segment
+    adsr_segment_duration = duration / 4.0;
+    number_of_steps = static_cast<size_t>(synthesiser.sampling_rate() * adsr_segment_duration);
 
-    // Create the attack segment
-    auto segment_attack = 
-        unique_ptr<Segment>(new ExponentialSegment(
-                    start_amplitude_attack, 
-                    end_amplitude_attack, 
-                    exponent, 
-                    number_of_steps));
+    for (auto it : end_amplitude_decay)
+    {
+        // 1. Finish defining amplitudes
+        end_amplitude_sustain   = it;
+        start_amplitude_release = it;
 
-    // Create the decay segment
-    auto segment_decay = 
-        unique_ptr<Segment>(new ExponentialSegment(
-                    start_amplitude_decay, 
-                    end_amplitude_decay, 
-                    exponent, 
-                    number_of_steps)); 
+        // 2. Create the attack segment
+        auto segment_attack = 
+            unique_ptr<Segment>(new ExponentialSegment(
+                        start_amplitude_attack, 
+                        end_amplitude_attack, 
+                        exponent_adr, 
+                        number_of_steps));
 
-    // Create the sustain segment
-    auto segment_sustain = 
-        unique_ptr<Segment>(new ExponentialSegment(
-                    start_amplitude_sustain, 
-                    end_amplitude_sustain, 
-                    exponent, 
-                    number_of_steps)); 
+        // 3. Create the decay segment
+        auto segment_decay = 
+            unique_ptr<Segment>(new ExponentialSegment(
+                        start_amplitude_decay, 
+                        it, 
+                        exponent_adr, 
+                        number_of_steps)); 
 
-    // Create the release segment
-    auto segment_release = 
-        unique_ptr<Segment>(new ExponentialSegment(
-                    start_amplitude_release, 
-                    end_amplitude_release, 
-                    exponent, 
-                    number_of_steps)); 
+        // 3. Create the sustain segment
+        auto segment_sustain = 
+            unique_ptr<Segment>(new ExponentialSegment(
+                        start_amplitude_sustain, 
+                        it, 
+                        exponent_s, 
+                        number_of_steps)); 
 
-    // 1. Initialise the envelope
-    AdsrEnvelope envelope(segment_attack, segment_decay, segment_sustain, segment_release);
+        // 4. Create the release segment
+        auto segment_release = 
+            unique_ptr<Segment>(new ExponentialSegment(
+                        start_amplitude_release, 
+                        end_amplitude_release, 
+                        exponent_adr, 
+                        number_of_steps)); 
 
-    // 2. Calculate the length of attack, decay, sustain and release segmentes
-    vector<int16_t>::difference_type attack_length = 
-        static_cast<vector<int16_t>::difference_type>(attack_duration * synthesiser.sampling_rate());
-    vector<int16_t>::difference_type decay_length  = 
-        static_cast<vector<int16_t>::difference_type>(decay_duration * synthesiser.sampling_rate());
-    vector<int16_t>::difference_type sustain_length = 
-        static_cast<vector<int16_t>::difference_type>(sustain_duration * synthesiser.sampling_rate());
-    vector<int16_t>::difference_type release_length  = 
-        static_cast<vector<int16_t>::difference_type>(release_duration * synthesiser.sampling_rate());
+        // 5. Create the envelope
+        AdsrEnvelope envelope(segment_attack, segment_decay, segment_sustain, segment_release);
 
-    // 2. Generate the samples and apply the envelope
-    Oscillator osc(synthesiser, volume , initial_phase, pitch);
-    vector<int16_t> samples_pre_envelope  = osc(duration);
+        // 6. Calculate the length of attack, decay, sustain and release segments
+        vector<int16_t>::difference_type attack_length = 
+            static_cast<vector<int16_t>::difference_type>(adsr_segment_duration * synthesiser.sampling_rate());
+        vector<int16_t>::difference_type decay_length  = 
+            static_cast<vector<int16_t>::difference_type>(adsr_segment_duration * synthesiser.sampling_rate());
+        vector<int16_t>::difference_type sustain_length = 
+            static_cast<vector<int16_t>::difference_type>(adsr_segment_duration * synthesiser.sampling_rate());
+        vector<int16_t>::difference_type release_length  = 
+            static_cast<vector<int16_t>::difference_type>(adsr_segment_duration * synthesiser.sampling_rate());
 
-    // 3. Create a copy of the generated samples and apply the envelope
-    vector<int16_t> samples_post_envelope  = samples_pre_envelope;
-    envelope.ApplyEnvelope(samples_post_envelope);
+        // 7. Generate the samples and apply the envelope
+        Oscillator osc(synthesiser, volume , initial_phase, pitch);
+        vector<int16_t> samples_pre_envelope  = osc(duration);
 
-    // 4. Validate the application of the envelope by comapring the pre- 
-    // and post- enevelope samples
-    ComparePreAndPostAdsrEnvelope(
-            attack_length,
-            decay_length,
-            sustain_length,
-            release_length,
-            samples_pre_envelope,
-            samples_post_envelope
-            );
+        // 8. Create a copy of the generated samples and apply the envelope
+        vector<int16_t> samples_post_envelope  = samples_pre_envelope;
+        envelope.ApplyEnvelope(samples_post_envelope);
+
+        // 9. Validate the application of the envelope by comparing the pre- 
+        // and post- envelope samples
+        ComparePreAndPostAdsrEnvelope(
+                attack_length,
+                decay_length,
+                sustain_length,
+                release_length,
+                it,
+                samples_pre_envelope,
+                samples_post_envelope
+                );
+    }
 }
 
 
