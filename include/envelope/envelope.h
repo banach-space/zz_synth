@@ -163,7 +163,9 @@ public:
     //  
     //  DESCRIPTION:
     //      Constructor. Note that all of the member segments have to
-    //      constructed before calling this constructor.
+    //      constructed before calling this constructor. Note also that
+    //      by calling this constructor the ownership of the underlying
+    //      data structures (i.e. segments) is passed onto this envelope.
     //  INPUT:
     //      synthesiser          -A reference to the current synthesiser
     //      attack_segment_arg   -Pointer to the attack segment
