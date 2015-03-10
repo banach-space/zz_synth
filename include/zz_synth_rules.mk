@@ -75,3 +75,7 @@ $(library): $(object_files)
 $(testbench): $(object_files) $(libraries)
 	$(LINK.cc) $(LIBS_UNIT_TESTS) $(LIBS) $^ -o $@
 	-rm $(object_files)
+
+$(example): $(object_files) $(libraries)
+	$(LINK.cc) $(LIBS_UNIT_TESTS) $(LIBS) $^ -o $@
+	-rm $(object_files)

@@ -78,6 +78,9 @@ unit_test_env := unit_tests/envelope
 unit_test_seg := unit_tests/segment
 unit_tests    := unit_tests/
 
+example_plain_note := examples/plain_note
+examples           := examples/
+
 .PHONY:				\
 	all				\
 	all_recursive	\
@@ -132,6 +135,11 @@ $(unit_test_seg): $(libraries)
 	$(MAKE) --directory=$@ $(TARGET)
 	$(if $(TARGET), $(MAKE) $(TARGET))
 
+$(example_plain_note): $(libraries)
+	@$(build-msg)
+	$(MAKE) --directory=$@ $(TARGET)
+	$(if $(TARGET), $(MAKE) $(TARGET))
+
 $(lib_common_bin): $(lib_common)
 
 $(lib_global_bin): $(lib_global)
@@ -139,6 +147,8 @@ $(lib_global_bin): $(lib_global)
 $(lib_envelope_bin): $(lib_envelope)
 
 $(unit_tests): $(unit_test_rww) $(unit_test_env) $(unit_test_seg)
+
+$(examples): $(example_plain_note)
 
 TAGS: 
 	@$(build-msg)
