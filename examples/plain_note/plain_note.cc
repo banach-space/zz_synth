@@ -6,10 +6,12 @@
 //   zimzum@github 
 //
 // DESCRIPTION:
-//   Generates WAVE files with plain sound (no envelope, etc.). There
+//   This file is intended to demonstrate how to generate simple notes
+//   and save them to WAVE files using the zz-synthesiser. A number
+//   of files with plain sound (no envelope, etc.) are generated. There
 //   are four hard-coded parameters that determine the sounds being
-//   generated. These are marked with 'Param #:' and can be freely
-//   modified.
+//   produced. These are marked with 'Param #:' and can be freely
+//   modified to experiment.
 //
 // License: GNU GPL v2.0 
 //========================================================================
@@ -48,11 +50,11 @@ int main()
         sprintf(file_name, "examples/plain_note/sounds/plain_note_%d.wav", file_idx);
         file_idx++;
 
-        // 1. Generate the samples 
+        // 2. Generate the samples 
         Oscillator osc(synthesiser, volume, initial_phase, *it);
         vector<int16_t> samples_out = osc(duration);
 
-        // 2. Save the generated samples to the file 
+        // 3. Save the samples to the file 
         WaveFileOut wf_out(duration);
         wf_out.SaveBufferToFile(file_name, samples_out);
     }
