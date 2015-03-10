@@ -13,15 +13,15 @@ Developed and tested under Linux (3.16.0-4-amd64) with GCC (4.9.1) and Clang (3.
 
 The unit testing is implemented with the aid of Google's mocking and unit-testing frameworks, gmock and gtest respectively. Otherwise, no external libraries are used.
 
-The attached build system is reqursive and every build command should be envoked from the top directory. For example, in order to build the **read_write_wav** testbench, type the following:
+The attached build system is recursive and every build command should be invoked from the top directory. For example, in order to build the **read_write_wav** testbench, type the following:
 ```
 make unit_tests/read_write_wav TARGET=new
 ```
-The **TARGET** variable is defined so that it can be passed to makefiles in subdirectories. Simple
+The **TARGET** variable is defined so that the requested target type is passed to makefiles in sub-directories. The following, fairly standard
+approach, is insufficient:
 ```
 make unit_tests/read_write_wav new
 ```
-won't work.
 
 The purpose of this project
 ----------------------------
