@@ -40,7 +40,7 @@ The purpose of this project
 ----------------------------
 Audio synthesis/DSP and C++ are my hobbies and this is my toy-project to try out various things, learn new stuff and be creative! My goal is to write efficient, high-standard, maintainable C++ library following best coding standards. If on top of that somebody finds this code useful/helpful, then I'll be extremely happy!
 
-Requirements:
+Requirements
 -------------
 The unit testing is performed with the aid of Google Unit Testing and Google Mocking Frameworks. These are assumed to be available in the system on which the synthesiser is run.
 
