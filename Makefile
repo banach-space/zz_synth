@@ -31,8 +31,15 @@
 #
 #   target_type can be any of:
 #       - clean		(deletes existing binaries/libraries)
-#       - all		(builds everything)
+#       - all		(builds everything + chkdirs)
 #       - new		(clean+all)
+#       - chkdirs   (creates sub-directories for output, e.g. wave files) 
+#
+#   Note that some targets (e.g. those in the examples sub-directory)
+#   require sub-directories for output. These directories are created
+#   with the 'TARGET=chkdirs' flag. You can also pass 'TARGET=all', which
+#   will build the corresponding target and create sub-directories if
+#   required.
 #
 #   -------------------------------------
 #   [3] Recursive make clean and make all 
@@ -78,8 +85,9 @@ unit_test_env := unit_tests/envelope
 unit_test_seg := unit_tests/segment
 unit_tests    := unit_tests/
 
-example_plain_note := examples/plain_note
-examples           := examples/
+example_plain_note       := examples/plain_note
+example_ar_envelope_note := examples/ar_envelope_note
+examples                 := examples/
 
 .PHONY:				\
 	all				\
@@ -136,6 +144,11 @@ $(unit_test_seg): $(libraries)
 	$(if $(TARGET), $(MAKE) $(TARGET))
 
 $(example_plain_note): $(libraries)
+	@$(build-msg)
+	$(MAKE) --directory=$@ $(TARGET)
+	$(if $(TARGET), $(MAKE) $(TARGET))
+
+$(example_ar_envelope_note): $(libraries)
 	@$(build-msg)
 	$(MAKE) --directory=$@ $(TARGET)
 	$(if $(TARGET), $(MAKE) $(TARGET))
