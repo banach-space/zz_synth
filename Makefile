@@ -85,9 +85,10 @@ unit_test_env := unit_tests/envelope
 unit_test_seg := unit_tests/segment
 unit_tests    := unit_tests/
 
-example_plain_note       := examples/plain_note
-example_ar_envelope_note := examples/ar_envelope_note
-examples                 := examples/
+example_plain_note         := examples/plain_note
+example_ar_envelope_note   := examples/ar_envelope_note
+example_adsr_envelope_note := examples/adsr_envelope_note
+examples                   := examples/
 
 .PHONY:				\
 	all				\
@@ -149,6 +150,11 @@ $(example_plain_note): $(libraries)
 	$(if $(TARGET), $(MAKE) $(TARGET))
 
 $(example_ar_envelope_note): $(libraries)
+	@$(build-msg)
+	$(MAKE) --directory=$@ $(TARGET)
+	$(if $(TARGET), $(MAKE) $(TARGET))
+
+$(example_adsr_envelope_note): $(libraries)
 	@$(build-msg)
 	$(MAKE) --directory=$@ $(TARGET)
 	$(if $(TARGET), $(MAKE) $(TARGET))

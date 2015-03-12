@@ -517,7 +517,7 @@ TEST(AdsrEnvelopeGenerationTest, HandleDifferentSustainLevels)
     float start_amplitude_release; 
     size_t number_of_steps;
 
-    // NOTE: Amplitude are defined so that there are no discontinuities.
+    // NOTE: Amplitudes are defined so that there are no discontinuities.
     //       All segments are identical length. The attack, decay and
     //       release segments are linear (exponent equal to 1), and
     //       the sustain segment is constant. This is to satisfy the
