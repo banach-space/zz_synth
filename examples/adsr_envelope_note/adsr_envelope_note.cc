@@ -101,7 +101,7 @@ int main()
         auto segment_sustain = 
             unique_ptr<Segment>(new ExponentialSegment(
                         start_amplitude_sustain, 
-                        end_amplitude_decay, 
+                        end_amplitude_sustain, 
                         exponent_s, 
                         number_of_steps)); 
 
