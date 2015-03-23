@@ -77,10 +77,10 @@ lib_global     := src/global
 lib_envelope   := src/envelope
 lib_oscillator := src/oscillator
 
-libraries      := \
-	$(lib_common)\
-	$(lib_envelope)\
-	$(lib_global)\
+libraries      :=	\
+	$(lib_common)	\
+	$(lib_envelope)	\
+	$(lib_global)	\
 	$(lib_oscillator)
 
 lib_common_bin     := $(lib_common)/libcommon.a
