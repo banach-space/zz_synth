@@ -1,12 +1,13 @@
 //========================================================================
 //  FILE:
-//      include/oscillator.h 
+//      include/oscillator/oscillator.h 
 //
 //  AUTHOR:
 //      zimzum@github 
 //
 //  DESCRIPTION:
-//      TODO
+//      Defines all classes used for generating basic waveforms:
+//		 a) Oscillator - plain sine wave
 //
 //  License: GNU GPL v2.0 
 //========================================================================

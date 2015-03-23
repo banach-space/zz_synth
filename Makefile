@@ -72,13 +72,21 @@
 ZZDIR = ~/github/zz_synth
 include include/zz_synth.mk
 
-lib_common       := src/common
-lib_global       := src/global
-lib_envelope     := src/envelope
-libraries        := $(lib_common) $(lib_envelope) $(lib_global)
-lib_common_bin   := $(lib_common)/libcommon.a
-lib_global_bin   := $(lib_global)/libglobal.a
-lib_envelope_bin := $(lib_envelope)/libenvelope.a
+lib_common     := src/common
+lib_global     := src/global
+lib_envelope   := src/envelope
+lib_oscillator := src/oscillator
+
+libraries      := \
+	$(lib_common)\
+	$(lib_envelope)\
+	$(lib_global)\
+	$(lib_oscillator)
+
+lib_common_bin     := $(lib_common)/libcommon.a
+lib_global_bin     := $(lib_global)/libglobal.a
+lib_envelope_bin   := $(lib_envelope)/libenvelope.a
+lib_oscillator_bin := $(lib_oscillator)/liboscillator.a
 
 unit_test_rww := unit_tests/read_write_wav
 unit_test_env := unit_tests/envelope
@@ -125,6 +133,11 @@ $(lib_global):
 	$(if $(TARGET), $(MAKE) $(TARGET))
 
 $(lib_envelope):
+	@$(build-msg)
+	$(MAKE) --directory=$@ $(TARGET)
+	$(if $(TARGET), $(MAKE) $(TARGET))
+
+$(lib_oscillator):
 	@$(build-msg)
 	$(MAKE) --directory=$@ $(TARGET)
 	$(if $(TARGET), $(MAKE) $(TARGET))

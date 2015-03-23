@@ -1,19 +1,17 @@
 //========================================================================
 // FILE:
-//      templates/class_name.cc
+//      src/oscillator/oscillator.cc
 //
 // AUTHOR:
 //      zimzum@github 
 //
 // DESCRIPTION:
-//      Template implementation file for defining classes. This file should
-//      considered as a rough guide and reasonable deviations, where
-//      necessary, are acceptable.
+//		Implements classes representing basic waveforms.
 //
 //  License: GNU GPL v2.0 
 //========================================================================
 
-#include <common/oscillator.h>
+#include <oscillator/oscillator.h>
 
 using namespace std;
 

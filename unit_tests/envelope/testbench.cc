@@ -16,7 +16,7 @@
 
 #include <envelope/envelope.h>
 #include <common/synth_config.h>
-#include <common/oscillator.h>
+#include <oscillator/oscillator.h>
 #include <cmath>
 
 using namespace std;

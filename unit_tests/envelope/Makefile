@@ -32,7 +32,8 @@ source_files = testbench.cc
 libraries    = \
 	$(ZZDIR)/lib/libcommon.a\
 	$(ZZDIR)/lib/libenvelope.a\
-	$(ZZDIR)/lib/libglobal.a
+	$(ZZDIR)/lib/libglobal.a\
+	$(ZZDIR)/lib/liboscillator.a
 
 testbench    = $(ZZBIN)/testbench_envelope$(EXE)
 

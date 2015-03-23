@@ -14,7 +14,7 @@
 #include <global/global_variables.h>
 #include <common/wave_file.h>
 #include <common/synth_config.h>
-#include <common/oscillator.h>
+#include <oscillator/oscillator.h>
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>

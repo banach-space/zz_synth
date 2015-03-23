@@ -1,27 +1,27 @@
-#=============================================================
+#========================================================================
 # FILE:
-#   src/common/Makefile
+#   src/oscillator/Makefile
 #
 # AUTHOR:
 #   zimzum@github 
 #
 # DESCRIPTION:
-#   This is a makefile for the src/common directory. Note
+#   This is a makefile for the src/oscillator directory. Note
 #   that this Makefile was not designed to be used as a standalone
 #   build script and will not work unless the specified dependencies from
 #   other directories are already built. Instead, you can build the
-#   sources listed here by typing the following in the root
+#   Oscillator library specified here by typing the following in the root
 #   directory by:
 #
-#   ~/zz_synth$ make src/global
+#   ~/zz_synth$ make src/oscillator
 #
 #   This is the recommended way of using this script. Check the main
 #   Makefile for available options.
 #
 # License: GNU GPL v2.0 
-#=============================================================
+#========================================================================
 ZZDIR   = ~/github/zz_synth
-library := $(ZZDIR)/lib/libcommon.a
+library := $(ZZDIR)/lib/liboscillator.a
 include ../../include/zz_synth.mk
 
 .PHONY: all new clean chkdirs
@@ -29,16 +29,14 @@ include ../../include/zz_synth.mk
 #-----------------------
 #  SOURCE FILES -->  RULES 
 #-----------------------
-source_files = \
-               synth_config.cc\
-               wave_file.cc
+source_files = oscillator.cc
 
 include ../../include/zz_synth_rules.mk
 
 #-----------------------
 #  TARGETS 
 #-----------------------
-all: clean chkdirs $(library)
+all: chkdirs $(library)
 
 clean:
 	@$(RM) $(object_files)
@@ -52,11 +50,6 @@ chkdirs:
 #-----------------------
 #  DEPENDENCIES 
 #-----------------------
-synth_config.cc: \
-	$(ZZINC)/common/synth_config.h\
+oscillator.cc: \
+	$(ZZINC)/oscillator/oscillator.h\
 	$(ZZINC)/global/global_include.h
-
-wave_file.cc: \
-	$(ZZINC)/common/wave_file.h\
-	$(ZZINC)/global/global_include.h\
-	$(ZZINC)/global/global_variables.h
