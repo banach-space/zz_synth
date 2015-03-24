@@ -118,7 +118,7 @@ int main()
         AdsrEnvelope envelope(segment_attack, segment_decay, segment_sustain, segment_release);
 
         // 6. Generate the samples and apply the envelope
-        Oscillator osc(synthesiser, volume , initial_phase, it);
+        SineWaveform osc(synthesiser, volume , initial_phase, it);
         vector<int16_t> samples  = osc(duration);
 
         // 7.  Apply the envelope

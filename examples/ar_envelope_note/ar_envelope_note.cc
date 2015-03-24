@@ -61,7 +61,7 @@ int main()
         file_idx++;
 
         // 2. Generate the samples 
-        Oscillator osc(synthesiser, volume, initial_phase, *it);
+        SineWaveform osc(synthesiser, volume, initial_phase, *it);
         vector<int16_t> samples_out = osc(duration);
         envelope.ApplyEnvelope(samples_out);
 

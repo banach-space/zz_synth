@@ -62,7 +62,7 @@ TEST(ReadWriteWaveFileTest, HandleDifferentPitches)
     for (auto it = pitch.begin(); it != pitch.end(); it++)
     {
         // 1. Generate the samples 
-        Oscillator osc(synthesiser, volume, initial_phase, *it);
+        SineWaveform osc(synthesiser, volume, initial_phase, *it);
         vector<int16_t> samples_out = osc(duration);
 
         // 2. Save the generated samples to the file 
@@ -95,7 +95,7 @@ TEST(ReadWriteWaveFileTest, HandleDifferentVolumes)
     for (auto it = volume.begin(); it != volume.end(); it++)
     {
         // 1. Generate the samples 
-        Oscillator osc(synthesiser,*it, initial_phase, pitch);
+        SineWaveform osc(synthesiser,*it, initial_phase, pitch);
         vector<int16_t> samples_out = osc(duration);
 
         // 2. Save the generated samples to the file 
@@ -128,7 +128,7 @@ TEST(ReadWriteWaveFileTest, HandleDifferentDuration)
     for (auto it = duration.begin(); it != duration.end(); it++)
     {
         // 1. Generate the samples 
-        Oscillator osc(synthesiser, volume, initial_phase, pitch);
+        SineWaveform osc(synthesiser, volume, initial_phase, pitch);
         vector<int16_t> samples_out = osc(*it);
 
         // 2. Save the generated samples to the file 

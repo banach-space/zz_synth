@@ -51,7 +51,7 @@ int main()
         file_idx++;
 
         // 2. Generate the samples 
-        Oscillator osc(synthesiser, volume, initial_phase, *it);
+        SineWaveform osc(synthesiser, volume, initial_phase, *it);
         vector<int16_t> samples_out = osc(duration);
 
         // 3. Save the samples to the file 
