@@ -34,9 +34,9 @@ public:
     // operator and the corresponding move operators.
     explicit Oscillator(
             const SynthConfig& synthesiser,
-            int16_t peak_amplitude = static_cast<uint16_t>(1 << 14), 
-            double initial_phase = 0,
-            std::size_t pitch_id = 48);
+            int16_t peak_amplitude, 
+            double initial_phase ,
+            std::size_t pitch_id);
     virtual ~Oscillator();
     explicit Oscillator(const Oscillator& rhs) = delete;
     explicit Oscillator(Oscillator&& rhs) = delete;
@@ -65,4 +65,4 @@ private:
     
 };
 
-#endif /* #define _OSCILLATOR_H_ */
+#endif /* #define OSCILLATOR_H */

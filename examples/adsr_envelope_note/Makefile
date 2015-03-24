@@ -32,7 +32,8 @@ source_files = adsr_envelope_note.cc
 libraries    = \
 	$(ZZDIR)/lib/libcommon.a\
 	$(ZZDIR)/lib/libglobal.a\
-	 $(ZZDIR)/lib/libenvelope.a
+    $(ZZDIR)/lib/liboscillator.a\
+	$(ZZDIR)/lib/libenvelope.a
 
 example = $(ZZBIN)/adsr_envelope_note$(EXE)
 
@@ -59,4 +60,6 @@ chkdirs:
 #-----------------------
 adsr_envelope_note.cc: \
 	$(ZZINC)/common/wave_file.h\
-    $(ZZINC)/common/synth_config.h
+    $(ZZINC)/common/synth_config.h\
+    $(ZZINC)/oscillator/oscillator.h\
+    $(ZZINC)/envelope/envelope.h

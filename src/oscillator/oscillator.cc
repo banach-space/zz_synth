@@ -43,8 +43,7 @@ Oscillator::~Oscillator() = default;
 vector<int16_t> Oscillator::operator()(uint32_t number_of_seconds)
 {
     double phase = initial_phase_;
-    size_t number_of_samples 
-        = (sampling_rate_ * number_of_seconds);
+    size_t number_of_samples = (sampling_rate_ * number_of_seconds);
 
     vector<int16_t> samples(number_of_samples);
 
