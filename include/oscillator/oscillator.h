@@ -38,22 +38,27 @@ public:
             double initial_phase ,
             std::size_t pitch_id);
     virtual ~Oscillator();
-    explicit Oscillator(const Oscillator& rhs) = delete;
-    explicit Oscillator(Oscillator&& rhs) = delete;
+    explicit Oscillator(const Oscillator& rhs)   = delete;
+    explicit Oscillator(Oscillator&& rhs)        = delete;
     Oscillator& operator=(const Oscillator &rhs) = delete;
-    Oscillator& operator=(Oscillator&& rhs) = delete;
+    Oscillator& operator=(Oscillator&& rhs)      = delete;
 
     //--------------------------------------------------------------------
     // 2. GENERAL USER INTERFACE 
     //--------------------------------------------------------------------
 	std::vector<int16_t> operator()(uint32_t number_of_seconds);
 
-    //--------------------------------------------------------------------
-    // 3. ACCESSORS
-    //--------------------------------------------------------------------
-    // None
-
 private:
+    //--------------------------------------------------------------------
+    // 3. INTERFACE DEFINITION 
+    //--------------------------------------------------------------------
+    virtual std::vector<int16_t> GenWaveform(
+            size_t number_of_samples,
+            int16_t peak_amplitude,
+            double initial_phase,
+            double phase_increment
+            ) const = 0;
+
     //--------------------------------------------------------------------
     // 4. DATA MEMMBERS 
     //--------------------------------------------------------------------
@@ -63,6 +68,37 @@ private:
     uint32_t sampling_rate_;
     double phase_increment_;
     
+};
+
+//========================================================================
+// CLASS: SineWaveform
+//
+// DESCRIPTION:
+//      TODO
+//========================================================================
+class SineWaveform : public Oscillator
+{
+public:
+    //--------------------------------------------------------------------
+    // 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
+    //--------------------------------------------------------------------
+    explicit SineWaveform(
+            const SynthConfig& synthesiser,
+            int16_t peak_amplitude, 
+            double initial_phase ,
+            std::size_t pitch_id);
+    ~SineWaveform() = default;
+
+private:
+    //--------------------------------------------------------------------
+    // 2. INTERFACE DEFINITION 
+    //--------------------------------------------------------------------
+    std::vector<int16_t> GenWaveform(
+            size_t number_of_samples,
+            int16_t peak_amplitude,
+            double initial_phase,
+            double phase_increment
+            ) const;
 };
 
 #endif /* #define OSCILLATOR_H */

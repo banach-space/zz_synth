@@ -16,7 +16,7 @@
 using namespace std;
 
 //========================================================================
-// CLASS: ClassName
+// CLASS: Oscillator
 //========================================================================
 //------------------------------------------------------------------------
 // 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
@@ -42,22 +42,26 @@ Oscillator::~Oscillator() = default;
 //------------------------------------------------------------------------
 vector<int16_t> Oscillator::operator()(uint32_t number_of_seconds)
 {
-    double phase = initial_phase_;
+    //double phase = initial_phase_;
     size_t number_of_samples = (sampling_rate_ * number_of_seconds);
 
-    vector<int16_t> samples(number_of_samples);
+    //vector<int16_t> samples(number_of_samples);
 
-    for (vector<int16_t>::iterator it = samples.begin(); 
-            it != samples.end(); 
-            it++)
-    {
-        *it = static_cast<int16_t>(peak_amplitude_ * sin(phase));
+    //for (vector<int16_t>::iterator it = samples.begin(); 
+            //it != samples.end(); 
+            //it++)
+    //{
+        //*it = static_cast<int16_t>(peak_amplitude_ * sin(phase));
 
-        if ((phase += phase_increment_) >= kTwoPi)
-            phase -= kTwoPi;
-    }
+        //if ((phase += phase_increment_) >= kTwoPi)
+            //phase -= kTwoPi;
+    //}
 
-    return samples;
+    return GenWaveform(
+            number_of_samples, 
+            peak_amplitude_, 
+            initial_phase_, 
+            phase_increment_);
 }
 
 //------------------------------------------------------------------------
@@ -69,3 +73,43 @@ vector<int16_t> Oscillator::operator()(uint32_t number_of_seconds)
 // 4. MUTATORS
 //------------------------------------------------------------------------
 // None
+
+//========================================================================
+// CLASS: SineWaveForm
+//========================================================================
+//------------------------------------------------------------------------
+// 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
+//------------------------------------------------------------------------
+SineWaveform::SineWaveform(
+        const SynthConfig& synthesiser,
+        int16_t peak_amplitude, 
+        double initial_phase ,
+        std::size_t pitch_id):
+    Oscillator(synthesiser, peak_amplitude, initial_phase, pitch_id)
+{
+}
+
+//--------------------------------------------------------------------
+// 3. INTERFACE DEFINITION 
+//--------------------------------------------------------------------
+std::vector<int16_t> SineWaveform::GenWaveform(
+            size_t number_of_samples,
+            int16_t peak_amplitude,
+            double initial_phase,
+            double phase_increment
+            ) const 
+{
+    double phase = initial_phase;
+
+    vector<int16_t> samples(number_of_samples);
+
+    for (auto it : samples)
+    {
+        it = static_cast<int16_t>(peak_amplitude * sin(phase));
+
+        if ((phase += phase_increment) >= kTwoPi)
+            phase -= kTwoPi;
+    }
+
+    return samples;
+}

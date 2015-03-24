@@ -73,6 +73,7 @@ $(library): $(object_files)
 	@$(RANLIB) $@
 
 $(testbench): $(object_files) $(libraries)
+	@echo $(LINK.cc)
 	$(LINK.cc) $(LIBS_UNIT_TESTS) $(LIBS) $^ -o $@
 	-rm $(object_files)
 

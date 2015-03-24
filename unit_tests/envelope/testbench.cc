@@ -278,7 +278,7 @@ TEST(ArEnvelopeGenerationTest, HandleDifferentPitches)
     for (auto it = pitch.begin(); it != pitch.end(); it++)
     {
         // 1. Generate the samples and apply the envelope
-        Oscillator osc(synthesiser, volume , initial_phase, *it);
+        SineWaveform osc(synthesiser, volume , initial_phase, *it);
         vector<int16_t> samples_pre_envelope  = osc(duration);
 
         // 2. Create a copy of the generated samples and apply the envelope
@@ -323,7 +323,7 @@ TEST(ArEnvelopeGenerationTest, BasicTest)
     for (auto it = volume.begin(); it != volume.end(); it++)
     {
         // 1. Generate the samples and apply the envelope
-        Oscillator osc(synthesiser, *it , initial_phase, pitch);
+        SineWaveform osc(synthesiser, *it , initial_phase, pitch);
         vector<int16_t> samples_pre_envelope  = osc(duration);
 
         // 2. Create a copy of the generated samples and apply the envelope
@@ -367,7 +367,7 @@ TEST(ArEnvelopeGenerationTest, HandleDifferentOveralDuration)
     for (auto it = duration.begin(); it != duration.end(); it++)
     {
         // 1. Generate the samples and apply the envelope
-        Oscillator osc(synthesiser, volume , initial_phase, pitch);
+        SineWaveform osc(synthesiser, volume , initial_phase, pitch);
         vector<int16_t> samples_pre_envelope  = osc(*it);
 
         // 2. Create a copy of the generated samples and apply the envelope
@@ -419,7 +419,7 @@ TEST(ArEnvelopeGenerationTest, HandleDifferentDecayDuration)
             static_cast<vector<int16_t>::difference_type>(*it * synthesiser.sampling_rate());
 
         // 2. Generate the samples and apply the envelope
-        Oscillator osc(synthesiser, volume , initial_phase, pitch);
+        SineWaveform osc(synthesiser, volume , initial_phase, pitch);
         vector<int16_t> samples_pre_envelope  = osc(duration);
 
         // 3. Create a copy of the generated samples and apply the envelope
@@ -471,7 +471,7 @@ TEST(ArEnvelopeGenerationTest, HandleDifferentAttackDuration)
             static_cast<vector<int16_t>::difference_type>(decay_duration * synthesiser.sampling_rate());
 
         // 2. Generate the samples and apply the envelope
-        Oscillator osc(synthesiser, volume , initial_phase, pitch);
+        SineWaveform osc(synthesiser, volume , initial_phase, pitch);
         vector<int16_t> samples_pre_envelope  = osc(duration);
 
         // 3. Create a copy of the generated samples and apply the envelope
@@ -585,7 +585,7 @@ TEST(AdsrEnvelopeGenerationTest, HandleDifferentSustainLevels)
             static_cast<vector<int16_t>::difference_type>(adsr_segment_duration * synthesiser.sampling_rate());
 
         // 7. Generate the samples and apply the envelope
-        Oscillator osc(synthesiser, volume , initial_phase, pitch);
+        SineWaveform osc(synthesiser, volume , initial_phase, pitch);
         vector<int16_t> samples_pre_envelope  = osc(duration);
 
         // 8. Create a copy of the generated samples and apply the envelope
