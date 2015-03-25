@@ -23,15 +23,22 @@ using namespace std;
 //------------------------------------------------------------------------
 Oscillator::Oscillator(
         const SynthConfig& synthesiser,
-        int16_t peak_amplitude, 
-        double initial_phase,
-        size_t pitch_id):
-    peak_amplitude_(peak_amplitude),
-    frequency_(synthesiser.frequency_table(pitch_id)),
-    initial_phase_(initial_phase),
+        int16_t peak_amplitude_arg, 
+        double initial_phase_arg,
+        size_t pitch_id_arg):
+    peak_amplitude_(peak_amplitude_arg),
+    frequency_(synthesiser.frequency_table(pitch_id_arg)),
+    initial_phase_(initial_phase_arg),
     sampling_rate_(synthesiser.sampling_rate())
 {
+    /* Verify the correctness of input */
+    assert((peak_amplitude_arg >= 0) && (peak_amplitude_arg <= 0x7fff));
+    assert((initial_phase_arg >= 0) && (initial_phase_arg <= kTwoPi));
+    assert((pitch_id_arg >= 0) && (pitch_id_arg <= kNumberOfFrequencies));
+
+    /* Calculate phase increment. Make sure it falls into the [0, kPi) range. */
     phase_increment_ = synthesiser.phase_increment_per_sample() * frequency_;
+    phase_increment_ = fmod(phase_increment_, kPi);
 
 }
 
@@ -42,20 +49,7 @@ Oscillator::~Oscillator() = default;
 //------------------------------------------------------------------------
 vector<int16_t> Oscillator::operator()(uint32_t number_of_seconds)
 {
-    //double phase = initial_phase_;
     size_t number_of_samples = (sampling_rate_ * number_of_seconds);
-
-    //vector<int16_t> samples(number_of_samples);
-
-    //for (vector<int16_t>::iterator it = samples.begin(); 
-            //it != samples.end(); 
-            //it++)
-    //{
-        //*it = static_cast<int16_t>(peak_amplitude_ * sin(phase));
-
-        //if ((phase += phase_increment_) >= kTwoPi)
-            //phase -= kTwoPi;
-    //}
 
     return GenWaveform(
             number_of_samples, 
@@ -63,16 +57,6 @@ vector<int16_t> Oscillator::operator()(uint32_t number_of_seconds)
             initial_phase_, 
             phase_increment_);
 }
-
-//------------------------------------------------------------------------
-// 3. ACCESSORS
-//------------------------------------------------------------------------
-// None
-
-//------------------------------------------------------------------------
-// 4. MUTATORS
-//------------------------------------------------------------------------
-// None
 
 //========================================================================
 // CLASS: SineWaveForm
@@ -90,7 +74,27 @@ SineWaveform::SineWaveform(
 }
 
 //--------------------------------------------------------------------
-// 3. INTERFACE DEFINITION 
+// 2. INTERFACE DEFINITION 
+//--------------------------------------------------------------------
+//--------------------------------------------------------------------
+//  NAME:
+//      SineWaveform::GenWaveform
+//  
+//  DESCRIPTION:
+//      Function that implements the waveform generation and which is
+//      used by Oscillator::operator(). 
+//  INPUT:
+//      number_of_samples   - number of samples in the waveform
+//                            (TODO!!! min and max value)
+//      peak_amplitude      - peak amplitude of the waveform
+//                            (range: [0, 2^15-1]). 
+//      initial_phase       - initial phase of the waveform
+//                            (range: [0, kTwoPi))
+//      phase_increment     - phase increment per sample, i.e.
+//                            kTwoPi/sampling_rate * frequency
+//                            (range: [0, kPi))
+//  RETURN:
+//      Vector of samples for the requested waveform
 //--------------------------------------------------------------------
 std::vector<int16_t> SineWaveform::GenWaveform(
             size_t number_of_samples,
@@ -99,9 +103,14 @@ std::vector<int16_t> SineWaveform::GenWaveform(
             double phase_increment
             ) const 
 {
+    assert((initial_phase >= 0) && (initial_phase <= kTwoPi));
+    assert((phase_increment >= 0) && (phase_increment <= kPi));
+    assert((peak_amplitude >= 0) && (peak_amplitude <= 0x7fff));
+    
     double phase = initial_phase;
 
     vector<int16_t> samples(number_of_samples);
+
 
     for (auto it : samples)
     {

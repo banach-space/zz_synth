@@ -92,7 +92,7 @@ private:
     SynthConfig() : frequency_table_(kNumberOfFrequencies) {}
 
     // The frequency table based on equal-tempered scale with
-    // middle C at index 48 (i.e. frequencies[48]). 
+    // middle C at index 48 (i.e. frequency_table_[48]). 
 	std::vector<double> frequency_table_;
     uint32_t sampling_rate_;
     // Maximum representable frequency according to Nyquist
@@ -102,17 +102,17 @@ private:
     double phase_increment_per_sample_;
     // Pre-calculated multiplier for frequency to table index
     // (tableLength/sampleRate)
-    double frqTI;
+    /*double frqTI_;*/
     // Pre-calculated multiplier for radians to table index
     // (tableLength/twoPI)
-    double radTI;
+    /*double radTI_;*/
     // Maximum phase increment for wavetables (ftableLength/2)
-    double maxIncrWT;
+    /*double maxIncrWT_;*/
     // Wave table length
-    double ftableLength;
+    /*double ftableLength_;*/
     // Wave table length as integer
-    int32_t itableLength;
+    /*int32_t itableLength_;*/
 
 };
 
-#endif /* _SYNTH_CONFIG_H_ */
+#endif /* SYNTH_CONFIG_H */

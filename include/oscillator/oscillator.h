@@ -7,7 +7,8 @@
 //
 //  DESCRIPTION:
 //      Defines all classes used for generating basic waveforms:
-//		 a) Oscillator - plain sine wave
+//		 a) Oscillator - pure abstract base class
+//       b) SineWaveform - plain sine wave 
 //
 //  License: GNU GPL v2.0 
 //========================================================================
@@ -22,7 +23,8 @@
 // CLASS: Oscillator
 //
 // DESCRIPTION:
-//      TODO
+//      Base class for other waveforms - defines the interface.
+//      Implemented as a pure abstract class. 
 //========================================================================
 class Oscillator 
 {
@@ -30,8 +32,22 @@ public:
     //--------------------------------------------------------------------
     // 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
     //--------------------------------------------------------------------
-    // Make this class pure abstract and block copy constructor, assignment
-    // operator and the corresponding move operators.
+    //--------------------------------------------------------------------
+    //  NAME:
+    //      Oscillator()
+    //  
+    //  DESCRIPTION:
+    //      Constructor
+    //  INPUT:
+    //      synthesiser     - currently used synthesiser
+    //      peak_amplitude  - peak amplitude of the waveform 
+    //                        (range: [0, 2^15-1]). 
+    //      initial_phase   - initial phase of the waveform 
+    //                        (range: [0, kTwoPi))
+    //      pitch_id        - index into the frequency table (range: 
+    //                        [0, kNumberOfFrequencies) (see the 
+    //                        definition of SynthConfig)
+    //--------------------------------------------------------------------
     explicit Oscillator(
             const SynthConfig& synthesiser,
             int16_t peak_amplitude, 
@@ -45,6 +61,19 @@ public:
 
     //--------------------------------------------------------------------
     // 2. GENERAL USER INTERFACE 
+    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------
+    //  NAME:
+    //      operator()
+    //  
+    //  DESCRIPTION:
+    //      Oscillators by oscillating generate waveforms. This operator
+    //      will generate one for you.
+    //  INPUT:
+    //      number_of_seconds - the length (in seconds) of the desired
+    //                          waveform (TODO!!! Limit?!)
+    //  RETURN:
+    //      Vector of samples for the requested waveform
     //--------------------------------------------------------------------
 	std::vector<int16_t> operator()(uint32_t number_of_seconds);
 
@@ -74,13 +103,32 @@ private:
 // CLASS: SineWaveform
 //
 // DESCRIPTION:
-//      TODO
+//      Basic sinewave: y[n] = A*sin(kTwoPi*f*n + phi), in which A is the
+//      peak amplitude, f is the frequency (determined by pitch_id), and
+//      phi is the initial phase. This sine wave is implemented with aid
+//      of the sin() function from <cmath.h>.
 //========================================================================
 class SineWaveform : public Oscillator
 {
 public:
     //--------------------------------------------------------------------
     // 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
+    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------
+    //  NAME:
+    //      SineWaveform()
+    //  
+    //  DESCRIPTION:
+    //      Constructor.
+    //  INPUT:
+    //      synthesiser     - currently used synthesiser
+    //      peak_amplitude  - peak amplitude of the waveform 
+    //                        (range: [0, 2^15-1]). 
+    //      initial_phase   - initial phase of the waveform 
+    //                        (range: [0, kTwoPi))
+    //      pitch_id        - index into the frequency table (range: 
+    //                        [0, kNumberOfFrequencies) (see the 
+    //                        definition of SynthConfig)
     //--------------------------------------------------------------------
     explicit SineWaveform(
             const SynthConfig& synthesiser,
