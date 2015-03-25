@@ -11,6 +11,11 @@ Known divergences from the above standard:
 - Indentation is 4 spaces at a time;
 - other?
 
+Further remarks/additions:
+- Public member functions (i.e. interface avaiable for users) are documented/commented
+  in the corresponding header file, private and protected member functions are documented
+  in the corresponding implementation file.
+
 For consistency, three template files are provided:
 - /templates/class_name.h
 - /templates/class_name.cc
