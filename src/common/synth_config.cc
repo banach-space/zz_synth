@@ -1,6 +1,6 @@
 //=============================================================
 // FILE:
-//   /src/zz_SynthConfig.cc
+//   src/common/synth_config.cc
 //
 // AUTHOR:
 //   zimzum@github 
@@ -11,8 +11,8 @@
 // License: GNU GPL v2.0 
 //=============================================================
 
-#include "common/synth_config.h"
-#include "global/global_include.h"
+#include <common/synth_config.h>
+#include <global/global_include.h>
 
 using namespace std;
 

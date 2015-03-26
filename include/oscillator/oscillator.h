@@ -149,4 +149,53 @@ private:
             ) const;
 };
 
+//========================================================================
+// CLASS: SawtoothWaveform
+//
+// DESCRIPTION:
+//     The sawtooth. 
+//
+//      TODO!!! Implement this using BLEP 
+//========================================================================
+class SawtoothWaveform : public Oscillator
+{
+public:
+    //--------------------------------------------------------------------
+    // 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
+    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------
+    //  NAME:
+    //      SawtoothWaveform()
+    //  
+    //  DESCRIPTION:
+    //      Constructor.
+    //  INPUT:
+    //      synthesiser     - currently used synthesiser
+    //      peak_amplitude  - peak amplitude of the waveform 
+    //                        (range: [0, 2^15-1]). 
+    //      initial_phase   - initial phase of the waveform 
+    //                        (range: [0, kTwoPi))
+    //      pitch_id        - index into the frequency table (range: 
+    //                        [0, kNumberOfFrequencies) (see the 
+    //                        definition of SynthConfig)
+    //--------------------------------------------------------------------
+    explicit SawtoothWaveform(
+            const SynthConfig& synthesiser,
+            int16_t peak_amplitude, 
+            double initial_phase ,
+            std::size_t pitch_id);
+    ~SawtoothWaveform() = default;
+
+private:
+    //--------------------------------------------------------------------
+    // 2. INTERFACE DEFINITION 
+    //--------------------------------------------------------------------
+    std::vector<int16_t> GenWaveform(
+            size_t number_of_samples,
+            int16_t peak_amplitude,
+            double initial_phase,
+            double phase_increment
+            ) const;
+};
+
 #endif /* #define OSCILLATOR_H */

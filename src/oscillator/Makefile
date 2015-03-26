@@ -39,8 +39,8 @@ include ../../include/zz_synth_rules.mk
 all: chkdirs $(library)
 
 clean:
-	@$(RM) $(object_files)
-	@$(RM) $(library)
+	$(RM) $(object_files)
+	$(RM) $(library)
 
 new: clean all
 

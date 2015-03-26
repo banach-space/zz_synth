@@ -96,6 +96,7 @@ unit_tests    := unit_tests/
 example_plain_note         := examples/plain_note
 example_ar_envelope_note   := examples/ar_envelope_note
 example_adsr_envelope_note := examples/adsr_envelope_note
+example_waveforms          := examples/waveforms
 examples                   := examples/
 
 .PHONY:				\
@@ -114,7 +115,7 @@ examples                   := examples/
 clean new:
 	@$(build-msg)
 
-all_recursive: $(libraries) $(unit_tests)
+all_recursive: $(libraries) $(unit_tests) $(examples)
 	@$(build-msg)
 	$(MAKE) $^ TARGET=all 
 
@@ -172,6 +173,11 @@ $(example_adsr_envelope_note): $(libraries)
 	$(MAKE) --directory=$@ $(TARGET)
 	$(if $(TARGET), $(MAKE) $(TARGET))
 
+$(example_waveforms): $(libraries)
+	@$(build-msg)
+	$(MAKE) --directory=$@ $(TARGET)
+	$(if $(TARGET), $(MAKE) $(TARGET))
+
 $(lib_common_bin): $(lib_common)
 
 $(lib_global_bin): $(lib_global)
@@ -180,7 +186,11 @@ $(lib_envelope_bin): $(lib_envelope)
 
 $(unit_tests): $(unit_test_rww) $(unit_test_env) $(unit_test_seg)
 
-$(examples): $(example_plain_note)
+$(examples):\
+	$(example_plain_note)\
+	$(example_ar_envelope_note)\
+	$(example_adrs_envelope)\
+	$(example_waveforms)
 
 TAGS: 
 	@$(build-msg)
