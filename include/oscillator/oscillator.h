@@ -146,7 +146,7 @@ private:
             int16_t peak_amplitude,
             double initial_phase,
             double phase_increment
-            ) const;
+            ) const final;
 };
 
 //========================================================================
@@ -195,7 +195,7 @@ private:
             int16_t peak_amplitude,
             double initial_phase,
             double phase_increment
-            ) const;
+            ) const final;
 };
 
 #endif /* #define OSCILLATOR_H */

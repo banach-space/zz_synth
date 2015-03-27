@@ -111,7 +111,7 @@ std::vector<int16_t> SineWaveform::GenWaveform(
 
     vector<int16_t> samples(number_of_samples);
 
-    for (auto it : samples)
+    for (auto& it : samples)
     {
         it = static_cast<int16_t>(peak_amplitude * sin(phase));
 
@@ -179,7 +179,7 @@ std::vector<int16_t> SawtoothWaveform::GenWaveform(
 
     vector<int16_t> samples(number_of_samples);
 
-    for (auto it : samples)
+    for (auto& it : samples)
     {
         it = static_cast<int16_t>(peak_amplitude * saw_tooth_value);
 
