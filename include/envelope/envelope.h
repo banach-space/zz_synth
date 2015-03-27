@@ -116,7 +116,7 @@ public:
     //--------------------------------------------------------------------
     // 2. GENERAL USER INTERFACE 
     //--------------------------------------------------------------------
-    void ApplyEnvelope(std::vector<int16_t> &samples) const;
+    void ApplyEnvelope(std::vector<int16_t> &samples) const final;
 
     //--------------------------------------------------------------------
     // 3. ACCESSORS
@@ -184,7 +184,7 @@ public:
     //--------------------------------------------------------------------
     // 2. GENERAL USER INTERFACE 
     //--------------------------------------------------------------------
-    void ApplyEnvelope(std::vector<int16_t> &samples) const;
+    void ApplyEnvelope(std::vector<int16_t> &samples) const final;
 
     //--------------------------------------------------------------------
     // 3. ACCESSORS
@@ -206,7 +206,6 @@ private:
     std::unique_ptr<Segment> sustain_segment_;
     std::unique_ptr<Segment> release_segment_;
     std::size_t length_;
-    
 };
 
 
