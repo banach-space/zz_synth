@@ -29,7 +29,10 @@ include ../../include/zz_synth.mk
 #  SOURCE/OBJECT FILES 
 #-----------------------
 source_files = plain_note.cc
-libraries    = $(ZZDIR)/lib/libcommon.a $(ZZDIR)/lib/libglobal.a
+libraries    =\
+	$(ZZDIR)/lib/libcommon.a\
+	$(ZZDIR)/lib/libglobal.a\
+	$(ZZDIR)/lib/liboscillator.a
 example      = $(ZZBIN)/plain_note$(EXE)
 
 ZZEXAMPLES = $(ZZDIR)/examples/plain_note/sounds

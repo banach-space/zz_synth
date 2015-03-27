@@ -32,8 +32,8 @@ source_files = ar_envelope_note.cc
 libraries    = \
 	$(ZZDIR)/lib/libcommon.a\
 	$(ZZDIR)/lib/libglobal.a\
-	 $(ZZDIR)/lib/libenvelope.a
-
+	$(ZZDIR)/lib/libenvelope.a\
+	$(ZZDIR)/lib/liboscillator.a
 example = $(ZZBIN)/ar_envelope_note$(EXE)
 
 ZZEXAMPLES = $(ZZDIR)/examples/ar_envelope_note/sounds
