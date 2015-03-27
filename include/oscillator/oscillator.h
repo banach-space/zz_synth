@@ -9,6 +9,9 @@
 //      Defines all classes used for generating basic waveforms:
 //		 a) Oscillator - pure abstract base class
 //       b) SineWaveform - plain sine wave 
+//       c) SawtoohWaveform - saw tooth
+//       d) SquareWaveform - square wave
+//       e) TriangleWaveform - triangle wave
 //
 //  License: GNU GPL v2.0 
 //========================================================================
@@ -153,7 +156,10 @@ private:
 // CLASS: SawtoothWaveform
 //
 // DESCRIPTION:
-//     The sawtooth. 
+//     The sawtooth waveform defined by: 
+//                 \phi_n
+//          y[n] = ------ - 1
+//                   Pi
 //
 //      TODO!!! Implement this using BLEP 
 //========================================================================
@@ -185,6 +191,108 @@ public:
             double initial_phase ,
             std::size_t pitch_id);
     ~SawtoothWaveform() = default;
+
+private:
+    //--------------------------------------------------------------------
+    // 2. INTERFACE DEFINITION 
+    //--------------------------------------------------------------------
+    std::vector<int16_t> GenWaveform(
+            size_t number_of_samples,
+            int16_t peak_amplitude,
+            double initial_phase,
+            double phase_increment
+            ) const final;
+};
+
+//========================================================================
+// CLASS: SquareWaveform
+//
+// DESCRIPTION:
+//     The square waveform defined by: 
+//                 \phi_n
+//          y[n] = ------ - 1
+//                   Pi
+//
+//      TODO!!! Implement this using BLEP 
+//========================================================================
+class SquareWaveform : public Oscillator
+{
+public:
+    //--------------------------------------------------------------------
+    // 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
+    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------
+    //  NAME:
+    //      SawtoothWaveform()
+    //  
+    //  DESCRIPTION:
+    //      Constructor.
+    //  INPUT:
+    //      synthesiser     - currently used synthesiser
+    //      peak_amplitude  - peak amplitude of the waveform 
+    //                        (range: [0, 2^15-1]). 
+    //      initial_phase   - initial phase of the waveform 
+    //                        (range: [0, kTwoPi))
+    //      pitch_id        - index into the frequency table (range: 
+    //                        [0, kNumberOfFrequencies) (see the 
+    //                        definition of SynthConfig)
+    //--------------------------------------------------------------------
+    explicit SquareWaveform(
+            const SynthConfig& synthesiser,
+            int16_t peak_amplitude, 
+            double initial_phase ,
+            std::size_t pitch_id);
+    ~SquareWaveform() = default;
+
+private:
+    //--------------------------------------------------------------------
+    // 2. INTERFACE DEFINITION 
+    //--------------------------------------------------------------------
+    std::vector<int16_t> GenWaveform(
+            size_t number_of_samples,
+            int16_t peak_amplitude,
+            double initial_phase,
+            double phase_increment
+            ) const final;
+};
+
+//========================================================================
+// CLASS: TriangleWaveform
+//
+// DESCRIPTION:
+//     The triangle waveform defined by:
+//                     2 |\phi_n - Pi|
+//          y[n] = 1 - ---------------
+//                          Pi
+//========================================================================
+class TriangleWaveform : public Oscillator
+{
+public:
+    //--------------------------------------------------------------------
+    // 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
+    //--------------------------------------------------------------------
+    //--------------------------------------------------------------------
+    //  NAME:
+    //      TriangleWaveform()
+    //  
+    //  DESCRIPTION:
+    //      Constructor.
+    //  INPUT:
+    //      synthesiser     - currently used synthesiser
+    //      peak_amplitude  - peak amplitude of the waveform 
+    //                        (range: [0, 2^15-1]). 
+    //      initial_phase   - initial phase of the waveform 
+    //                        (range: [0, kTwoPi))
+    //      pitch_id        - index into the frequency table (range: 
+    //                        [0, kNumberOfFrequencies) (see the 
+    //                        definition of SynthConfig)
+    //--------------------------------------------------------------------
+    explicit TriangleWaveform(
+            const SynthConfig& synthesiser,
+            int16_t peak_amplitude, 
+            double initial_phase ,
+            std::size_t pitch_id);
+    ~TriangleWaveform() = default;
 
 private:
     //--------------------------------------------------------------------

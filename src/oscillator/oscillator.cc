@@ -16,6 +16,30 @@
 using namespace std;
 
 //========================================================================
+// PRIVATE FUNCTIONS DECLARATIONS
+//========================================================================
+static void GenWaveformAssertions(
+            int16_t peak_amplitude,
+            double initial_phase,
+            double phase_increment
+);
+
+//========================================================================
+// PRIVATE FUNCTIONS DEFINITIONS
+//========================================================================
+static void GenWaveformAssertions(
+            int16_t peak_amplitude,
+            double initial_phase,
+            double phase_increment
+)
+{
+    assert((initial_phase >= 0) && (initial_phase <= kTwoPi));
+    assert((phase_increment >= 0) && (phase_increment <= kPi));
+    assert((peak_amplitude >= 0) && (peak_amplitude <= 0x7fff));
+
+}
+
+//========================================================================
 // CLASS: Oscillator
 //========================================================================
 //------------------------------------------------------------------------
@@ -103,9 +127,8 @@ std::vector<int16_t> SineWaveform::GenWaveform(
             double phase_increment
             ) const 
 {
-    assert((initial_phase >= 0) && (initial_phase <= kTwoPi));
-    assert((phase_increment >= 0) && (phase_increment <= kPi));
-    assert((peak_amplitude >= 0) && (peak_amplitude <= 0x7fff));
+    // Assertions before it makes sense to proceeds
+    GenWaveformAssertions(peak_amplitude, initial_phase, phase_increment);
     
     double phase = initial_phase;
 
@@ -167,9 +190,8 @@ std::vector<int16_t> SawtoothWaveform::GenWaveform(
             double phase_increment
             ) const 
 {
-    assert((initial_phase >= 0) && (initial_phase <= kTwoPi));
-    assert((phase_increment >= 0) && (phase_increment <= kPi));
-    assert((peak_amplitude >= 0) && (peak_amplitude <= 0x7fff));
+    // Assertions before it makes sense to proceeds
+    GenWaveformAssertions(peak_amplitude, initial_phase, phase_increment);
     
     // saw_tooth_value is a floating point in the [-1, 1] range. 
     // (For consistency with sin()).
@@ -189,3 +211,140 @@ std::vector<int16_t> SawtoothWaveform::GenWaveform(
 
     return samples;
 }
+
+//========================================================================
+// CLASS: SquareWaveForm
+//========================================================================
+//------------------------------------------------------------------------
+// 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
+//------------------------------------------------------------------------
+SquareWaveform::SquareWaveform(
+        const SynthConfig& synthesiser,
+        int16_t peak_amplitude, 
+        double initial_phase ,
+        std::size_t pitch_id):
+    Oscillator(synthesiser, peak_amplitude, initial_phase, pitch_id)
+{
+}
+
+//--------------------------------------------------------------------
+// 2. INTERFACE DEFINITION 
+//--------------------------------------------------------------------
+//--------------------------------------------------------------------
+//  NAME:
+//      SquareWaveform::GenWaveform
+//  
+//  DESCRIPTION:
+//      Function that implements the waveform generation and which is
+//      used by Oscillator::operator(). 
+//  INPUT:
+//      number_of_samples   - number of samples in the waveform
+//                            (TODO!!! min and max value)
+//      peak_amplitude      - peak amplitude of the waveform
+//                            (range: [0, 2^15-1]). 
+//      initial_phase       - initial phase of the waveform
+//                            (range: [0, kTwoPi))
+//      phase_increment     - phase increment per sample, i.e.
+//                            kTwoPi/sampling_rate * frequency
+//                            (range: [0, kPi))
+//  RETURN:
+//      Vector of samples for the requested waveform
+//--------------------------------------------------------------------
+std::vector<int16_t> SquareWaveform::GenWaveform(
+            size_t number_of_samples,
+            int16_t peak_amplitude,
+            double initial_phase,
+            double phase_increment
+            ) const 
+{
+    // Assertions before it makes sense to proceeds
+    GenWaveformAssertions(peak_amplitude, initial_phase, phase_increment);
+    
+    // saw_tooth_value is a floating point in the [-1, 1] range. 
+    // (For consistency with sin()).
+    double saw_tooth_value = initial_phase / kTwoPi;
+    // saw_tooth_increment is a floating point in the [0, 1] range.
+    double saw_tooth_increment = phase_increment / kTwoPi;
+
+    vector<int16_t> samples(number_of_samples);
+
+    for (auto& it : samples)
+    {
+        it = static_cast<int16_t>(peak_amplitude * saw_tooth_value);
+
+        if ((saw_tooth_value += saw_tooth_increment) >= 1)
+            saw_tooth_value -= 2;
+    }
+
+    return samples;
+}
+
+//========================================================================
+// CLASS: TriangleWaveForm
+//========================================================================
+//------------------------------------------------------------------------
+// 1. CONSTRUCTORS/DESTRUCTOR/ASSIGNMENT OPERATORS
+//------------------------------------------------------------------------
+TriangleWaveform::TriangleWaveform(
+        const SynthConfig& synthesiser,
+        int16_t peak_amplitude, 
+        double initial_phase ,
+        std::size_t pitch_id):
+    Oscillator(synthesiser, peak_amplitude, initial_phase, pitch_id)
+{
+}
+
+//--------------------------------------------------------------------
+// 2. INTERFACE DEFINITION 
+//--------------------------------------------------------------------
+//--------------------------------------------------------------------
+//  NAME:
+//      TriangleWaveform::GenWaveform
+//  
+//  DESCRIPTION:
+//      Function that implements the waveform generation and which is
+//      used by Oscillator::operator(). 
+//  INPUT:
+//      number_of_samples   - number of samples in the waveform
+//                            (TODO!!! min and max value)
+//      peak_amplitude      - peak amplitude of the waveform
+//                            (range: [0, 2^15-1]). 
+//      initial_phase       - initial phase of the waveform
+//                            (range: [0, kTwoPi))
+//      phase_increment     - phase increment per sample, i.e.
+//                            kTwoPi/sampling_rate * frequency
+//                            (range: [0, kPi))
+//  RETURN:
+//      Vector of samples for the requested waveform
+//--------------------------------------------------------------------
+std::vector<int16_t> TriangleWaveform::GenWaveform(
+            size_t number_of_samples,
+            int16_t peak_amplitude,
+            double initial_phase,
+            double phase_increment
+            ) const 
+{
+    // Assertions before it makes sense to proceeds
+    GenWaveformAssertions(peak_amplitude, initial_phase, phase_increment);
+    
+    const double two_div_pi = kPi / 2.0;
+    double triangle_wave_value;
+    double phase = initial_phase;
+
+    vector<int16_t> samples(number_of_samples);
+
+    for (auto& it : samples)
+    {
+        triangle_wave_value = 1.0 - two_div_pi * fabs(phase - kPi);
+        it = static_cast<int16_t>(peak_amplitude * phase);
+
+        if ((phase += phase_increment) >= kTwoPi)
+            phase -= kTwoPi;
+    }
+
+    return samples;
+}
+
+//========================================================================
+// End of file
+//========================================================================
