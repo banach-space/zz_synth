@@ -34,7 +34,7 @@ static void GenWaveformAssertions(
 )
 {
     assert((initial_phase >= 0) && (initial_phase <= kTwoPi));
-    assert((phase_increment >= 0) && (phase_increment <= kPi));
+    assert((phase_increment >= -kPi) && (phase_increment <= kPi));
     assert((peak_amplitude >= 0) && (peak_amplitude <= 0x7fff));
 
 }
@@ -116,7 +116,7 @@ SineWaveform::SineWaveform(
 //                            (range: [0, kTwoPi))
 //      phase_increment     - phase increment per sample, i.e.
 //                            kTwoPi/sampling_rate * frequency
-//                            (range: [0, kPi))
+//                            (range: [-kPi, kPi))
 //  RETURN:
 //      Vector of samples for the requested waveform
 //--------------------------------------------------------------------
@@ -179,7 +179,7 @@ SawtoothWaveform::SawtoothWaveform(
 //                            (range: [0, kTwoPi))
 //      phase_increment     - phase increment per sample, i.e.
 //                            kTwoPi/sampling_rate * frequency
-//                            (range: [0, kPi))
+//                            (range: [-kPi, kPi))
 //  RETURN:
 //      Vector of samples for the requested waveform
 //--------------------------------------------------------------------
@@ -196,8 +196,8 @@ std::vector<int16_t> SawtoothWaveform::GenWaveform(
     // saw_tooth_value is a floating point in the [-1, 1] range. 
     // (For consistency with sin()).
     double saw_tooth_value = initial_phase / kTwoPi;
-    // saw_tooth_increment is a floating point in the [0, 1] range.
-    double saw_tooth_increment = phase_increment / kTwoPi;
+    // saw_tooth_increment is a floating point in the [-1, 1] range.
+    double saw_tooth_increment = phase_increment / kPi;
 
     vector<int16_t> samples(number_of_samples);
 
@@ -246,7 +246,7 @@ SquareWaveform::SquareWaveform(
 //                            (range: [0, kTwoPi))
 //      phase_increment     - phase increment per sample, i.e.
 //                            kTwoPi/sampling_rate * frequency
-//                            (range: [0, kPi))
+//                            (range: [-kPi, kPi))
 //  RETURN:
 //      Vector of samples for the requested waveform
 //--------------------------------------------------------------------
@@ -313,7 +313,7 @@ TriangleWaveform::TriangleWaveform(
 //                            (range: [0, kTwoPi))
 //      phase_increment     - phase increment per sample, i.e.
 //                            kTwoPi/sampling_rate * frequency
-//                            (range: [0, kPi))
+//                            (range: [-kPi, kPi))
 //  RETURN:
 //      Vector of samples for the requested waveform
 //--------------------------------------------------------------------
@@ -327,7 +327,7 @@ std::vector<int16_t> TriangleWaveform::GenWaveform(
     // Assertions before it makes sense to proceeds
     GenWaveformAssertions(peak_amplitude, initial_phase, phase_increment);
     
-    const double two_div_pi = kPi / 2.0;
+    const double one_div_pi = 1.0/ kPi;
     double triangle_wave_value;
     double phase = initial_phase;
 
@@ -335,11 +335,17 @@ std::vector<int16_t> TriangleWaveform::GenWaveform(
 
     for (auto& it : samples)
     {
-        triangle_wave_value = 1.0 - two_div_pi * fabs(phase - kPi);
-        it = static_cast<int16_t>(peak_amplitude * phase);
+        triangle_wave_value = 1.0 - one_div_pi * fabs(phase - kTwoPi);
+        it = static_cast<int16_t>(peak_amplitude * triangle_wave_value);
 
-        if ((phase += phase_increment) >= kTwoPi)
-            phase -= kTwoPi;
+        phase = phase + phase_increment;
+
+        if ((phase >= kTwoPi) || (phase <= 0))
+        {
+            phase = phase - phase_increment;
+            phase_increment = -phase_increment;
+        }
+
     }
 
     return samples;
