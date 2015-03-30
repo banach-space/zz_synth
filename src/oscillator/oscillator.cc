@@ -66,6 +66,28 @@ Oscillator::Oscillator(
 
 }
 
+Oscillator::Oscillator(
+        const SynthConfig& synthesiser,
+        int16_t peak_amplitude_arg, 
+        double initial_phase_arg,
+        float frequency_arg):
+    peak_amplitude_(peak_amplitude_arg),
+    frequency_(frequency_arg),
+    initial_phase_(initial_phase_arg),
+    sampling_rate_(synthesiser.sampling_rate())
+{
+    /* Verify the correctness of input */
+    assert((peak_amplitude_arg >= 0) && (peak_amplitude_arg <= 0x7fff));
+    assert((initial_phase_arg >= 0) && (initial_phase_arg <= kTwoPi));
+    assert((frequency_arg >= -synthesiser.sampling_rate() / 2.0) 
+            && (frequency_arg >= -synthesiser.sampling_rate() / 2.0));
+
+    /* Calculate phase increment. Make sure it falls into the [0, kPi) range. */
+    phase_increment_ = synthesiser.phase_increment_per_sample() * frequency_;
+    phase_increment_ = fmod(phase_increment_, kPi);
+
+}
+
 Oscillator::~Oscillator() = default;
 
 //------------------------------------------------------------------------
@@ -94,6 +116,15 @@ SineWaveform::SineWaveform(
         double initial_phase ,
         std::size_t pitch_id):
     Oscillator(synthesiser, peak_amplitude, initial_phase, pitch_id)
+{
+}
+
+SineWaveform::SineWaveform(
+        const SynthConfig& synthesiser,
+        int16_t peak_amplitude, 
+        double initial_phase ,
+        float frequency):
+    Oscillator(synthesiser, peak_amplitude, initial_phase, frequency)
 {
 }
 
@@ -157,6 +188,15 @@ SawtoothWaveform::SawtoothWaveform(
         double initial_phase ,
         std::size_t pitch_id):
     Oscillator(synthesiser, peak_amplitude, initial_phase, pitch_id)
+{
+}
+
+SawtoothWaveform::SawtoothWaveform(
+        const SynthConfig& synthesiser,
+        int16_t peak_amplitude, 
+        double initial_phase ,
+        float frequency):
+    Oscillator(synthesiser, peak_amplitude, initial_phase, frequency)
 {
 }
 
@@ -227,6 +267,15 @@ SquareWaveform::SquareWaveform(
 {
 }
 
+SquareWaveform::SquareWaveform(
+        const SynthConfig& synthesiser,
+        int16_t peak_amplitude, 
+        double initial_phase ,
+        float frequency):
+    Oscillator(synthesiser, peak_amplitude, initial_phase, frequency)
+{
+}
+
 //--------------------------------------------------------------------
 // 2. INTERFACE DEFINITION 
 //--------------------------------------------------------------------
@@ -289,6 +338,15 @@ TriangleWaveform::TriangleWaveform(
         double initial_phase ,
         std::size_t pitch_id):
     Oscillator(synthesiser, peak_amplitude, initial_phase, pitch_id)
+{
+}
+
+TriangleWaveform::TriangleWaveform(
+        const SynthConfig& synthesiser,
+        int16_t peak_amplitude, 
+        double initial_phase ,
+        float frequency):
+    Oscillator(synthesiser, peak_amplitude, initial_phase, frequency)
 {
 }
 

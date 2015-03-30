@@ -56,6 +56,25 @@ public:
             int16_t peak_amplitude, 
             double initial_phase ,
             std::size_t pitch_id);
+    //--------------------------------------------------------------------
+    //  NAME:
+    //      Oscillator()
+    //  
+    //  DESCRIPTION:
+    //      Constructor
+    //  INPUT:
+    //      synthesiser     - currently used synthesiser
+    //      peak_amplitude  - peak amplitude of the waveform 
+    //                        (range: [0, 2^15-1]). 
+    //      initial_phase   - initial phase of the waveform 
+    //                        (range: [0, kTwoPi))
+    //      frequency       - the frequency (range: according to Nyquist)
+    //--------------------------------------------------------------------
+    explicit Oscillator(
+            const SynthConfig& synthesiser,
+            int16_t peak_amplitude, 
+            double initial_phase ,
+            float frequency);
     virtual ~Oscillator();
     explicit Oscillator(const Oscillator& rhs)   = delete;
     explicit Oscillator(Oscillator&& rhs)        = delete;
@@ -138,6 +157,25 @@ public:
             int16_t peak_amplitude, 
             double initial_phase ,
             std::size_t pitch_id);
+    //--------------------------------------------------------------------
+    //  NAME:
+    //      SineWaveform()
+    //  
+    //  DESCRIPTION:
+    //      Constructor.
+    //  INPUT:
+    //      synthesiser     - currently used synthesiser
+    //      peak_amplitude  - peak amplitude of the waveform 
+    //                        (range: [0, 2^15-1]). 
+    //      initial_phase   - initial phase of the waveform 
+    //                        (range: [0, kTwoPi))
+    //      frequency       - frequency (range: according to Nyquist)
+    //--------------------------------------------------------------------
+    explicit SineWaveform(
+            const SynthConfig& synthesiser,
+            int16_t peak_amplitude, 
+            double initial_phase ,
+            float frequency);
     ~SineWaveform() = default;
 
 private:
@@ -190,6 +228,25 @@ public:
             int16_t peak_amplitude, 
             double initial_phase ,
             std::size_t pitch_id);
+    //--------------------------------------------------------------------
+    //  NAME:
+    //      SawtoothWaveform()
+    //  
+    //  DESCRIPTION:
+    //      Constructor.
+    //  INPUT:
+    //      synthesiser     - currently used synthesiser
+    //      peak_amplitude  - peak amplitude of the waveform 
+    //                        (range: [0, 2^15-1]). 
+    //      initial_phase   - initial phase of the waveform 
+    //                        (range: [0, kTwoPi))
+    //      frequency       - frequency (range: according to Nyquist)
+    //--------------------------------------------------------------------
+    explicit SawtoothWaveform(
+            const SynthConfig& synthesiser,
+            int16_t peak_amplitude, 
+            double initial_phase ,
+            float frequency);
     ~SawtoothWaveform() = default;
 
 private:
@@ -242,6 +299,25 @@ public:
             int16_t peak_amplitude, 
             double initial_phase ,
             std::size_t pitch_id);
+    //--------------------------------------------------------------------
+    //  NAME:
+    //      SquareWaveform()
+    //  
+    //  DESCRIPTION:
+    //      Constructor.
+    //  INPUT:
+    //      synthesiser     - currently used synthesiser
+    //      peak_amplitude  - peak amplitude of the waveform 
+    //                        (range: [0, 2^15-1]). 
+    //      initial_phase   - initial phase of the waveform 
+    //                        (range: [0, kTwoPi))
+    //      frequency       - frequency (range: according to Nyquist)
+    //--------------------------------------------------------------------
+    explicit SquareWaveform(
+            const SynthConfig& synthesiser,
+            int16_t peak_amplitude, 
+            double initial_phase ,
+            float frequency);
     ~SquareWaveform() = default;
 
 private:
@@ -292,6 +368,25 @@ public:
             int16_t peak_amplitude, 
             double initial_phase ,
             std::size_t pitch_id);
+    //--------------------------------------------------------------------
+    //  NAME:
+    //      TriangleWaveform()
+    //  
+    //  DESCRIPTION:
+    //      Constructor.
+    //  INPUT:
+    //      synthesiser     - currently used synthesiser
+    //      peak_amplitude  - peak amplitude of the waveform 
+    //                        (range: [0, 2^15-1]). 
+    //      initial_phase   - initial phase of the waveform 
+    //                        (range: [0, kTwoPi))
+    //      frequency       - frequency (range: according to Nyquist)
+    //--------------------------------------------------------------------
+    explicit TriangleWaveform(
+            const SynthConfig& synthesiser,
+            int16_t peak_amplitude, 
+            double initial_phase ,
+            float frequency);
     ~TriangleWaveform() = default;
 
 private:
