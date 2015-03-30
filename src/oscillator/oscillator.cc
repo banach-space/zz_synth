@@ -260,20 +260,18 @@ std::vector<int16_t> SquareWaveform::GenWaveform(
     // Assertions before it makes sense to proceeds
     GenWaveformAssertions(peak_amplitude, initial_phase, phase_increment);
     
-    // saw_tooth_value is a floating point in the [-1, 1] range. 
-    // (For consistency with sin()).
-    double saw_tooth_value = initial_phase / kTwoPi;
-    // saw_tooth_increment is a floating point in the [0, 1] range.
-    double saw_tooth_increment = phase_increment / kTwoPi;
+    double phase = initial_phase;
+    double value = 0;
 
     vector<int16_t> samples(number_of_samples);
 
     for (auto& it : samples)
     {
-        it = static_cast<int16_t>(peak_amplitude * saw_tooth_value);
+        value = phase > kPi ? 1.0 : -1.0;
+        it = static_cast<int16_t>(peak_amplitude * value);
 
-        if ((saw_tooth_value += saw_tooth_increment) >= 1)
-            saw_tooth_value -= 2;
+        if ((phase += phase_increment) >= kTwoPi)
+            phase -= kTwoPi;
     }
 
     return samples;

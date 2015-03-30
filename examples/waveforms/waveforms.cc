@@ -75,6 +75,20 @@ int main()
         wf_out_sawtooth.SaveBufferToFile(file_name, samples_out_sawtooth);
 
         //----------------------------------------------------------------
+        // Square wave
+        //----------------------------------------------------------------
+        // 1. Generate filename
+        sprintf(file_name, "examples/waveforms/sounds/square_%d.wav", file_idx);
+
+        // 2. Generate the samples 
+        SquareWaveform osc_square(synthesiser, volume, initial_phase, *it);
+        vector<int16_t> samples_out_square = osc_square(duration);
+
+        // 3. Save the samples to the file 
+        WaveFileOut wf_out_square(duration);
+        wf_out_square.SaveBufferToFile(file_name, samples_out_square);
+
+        //----------------------------------------------------------------
         // Triangle wave
         //----------------------------------------------------------------
         // 1. Generate filename
