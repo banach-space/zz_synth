@@ -209,11 +209,11 @@ private:
 //
 // DESCRIPTION:
 //     The square waveform defined by: 
-//                 \phi_n
-//          y[n] = ------ - 1
-//                   Pi
+//                  _
+//                 |  1 when n before the midpoint of the period
+//          y[n] = { 
+//                 |_-1 otherwise
 //
-//      TODO!!! Implement this using BLEP 
 //========================================================================
 class SquareWaveform : public Oscillator
 {
