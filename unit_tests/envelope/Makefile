@@ -16,7 +16,7 @@
 #   testbench specified here by typing the following in the root
 #   directory:
 #
-#   ~/zz_synth$ make  [dir_name]
+#   $ make  [dir_name]
 #
 #   This is the recommended way of using this script. Check the main
 #   Makefile for available options.
