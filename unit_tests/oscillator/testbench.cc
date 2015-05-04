@@ -23,7 +23,25 @@
 //========================================================================
 TEST(YourTestNameTest, SubtestName)
 {
-	// Implement your test here
+    size_t pitch           = kNumberOfFrequencies/size_t(2);
+    vector<int16_t> volume = {0, 1 << 7, 1 << 14};
+    uint32_t duration      = 1;
+    double initial_phase   = 0;
+    float peak_amplitude   = 1;
+
+    // Initialise the synthesiser
+    SynthConfig &synthesiser  = SynthConfig::getInstance();
+    synthesiser.Init();	
+
+    for (auto it = volume.begin(); it != volume.end(); it++)
+    {
+        // 1. Generate the oscillator and the sound-wave
+        SineWaveform osc(synthesiser, *it , initial_phase, pitch);
+        vector<int16_t> samples = osc(duration);
+
+        EXPECT_EQ(samples.size(), duration * synthesiser.sample_rate());
+
+    }
 }
 
 //========================================================================
