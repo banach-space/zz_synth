@@ -11,8 +11,15 @@
 // License: GNU GPL v2.0 
 //========================================================================
 
+#include <algorithm>
+
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
+
+#include <common/synth_config.h>
+#include <oscillator/oscillator.h>
+
+using namespace std;
 
 //========================================================================
 // UTILITIES 
@@ -33,14 +40,22 @@ TEST(YourTestNameTest, SubtestName)
     SynthConfig &synthesiser  = SynthConfig::getInstance();
     synthesiser.Init();	
 
+    
     for (auto it = volume.begin(); it != volume.end(); it++)
     {
+        auto outside_bounds = [=](int16_t sample) 
+        {
+            return (sample > *it) && (sample < -*it);
+        };
+
         // 1. Generate the oscillator and the sound-wave
         SineWaveform osc(synthesiser, *it , initial_phase, pitch);
         vector<int16_t> samples = osc(duration);
 
-        EXPECT_EQ(samples.size(), duration * synthesiser.sample_rate());
+        EXPECT_EQ(samples.size(), duration * synthesiser.sampling_rate());
+        auto n_outside_bounds = count_if(samples.begin(), samples.end(), outside_bounds);
 
+        EXPECT_EQ(n_outside_bounds, 0);
     }
 }
 

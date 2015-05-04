@@ -91,6 +91,7 @@ lib_oscillator_bin := $(lib_oscillator)/liboscillator.a
 unit_test_rww := unit_tests/read_write_wav
 unit_test_env := unit_tests/envelope
 unit_test_seg := unit_tests/segment
+unit_test_osc := unit_tests/oscillator
 unit_tests    := unit_tests/
 
 example_plain_note         := examples/plain_note
@@ -154,6 +155,11 @@ $(unit_test_env): $(libraries)
 	$(if $(TARGET), $(MAKE) $(TARGET))
 
 $(unit_test_seg): $(libraries)
+	@$(build-msg)
+	$(MAKE) --directory=$@ $(TARGET)
+	$(if $(TARGET), $(MAKE) $(TARGET))
+
+$(unit_test_osc): $(libraries)
 	@$(build-msg)
 	$(MAKE) --directory=$@ $(TARGET)
 	$(if $(TARGET), $(MAKE) $(TARGET))

@@ -128,7 +128,7 @@ private:
 //      Basic sinewave: y[n] = A*sin(kTwoPi*f*n + phi), in which A is the
 //      peak amplitude, f is the frequency (determined by pitch_id), and
 //      phi is the initial phase. This sine wave is implemented with aid
-//      of the sin() function from <cmath.h>.
+//      of the sin() function from <cmath>.
 //========================================================================
 class SineWaveform : public Oscillator
 {
