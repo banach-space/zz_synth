@@ -16,30 +16,6 @@
 using namespace std;
 
 //========================================================================
-// PRIVATE FUNCTIONS DECLARATIONS
-//========================================================================
-static void GenWaveformAssertions(
-            int16_t peak_amplitude,
-            double initial_phase,
-            double phase_increment
-);
-
-//========================================================================
-// PRIVATE FUNCTIONS DEFINITIONS
-//========================================================================
-static void GenWaveformAssertions(
-            int16_t peak_amplitude,
-            double initial_phase,
-            double phase_increment
-)
-{
-    assert((initial_phase >= 0) && (initial_phase <= kTwoPi));
-    assert((phase_increment >= -kPi) && (phase_increment <= kPi));
-    assert((peak_amplitude >= 0) && (peak_amplitude <= 0x7fff));
-
-}
-
-//========================================================================
 // CLASS: Oscillator
 //========================================================================
 //------------------------------------------------------------------------
@@ -55,7 +31,7 @@ Oscillator::Oscillator(
     initial_phase_(initial_phase_arg),
     sampling_rate_(synthesiser.sampling_rate())
 {
-    /* Verify the correctness of input */
+    /* Assert the input */
     assert((peak_amplitude_arg >= 0) && (peak_amplitude_arg <= 0x7fff));
     assert((initial_phase_arg >= 0) && (initial_phase_arg <= kTwoPi));
     assert((pitch_id_arg >= 0) && (pitch_id_arg <= kNumberOfFrequencies));
@@ -70,13 +46,13 @@ Oscillator::Oscillator(
         const SynthConfig& synthesiser,
         int16_t peak_amplitude_arg, 
         double initial_phase_arg,
-        float frequency_arg):
+        double frequency_arg):
     peak_amplitude_(peak_amplitude_arg),
     frequency_(frequency_arg),
     initial_phase_(initial_phase_arg),
     sampling_rate_(synthesiser.sampling_rate())
 {
-    /* Verify the correctness of input */
+    /* Assert the input */
     assert((peak_amplitude_arg >= 0) && (peak_amplitude_arg <= 0x7fff));
     assert((initial_phase_arg >= 0) && (initial_phase_arg <= kTwoPi));
     assert((frequency_arg >= -synthesiser.sampling_rate() / 2.0) 
@@ -123,7 +99,7 @@ SineWaveform::SineWaveform(
         const SynthConfig& synthesiser,
         int16_t peak_amplitude, 
         double initial_phase ,
-        float frequency):
+        double frequency):
     Oscillator(synthesiser, peak_amplitude, initial_phase, frequency)
 {
 }
@@ -158,8 +134,6 @@ std::vector<int16_t> SineWaveform::GenWaveform(
             double phase_increment
             ) const 
 {
-    // Assertions before it makes sense to proceeds
-    GenWaveformAssertions(peak_amplitude, initial_phase, phase_increment);
     
     double phase = initial_phase;
 
@@ -195,7 +169,7 @@ SawtoothWaveform::SawtoothWaveform(
         const SynthConfig& synthesiser,
         int16_t peak_amplitude, 
         double initial_phase ,
-        float frequency):
+        double frequency):
     Oscillator(synthesiser, peak_amplitude, initial_phase, frequency)
 {
 }
@@ -230,9 +204,6 @@ std::vector<int16_t> SawtoothWaveform::GenWaveform(
             double phase_increment
             ) const 
 {
-    // Assertions before it makes sense to proceeds
-    GenWaveformAssertions(peak_amplitude, initial_phase, phase_increment);
-    
     // saw_tooth_value is a floating point in the [-1, 1] range. 
     // (For consistency with sin()).
     double saw_tooth_value = initial_phase / kTwoPi;
@@ -271,7 +242,7 @@ SquareWaveform::SquareWaveform(
         const SynthConfig& synthesiser,
         int16_t peak_amplitude, 
         double initial_phase ,
-        float frequency):
+        double frequency):
     Oscillator(synthesiser, peak_amplitude, initial_phase, frequency)
 {
 }
@@ -306,9 +277,6 @@ std::vector<int16_t> SquareWaveform::GenWaveform(
             double phase_increment
             ) const 
 {
-    // Assertions before it makes sense to proceeds
-    GenWaveformAssertions(peak_amplitude, initial_phase, phase_increment);
-    
     double phase = initial_phase;
     double value = 0;
 
@@ -345,7 +313,7 @@ TriangleWaveform::TriangleWaveform(
         const SynthConfig& synthesiser,
         int16_t peak_amplitude, 
         double initial_phase ,
-        float frequency):
+        double frequency):
     Oscillator(synthesiser, peak_amplitude, initial_phase, frequency)
 {
 }
@@ -380,9 +348,6 @@ std::vector<int16_t> TriangleWaveform::GenWaveform(
             double phase_increment
             ) const 
 {
-    // Assertions before it makes sense to proceeds
-    GenWaveformAssertions(peak_amplitude, initial_phase, phase_increment);
-    
     const double one_div_pi = 1.0/ kPi;
     double triangle_wave_value;
     double phase = initial_phase;

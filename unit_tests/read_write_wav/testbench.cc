@@ -82,7 +82,7 @@ TEST(ReadWriteWaveFileTest, HandleDifferentPitches)
 
 TEST(ReadWriteWaveFileTest, HandleDifferentVolumes)
 {
-    uint32_t pitch             = 48;
+    size_t pitch               = 48;
     vector<int16_t> volume     = {0, 1 << 7, 1 << 14};
     uint32_t duration = 5;
     double initial_phase       = 0;
@@ -115,7 +115,7 @@ TEST(ReadWriteWaveFileTest, HandleDifferentVolumes)
 
 TEST(ReadWriteWaveFileTest, HandleDifferentDuration)
 {
-    uint32_t pitch            = 48;
+    size_t   pitch            = 48;
     int16_t volume            = 1 << 14;
     vector<uint32_t> duration = {0, 5, 10};
     double initial_phase      = 0;

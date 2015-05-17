@@ -1,6 +1,6 @@
 //========================================================================
 //  FILE:
-//      templatetes/class_name.h 
+//      template_files/class_name.h 
 //
 //  AUTHOR:
 //      zimzum@github 

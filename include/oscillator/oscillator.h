@@ -74,7 +74,7 @@ public:
             const SynthConfig& synthesiser,
             int16_t peak_amplitude, 
             double initial_phase ,
-            float frequency);
+            double frequency);
     virtual ~Oscillator();
     explicit Oscillator(const Oscillator& rhs)   = delete;
     explicit Oscillator(Oscillator&& rhs)        = delete;
@@ -175,7 +175,7 @@ public:
             const SynthConfig& synthesiser,
             int16_t peak_amplitude, 
             double initial_phase ,
-            float frequency);
+            double frequency);
     ~SineWaveform() = default;
 
 private:
@@ -246,7 +246,7 @@ public:
             const SynthConfig& synthesiser,
             int16_t peak_amplitude, 
             double initial_phase ,
-            float frequency);
+            double frequency);
     ~SawtoothWaveform() = default;
 
 private:
@@ -317,7 +317,7 @@ public:
             const SynthConfig& synthesiser,
             int16_t peak_amplitude, 
             double initial_phase ,
-            float frequency);
+            double frequency);
     ~SquareWaveform() = default;
 
 private:
@@ -386,7 +386,7 @@ public:
             const SynthConfig& synthesiser,
             int16_t peak_amplitude, 
             double initial_phase ,
-            float frequency);
+            double frequency);
     ~TriangleWaveform() = default;
 
 private:
