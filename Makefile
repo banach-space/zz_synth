@@ -72,21 +72,24 @@
 ZZDIR = ~/github/zz_synth
 include include/zz_synth.mk
 
-lib_common     := src/common
-lib_global     := src/global
-lib_envelope   := src/envelope
-lib_oscillator := src/oscillator
+lib_common        := src/common
+lib_global        := src/global
+lib_envelope      := src/envelope
+lib_oscillator    := src/oscillator
+lib_fm_synthesiser := src/fm_synthesiser
 
-libraries      :=	\
-	$(lib_common)	\
-	$(lib_envelope)	\
-	$(lib_global)	\
-	$(lib_oscillator)
+libraries      :=	 \
+	$(lib_common)	 \
+	$(lib_envelope)	 \
+	$(lib_global)	 \
+	$(lib_oscillator)\
+    $(lib_fm_synthesiser)
 
-lib_common_bin     := $(lib_common)/libcommon.a
-lib_global_bin     := $(lib_global)/libglobal.a
-lib_envelope_bin   := $(lib_envelope)/libenvelope.a
-lib_oscillator_bin := $(lib_oscillator)/liboscillator.a
+lib_common_bin        := $(lib_common)/libcommon.a
+lib_global_bin        := $(lib_global)/libglobal.a
+lib_envelope_bin      := $(lib_envelope)/libenvelope.a
+lib_oscillator_bin    := $(lib_oscillator)/liboscillator.a
+lib_fm_synthesiser_bin := $(lib_fm_synthesiser)/libfm_synthesiser.a
 
 unit_test_rww := unit_tests/read_write_wav
 unit_test_env := unit_tests/envelope
@@ -140,6 +143,11 @@ $(lib_envelope):
 	$(if $(TARGET), $(MAKE) $(TARGET))
 
 $(lib_oscillator):
+	@$(build-msg)
+	$(MAKE) --directory=$@ $(TARGET)
+	$(if $(TARGET), $(MAKE) $(TARGET))
+
+$(lib_fm_synthesiser):
 	@$(build-msg)
 	$(MAKE) --directory=$@ $(TARGET)
 	$(if $(TARGET), $(MAKE) $(TARGET))

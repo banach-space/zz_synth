@@ -84,7 +84,7 @@ TEST(ReadWriteWaveFileTest, HandleDifferentVolumes)
 {
     size_t pitch               = 48;
     vector<int16_t> volume     = {0, 1 << 7, 1 << 14};
-    uint32_t duration = 5;
+    uint32_t duration          = 5;
     double initial_phase       = 0;
     const string file_name("test_volume.wav");
 
