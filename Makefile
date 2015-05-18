@@ -189,11 +189,12 @@ $(example_adsr_envelope_note): $(libraries)
 	$(if $(TARGET), $(MAKE) $(TARGET))
 
 $(example_waveforms): $(libraries)
+	echo dupa
 	@$(build-msg)
 	$(MAKE) --directory=$@ $(TARGET)
 	$(if $(TARGET), $(MAKE) $(TARGET))
 
-$(example_fm_waveforms): $(libfm_synthesiser)
+$(example_fm_waveforms): $(lib_fm_synthesiser)
 	@$(build-msg)
 	$(MAKE) --directory=$@ $(TARGET)
 	$(if $(TARGET), $(MAKE) $(TARGET))

@@ -59,7 +59,7 @@ chkdirs:
 #-----------------------
 #  DEPENDENCIES 
 #-----------------------
-waveforms.cc: \
+fm_waveforms.cc: \
 	$(ZZINC)/common/wave_file.h\
 	$(ZZINC)/global/global_variables.h\
 	$(ZZINC)/fm_synthesiser/fm_synthesiser.h\
