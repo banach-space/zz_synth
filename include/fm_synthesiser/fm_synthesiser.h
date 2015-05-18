@@ -36,7 +36,7 @@ public:
             std::size_t pitch_id_carrier,
             std::size_t pitch_id_modulator,
             double frequency_deviation);
-    virtual ~FmSynthesiser() = default;
+    ~FmSynthesiser() = default;
     explicit FmSynthesiser(const FmSynthesiser& rhs) = delete;
     explicit FmSynthesiser(FmSynthesiser&& rhs) = delete;
     FmSynthesiser& operator=(const FmSynthesiser &rhs) = delete;
@@ -73,17 +73,6 @@ protected:
 
 private:
     //--------------------------------------------------------------------
-    // 3. INTERFACE DEFINITION 
-    //--------------------------------------------------------------------
-    virtual std::vector<int16_t> GenWaveform(
-            size_t number_of_samples,
-            int16_t peak_amplitude,
-            double initial_phase,
-            double frequency_carrier,
-            double frequency_modulator
-            ) const;
-
-    //--------------------------------------------------------------------
     // 5. DATA MEMMBERS 
     //--------------------------------------------------------------------
     int16_t peak_amplitude_;
@@ -91,6 +80,8 @@ private:
     double frequency_modulator_;
     double initial_phase_;
     uint32_t sampling_rate_;
+    double frequency_deviation_;
+    double phase_increment_per_sample_at_sampling_rate_;
     
 };
 

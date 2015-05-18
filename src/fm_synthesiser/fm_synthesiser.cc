@@ -32,7 +32,9 @@ FmSynthesiser::FmSynthesiser(
     frequency_carrier_(synthesiser.frequency_table(pitch_id_carrier_arg)),
     frequency_modulator_(synthesiser.frequency_table(pitch_id_modulator_arg)),
     initial_phase_(initial_phase_arg),
-    sampling_rate_(synthesiser.sampling_rate())
+    sampling_rate_(synthesiser.sampling_rate()),
+    frequency_deviation_(frequency_deviation),
+    phase_increment_per_sample_at_sampling_rate_(synthesiser.phase_increment_per_sample())
 {
 
 }
@@ -42,57 +44,27 @@ FmSynthesiser::FmSynthesiser(
 //------------------------------------------------------------------------
 vector<int16_t> FmSynthesiser::operator()(uint32_t number_of_seconds)
 {
-    size_t number_of_samples = (sampling_rate_ * number_of_seconds);
-
-    return GenWaveform(
-            number_of_samples, 
-            peak_amplitude_, 
-            initial_phase_, 
-            frequency_carrier_,
-            frequency_modulator_);
-}
-
-//------------------------------------------------------------------------
-// 2. INTERFACE DEFINITION: private
-//------------------------------------------------------------------------
-//------------------------------------------------------------------------
-//  NAME:
-//      FmSynthesiser::GenWaveform
-//  
-//  DESCRIPTION:
-//      Function that synthesises a frequency mdoulated waveform and which
-//      is used by FmSynthesiser::operator(). 
-//  INPUT:
-//      number_of_samples   - number of samples in the waveform
-//                            (TODO!!! min and max value)
-//      peak_amplitude      - peak amplitude of the waveform
-//                            (range: [0, 2^15-1]). 
-//      initial_phase       - initial phase of the waveform
-//                            (range: [0, kTwoPi))
-//      frequency_carrier   -
-//      frequency_modulator -
-//  RETURN:
-//      Vector of samples for the requested waveform
-//------------------------------------------------------------------------
-std::vector<int16_t> FmSynthesiser::GenWaveform(
-            size_t number_of_samples,
-            int16_t peak_amplitude,
-            double initial_phase,
-            double frequency_carrier,
-            double frequency_modulator 
-            ) const
-{
-    
-    double phase = initial_phase;
+    size_t number_of_samples         = (sampling_rate_ * number_of_seconds);
+    double phase_modulator           = 0.0;
+    double modulator_current_value   = 0.0;
+    double phase_increment_modulator = sampling_rate_ * frequency_modulator_
+        * phase_increment_per_sample_at_sampling_rate_;
 
     vector<int16_t> samples(number_of_samples);
 
     for (auto& it : samples)
     {
-        //it = static_cast<int16_t>(peak_amplitude * sin(phase));
+        modulator_current_value = frequency_deviation_ * sin(phase_modulator);
+        it = static_cast<int16_t>(
+                phase_increment_per_sample_at_sampling_rate_
+                * (modulator_current_value + frequency_carrier_)
+                + initial_phase_);
 
-        //if ((phase += phase_increment) >= kTwoPi)
-        //phase -= kTwoPi;
+        phase_modulator += phase_increment_modulator;
+        if (phase_modulator >= kTwoPi)
+        {
+            phase_modulator -= kTwoPi;
+        }
     }
 
     return samples;
