@@ -6,14 +6,17 @@
 #   zimzum@github 
 #
 # DESCRIPTION:
-#   This is a makefile for the examples/adsr_envelope_note/ directory.
-#   Note that this Makefile was not designed to be used as a standalone
+#   This is a makefile for the following directory:
+#
+#     [dir_name] = examples/adsr_envelope_note
+#
+#   This Makefile was not designed to be used as a standalone
 #   build script and will not work unless the specified dependencies from
 #   other directories are already built. Instead, you can build the
 #   testbench specified here by typing the following in the root
-#   directory by:
+#   directory:
 #
-#   ~/zz_synth$ make examples/adsr_envelope_note/
+#   $ make  [dir_name]
 #
 #   This is the recommended way of using this script. Check the main
 #   Makefile for available options.
