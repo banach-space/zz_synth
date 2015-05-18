@@ -101,6 +101,7 @@ example_plain_note         := examples/plain_note
 example_ar_envelope_note   := examples/ar_envelope_note
 example_adsr_envelope_note := examples/adsr_envelope_note
 example_waveforms          := examples/waveforms
+example_fm_waveforms       := examples/fm_waveforms
 examples                   := examples/
 
 .PHONY:				\
@@ -192,6 +193,11 @@ $(example_waveforms): $(libraries)
 	$(MAKE) --directory=$@ $(TARGET)
 	$(if $(TARGET), $(MAKE) $(TARGET))
 
+$(example_fm_waveforms): $(libfm_synthesiser)
+	@$(build-msg)
+	$(MAKE) --directory=$@ $(TARGET)
+	$(if $(TARGET), $(MAKE) $(TARGET))
+
 $(lib_common_bin): $(lib_common)
 
 $(lib_global_bin): $(lib_global)
@@ -204,7 +210,8 @@ $(examples):\
 	$(example_plain_note)\
 	$(example_ar_envelope_note)\
 	$(example_adrs_envelope)\
-	$(example_waveforms)
+	$(example_waveforms)\
+	$(example_fm_waveforms)
 
 TAGS: 
 	@$(build-msg)
