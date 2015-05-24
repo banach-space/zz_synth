@@ -33,12 +33,12 @@ include ../../include/zz_synth.mk
 #-----------------------
 source_files = waveforms.cc
 libraries    =\
-	$(ZZDIR)/lib/libcommon.a\
-	$(ZZDIR)/lib/libglobal.a\
-	$(ZZDIR)/lib/liboscillator.a
+	$(lib_common_bin)\
+	$(lib_global_bin)\
+	$(lib_oscillator_bin)
 example      = $(ZZBIN)/waveforms$(EXE)
 
-ZZEXAMPLES = $(ZZDIR)/examples/waveforms/sounds
+DIR_SOUNDS = $(DIR_EXAMPLES)/waveforms/sounds
 
 include ../../include/zz_synth_rules.mk
 
@@ -54,7 +54,7 @@ clean:
 
 chkdirs:
 	$(MKDIR) $(ZZBIN)
-	$(MKDIR) $(ZZEXAMPLES)
+	$(MKDIR) $(DIR_SOUNDS)
 
 #-----------------------
 #  DEPENDENCIES 

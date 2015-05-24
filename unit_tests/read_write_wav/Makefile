@@ -33,9 +33,9 @@ include ../../include/zz_synth.mk
 #-----------------------
 source_files = testbench.cc
 libraries = \
-	$(ZZDIR)/lib/libcommon.a\
-	$(ZZDIR)/lib/libglobal.a\
-	$(ZZDIR)/lib/liboscillator.a
+	$(lib_common_bin)\
+	$(lib_global_bin)\
+	$(lib_oscillator_bin)
 	
 testbench = $(ZZBIN)/testbench_rww$(EXE)
 

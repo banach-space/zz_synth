@@ -41,7 +41,7 @@ libraries    =\
 
 example      = $(ZZBIN)/fm_waveforms$(EXE)
 
-ZZEXAMPLES = $(ZZDIR)/examples/fm_waveforms/sounds
+DIR_SOUNDS = $(DIR_EXAMPLES)/fm_waveforms/sounds
 
 include ../../include/zz_synth_rules.mk
 
@@ -57,7 +57,7 @@ clean:
 
 chkdirs:
 	$(MKDIR) $(ZZBIN)
-	$(MKDIR) $(ZZEXAMPLES)
+	$(MKDIR) $(DIR_SOUNDS)
 
 #-----------------------
 #  DEPENDENCIES 

@@ -20,10 +20,12 @@ ifeq ($(ZZDIR),)
 $(error No value for ZZDIR)
 endif
 
-ZZBIN = $(ZZDIR)/bin
-ZZINC = $(ZZDIR)/include
-ZZSRC = $(ZZDIR)/src
-ZZLIB = $(ZZDIR)/lib
+ZZBIN          = $(ZZDIR)/bin
+ZZINC          = $(ZZDIR)/include
+ZZSRC          = $(ZZDIR)/src
+ZZLIB          = $(ZZDIR)/lib
+DIR_UNIT_TESTS = $(ZZDIR)/unit_tests
+DIR_EXAMPLES   = $(ZZDIR)/examples
 
 #-----------------------
 #  LIBRARIES 

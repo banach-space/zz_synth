@@ -34,12 +34,12 @@ include ../../include/zz_synth.mk
 #-----------------------
 source_files = plain_note.cc
 libraries    =\
-	$(ZZDIR)/lib/libcommon.a\
-	$(ZZDIR)/lib/libglobal.a\
-	$(ZZDIR)/lib/liboscillator.a
+	$(lib_common_bin)\
+	$(lib_global_bin)\
+	$(lib_oscillator_bin)
 example      = $(ZZBIN)/plain_note$(EXE)
 
-ZZEXAMPLES = $(ZZDIR)/examples/plain_note/sounds
+DIR_SOUNDS = $(DIR_EXAMPLES)/plain_note/sounds
 
 include ../../include/zz_synth_rules.mk
 
@@ -55,7 +55,7 @@ clean:
 
 chkdirs:
 	$(MKDIR) $(ZZBIN)
-	$(MKDIR) $(ZZEXAMPLES)
+	$(MKDIR) $(DIR_SOUNDS)
 
 #-----------------------
 #  DEPENDENCIES 

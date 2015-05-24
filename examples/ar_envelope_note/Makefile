@@ -33,13 +33,15 @@ include ../../include/zz_synth.mk
 #-----------------------
 source_files = ar_envelope_note.cc
 libraries    = \
-	$(ZZDIR)/lib/libcommon.a\
-	$(ZZDIR)/lib/libglobal.a\
-	$(ZZDIR)/lib/libenvelope.a\
-	$(ZZDIR)/lib/liboscillator.a
+	$(lib_common_bin)\
+	$(lib_global_bin)\
+	$(lib_envelope_bin)\
+	$(lib_oscillator_bin)
+
 example = $(ZZBIN)/ar_envelope_note$(EXE)
 
-ZZEXAMPLES = $(ZZDIR)/examples/ar_envelope_note/sounds
+DIR_SOUNDS = $(DIR_EXAMPLES)/ar_envelope_note/sounds
+
 
 include ../../include/zz_synth_rules.mk
 
@@ -55,7 +57,7 @@ clean:
 
 chkdirs:
 	$(MKDIR) $(ZZBIN)
-	$(MKDIR) $(ZZEXAMPLES)
+	$(MKDIR) $(DIR_SOUNDS)
 
 #-----------------------
 #  DEPENDENCIES 
