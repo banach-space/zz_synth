@@ -24,8 +24,8 @@
 # License: GNU GPL v2.0 
 #========================================================================
 ZZDIR   = ~/github/zz_synth
-library := $(ZZDIR)/lib/libfmsynthesiser.a
 include ../../include/zz_synth.mk
+library := $(lib_fm_synthesiser_bin)
 
 .PHONY: all new clean chkdirs
 

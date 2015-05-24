@@ -8,6 +8,9 @@
 //  DESCRIPTION:
 //      Classes for generating audio spectra using frequency modulation.
 //
+//  DEPENDENCIES:
+//      lib/liboscillator.a
+//
 //  License: GNU GPL v2.0 
 //========================================================================
 
@@ -16,6 +19,7 @@
 
 #include <global/global_include.h>
 #include <common/synth_config.h>
+#include <oscillator/oscillator.h>
 
 //========================================================================
 // CLASS: FmSynthesiser
@@ -34,8 +38,7 @@ public:
             int16_t peak_amplitude, 
             double initial_phase ,
             std::size_t pitch_id_carrier,
-            std::size_t pitch_id_modulator,
-            double frequency_deviation);
+            std::size_t pitch_id_modulator);
     ~FmSynthesiser() = default;
     explicit FmSynthesiser(const FmSynthesiser& rhs) = delete;
     explicit FmSynthesiser(FmSynthesiser&& rhs) = delete;
@@ -46,19 +49,9 @@ public:
     // 2. GENERAL USER INTERFACE 
     //--------------------------------------------------------------------
     //--------------------------------------------------------------------
-    //  NAME:
-    //      operator()
-    //  
-    //  DESCRIPTION:
-    //      Oscillators by oscillating generate waveforms. This operator
-    //      will generate one for you.
-    //  INPUT:
-    //      number_of_seconds - the length (in seconds) of the desired
-    //                          waveform (TODO!!! Limit?!)
-    //  RETURN:
-    //      Vector of samples for the requested waveform
+    //  TODO!!! 
     //--------------------------------------------------------------------
-	std::vector<int16_t> operator()(uint32_t number_of_seconds);
+	std::vector<int16_t> operator()(uint32_t number_of_seconds) const;
 
     //--------------------------------------------------------------------
     // 3. ACCESSORS
@@ -75,13 +68,11 @@ private:
     //--------------------------------------------------------------------
     // 5. DATA MEMMBERS 
     //--------------------------------------------------------------------
+    const SynthConfig& synthesiser_;
     int16_t peak_amplitude_;
+    double initial_phase_;
     double frequency_carrier_;
     double frequency_modulator_;
-    double initial_phase_;
-    uint32_t sampling_rate_;
-    double frequency_deviation_;
-    double phase_increment_per_sample_at_sampling_rate_;
     
 };
 

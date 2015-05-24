@@ -56,12 +56,12 @@ int main()
         sprintf(file_name, "examples/fm_waveforms/sounds/fm_wave_%d.wav", file_idx);
 
         // 2. Generate the samples 
-        SineWaveform osc_sine(synthesiser, volume, initial_phase, *it, pitch_id_modulator, frequency_deviation);
-        vector<int16_t> samples_out_sine = osc_sine(duration);
+        FmSynthesiser fm_synthesiser(synthesiser, volume, initial_phase, *it, *it);
+        vector<int16_t> samples_output = fm_synthesiser(duration);
 
         // 3. Save the samples to the file 
         WaveFileOut wf_out_sine(duration);
-        wf_out_sine.SaveBufferToFile(file_name, samples_out_sine);
+        wf_out_sine.SaveBufferToFile(file_name, samples_output);
     }
 
 	return 0;

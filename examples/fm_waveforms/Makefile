@@ -32,10 +32,13 @@ include ../../include/zz_synth.mk
 #  SOURCE/OBJECT FILES 
 #-----------------------
 source_files = fm_waveforms.cc
+
 libraries    =\
-	$(ZZDIR)/lib/libcommon.a\
-	$(ZZDIR)/lib/libglobal.a\
-	$(ZZDIR)/lib/libfm_synthesiser.a
+	$(lib_common_bin)\
+	$(lib_global_bin)\
+	$(lib_fm_synthesiser_bin)\
+	$(lib_oscillator_bin)
+
 example      = $(ZZBIN)/fm_waveforms$(EXE)
 
 ZZEXAMPLES = $(ZZDIR)/examples/fm_waveforms/sounds
@@ -62,5 +65,6 @@ chkdirs:
 fm_waveforms.cc: \
 	$(ZZINC)/common/wave_file.h\
 	$(ZZINC)/global/global_variables.h\
+	$(ZZINC)/oscillator/oscillator.h\
 	$(ZZINC)/fm_synthesiser/fm_synthesiser.h\
     $(ZZINC)/common/synth_config.h
