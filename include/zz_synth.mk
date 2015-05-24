@@ -1,4 +1,4 @@
-#=============================================================
+#========================================================================
 # FILE:
 #   inclue/zz_synth.mk 
 #
@@ -9,8 +9,10 @@
 #   Make variables/macros for compiling and installing zz_synth 
 #
 # License: GNU GPL v2.0 
-#=============================================================
-
+#========================================================================
+#-----------------------
+#  DIRECTORIES 
+#-----------------------
 # ZZDIR is the root directory for zz_synth. The main Makefile 
 # sets this to the directory of the Makefile. Optionally, set
 # this from the command line: make ZZDIR=path
@@ -18,8 +20,6 @@ ifeq ($(ZZDIR),)
 $(error No value for ZZDIR)
 endif
 
-# The directory containing the binaries, include files and
-# libraries
 ZZBIN = $(ZZDIR)/bin
 ZZINC = $(ZZDIR)/include
 ZZSRC = $(ZZDIR)/src
@@ -28,8 +28,11 @@ ZZLIB = $(ZZDIR)/lib
 #-----------------------
 #  LIBRARIES 
 #-----------------------
-lib_common  := src/common
-#lib_common  := $(ZZLIB)/libcommon.a
+lib_common_bin         := $(ZZLIB)/libcommon.a
+lib_global_bin         := $(ZZLIB)/libglobal.a
+lib_envelope_bin       := $(ZZLIB)/libenvelope.a
+lib_oscillator_bin     := $(ZZLIB)/liboscillator.a
+lib_fm_synthesiser_bin := $(ZZLIB)/libfm_synthesiser.a
 
 #-----------------------
 #  COMPILE VARIABLES 

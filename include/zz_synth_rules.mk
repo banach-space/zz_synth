@@ -78,5 +78,9 @@ $(testbench): $(object_files) $(libraries)
 	-rm $(object_files)
 
 $(example): $(object_files) $(libraries)
+	@echo ---------------------------------------
+	@echo --==LIBRARIES==--
+	@echo $(libraries)
+	@echo ---------------------------------------
 	$(LINK.cc) $(LIBS_UNIT_TESTS) $(LIBS) $^ -o $@
 	-rm $(object_files)
