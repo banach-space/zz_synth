@@ -30,9 +30,9 @@ using namespace std;
 int main()
 {
     // Param 1: Pitch
-    vector<size_t> pitch = {45};
-    size_t pitch_modulator = {10};
-    double frequency_deviation = 20; 
+    size_t pitch_carrier = 64;
+    vector<size_t> pitch_modulator = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120};
+    vector<double> index_of_modulation = {1 << 3, 1 << 5, 1 << 8};
     // Param 2: Volume
     int16_t volume       = 1 << 14;
     // Param 3: Duration
@@ -47,21 +47,34 @@ int main()
     SynthConfig &synthesiser  = SynthConfig::getInstance();
     synthesiser.Init();	
 
-    for (auto it = pitch.begin(); it != pitch.end(); it++)
+    for (auto it : pitch_modulator)
     {
-        //----------------------------------------------------------------
-        // Sine-wave
-        //----------------------------------------------------------------
-        // 1. Generate filename
-        sprintf(file_name, "examples/fm_waveforms/sounds/fm_wave_%d.wav", file_idx);
+        for (auto it2 : index_of_modulation)
+        {
+            //----------------------------------------------------------------
+            // Sine-wave
+            //----------------------------------------------------------------
+            // 1. Generate filename
+            sprintf(
+                    file_name, 
+                    "examples/fm_waveforms/sounds/fm_wave_pitch_id_%lu_iom_%lu.wav", 
+                    it, 
+                    static_cast<size_t>(it2));
 
-        // 2. Generate the samples 
-        FmSynthesiser fm_synthesiser(synthesiser, volume, initial_phase, *it, *it);
-        vector<int16_t> samples_output = fm_synthesiser(duration);
+            // 2. Generate the samples 
+            FmSynthesiser fm_synthesiser(
+                    synthesiser, 
+                    volume, 
+                    initial_phase, 
+                    pitch_carrier, 
+                    it, 
+                    it2);
+            vector<int16_t> samples_output = fm_synthesiser(duration);
 
-        // 3. Save the samples to the file 
-        WaveFileOut wf_out_sine(duration);
-        wf_out_sine.SaveBufferToFile(file_name, samples_output);
+            // 3. Save the samples to the file 
+            WaveFileOut wf_out_sine(duration);
+            wf_out_sine.SaveBufferToFile(file_name, samples_output);
+        }
     }
 
 	return 0;

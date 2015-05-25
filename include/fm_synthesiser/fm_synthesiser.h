@@ -38,7 +38,8 @@ public:
             int16_t peak_amplitude, 
             double initial_phase ,
             std::size_t pitch_id_carrier,
-            std::size_t pitch_id_modulator);
+            std::size_t pitch_id_modulator,
+            double index_of_modulation);
     ~FmSynthesiser() = default;
     explicit FmSynthesiser(const FmSynthesiser& rhs) = delete;
     explicit FmSynthesiser(FmSynthesiser&& rhs) = delete;
@@ -73,6 +74,7 @@ private:
     double initial_phase_;
     double frequency_carrier_;
     double frequency_modulator_;
+    double index_of_modulation_;
     
 };
 
