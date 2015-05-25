@@ -55,8 +55,8 @@ Oscillator::Oscillator(
     /* Assert the input */
     assert((peak_amplitude_arg >= 0) && (peak_amplitude_arg <= 0x7fff));
     assert((initial_phase_arg >= 0) && (initial_phase_arg <= kTwoPi));
-    assert((frequency_arg >= -synthesiser.sampling_rate() / 2.0) 
-            && (frequency_arg >= -synthesiser.sampling_rate() / 2.0));
+    assert((frequency_arg >= -(synthesiser.sampling_rate() / 2.0)) 
+            && (frequency_arg <= synthesiser.sampling_rate() / 2.0));
 
     /* Calculate phase increment. Make sure it falls into the [0, kPi) range. */
     phase_increment_ = synthesiser.phase_increment_per_sample() * frequency_;
