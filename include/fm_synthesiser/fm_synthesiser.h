@@ -25,7 +25,18 @@
 // CLASS: FmSynthesiser
 //
 // DESCRIPTION:
-//      TODO!!!
+//      The FmSynthesiser class that generates frequency modulated 
+//      sound-waves. It implements the classic form [1] of frequency
+//      modulation and for this it uses the SineWaveForm class as
+//      the oscillator. Note also that this class holds a reference
+//      to the synthesiser class. This simplifies the interface as
+//      various members of the synthesiser are used throughout.
+//
+//  REFERENCES:
+//      [1] Miller Puckette, Theory and Techniques of Electronic Music,
+//          Section 5.4
+//
+//      TODO!!! Do we really need to hold the synthesiser reference?
 //========================================================================
 class FmSynthesiser 
 {
@@ -50,7 +61,17 @@ public:
     // 2. GENERAL USER INTERFACE 
     //--------------------------------------------------------------------
     //--------------------------------------------------------------------
-    //  TODO!!! 
+    //  NAME:
+    //      operator()
+    //  
+    //  DESCRIPTION:
+    //      Returns a frequency modulated sound wave-form determined
+    //      by the parameters passed to the constructor.
+    //  INPUT:
+    //      number_of_seconds - the length (in seconds) of the desired
+    //                          waveform (TODO!!! Limit?!)
+    //  RETURN:
+    //      Vector of samples for the requested waveform
     //--------------------------------------------------------------------
 	std::vector<int16_t> operator()(uint32_t number_of_seconds) const;
 

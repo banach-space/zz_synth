@@ -6,7 +6,7 @@
 //		zimzum@github 
 //
 // DESCRIPTION:
-//      TODO!!!
+//      Testbench for FM synthesiser
 //
 // License: GNU GPL v2.0 
 //========================================================================
@@ -25,17 +25,13 @@ using namespace std;
 //========================================================================
 void TestFmSynthesiser()
 {
-    // Param 1: Pitch
-    size_t pitch_carrier = 64;
-    vector<size_t> pitch_modulator = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120};
+    size_t pitch_carrier               = 64;
+    vector<size_t> pitch_modulator     = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120};
     vector<double> index_of_modulation = {1 << 3, 1 << 5, 1 << 8};
-    // Param 2: Volume
-    int16_t volume       = 1 << 14;
-    // Param 4: Initial phase
-    double initial_phase = 0;
-
-    size_t pitch           = kNumberOfFrequencies/size_t(2);
-    uint32_t duration      = 1;
+    int16_t volume                     = 1 << 14;
+    double initial_phase               = 0;
+    size_t pitch                       = kNumberOfFrequencies/size_t(2);
+    uint32_t duration                  = 1;
 
     // Initialise the synthesiser
     SynthConfig &synthesiser  = SynthConfig::getInstance();
@@ -54,7 +50,6 @@ void TestFmSynthesiser()
     {
         for (auto it2 : index_of_modulation)
         {
-            // 2. Generate the samples 
             FmSynthesiser fm_synthesiser(
                     synthesiser, 
                     volume, 
@@ -79,7 +74,7 @@ void TestFmSynthesiser()
 //========================================================================
 TEST(YourTestNameTest, SubtestName)
 {
-	// Implement your test here
+    TestFmSynthesiser();
 }
 
 //========================================================================

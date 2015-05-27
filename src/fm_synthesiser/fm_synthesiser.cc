@@ -6,7 +6,7 @@
 //      zimzum@github 
 //
 // DESCRIPTION:
-//      TODO!!!
+//		Implements classes for generating frequency modulated waveforms.
 //
 //  License: GNU GPL v2.0 
 //========================================================================
@@ -59,9 +59,9 @@ vector<int16_t> FmSynthesiser::operator()(uint32_t number_of_seconds) const
     SineWaveform osc(synthesiser, index_of_modulation_, initial_phase_, frequency_modulator_);
     samples_modulator = osc(number_of_seconds);
 
+    // Modulate
     for (auto it = samples_output.begin(), it2 = samples_modulator.begin(); it != samples_output.end(); it++, it2++)
     {
-        //modulator_current_value = index_of_modulation_ * sin(phase_modulator);
         temp = (peak_amplitude_ * sin((frequency_carrier_ + *it2) * current_phase_at_sampling_rate));
         *it = static_cast<int16_t>(temp);
         current_phase_at_sampling_rate += synthesiser_.phase_increment_per_sample();
