@@ -5,7 +5,8 @@ A software synthesiser implemented in C++11.
 
 Status
 --------
-This is work in progress and will remain so for a while. I try to add new features as often as possible, but with other commitments this proves very challenging. 
+Recently I haven't had much time to look into this. This is due to various
+personal and professional commitments.
 
 Technicalities
 --------------
