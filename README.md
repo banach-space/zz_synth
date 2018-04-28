@@ -1,5 +1,6 @@
 zz_synth
 ========
+[![Build Status](https://travis-ci.org/zimzum/zz_synth.svg?branch=master)](https://travis-ci.org/zimzum/zz_synth)
 
 A software synthesiser implemented in C++11. 
 
