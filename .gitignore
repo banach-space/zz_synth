@@ -5,3 +5,6 @@ tags
 files_ctags
 *.wav
 bin/*
+
+# Google Test
+unit_tests/googletest

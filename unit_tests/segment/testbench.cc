@@ -12,7 +12,6 @@
 //========================================================================
 
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
 
 #include <envelope/segment.h>
 #include <global/global_variables.h>

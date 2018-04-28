@@ -14,7 +14,6 @@
 #include <algorithm>
 
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
 
 #include <common/synth_config.h>
 #include <oscillator/oscillator.h>

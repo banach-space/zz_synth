@@ -22,9 +22,9 @@
 #-----------------------
 CPPFLAGS = $(OPTFLAG) -std=c++11 -lstdc++
 #CXX      = g++ -fdiagnostics-show-option
-CXX      = clang-3.4
+CXX      = clang
 
-ifeq "$(CXX)" "clang-3.4"
+ifeq "$(CXX)" "clang"
   include $(ZZINC)/compiler_flags_clang.mk
 else
   include $(ZZINC)/compiler_flags_gcc.mk
@@ -38,14 +38,16 @@ else ifeq "$(COMPILE_FLAGS)" "DEBUG"
   $(info Debuggin compile flags...)
 endif
 
-INCLUDES    = -I $(ZZINC) -I /usr/lib/x86_64-linux-gnu
+INCLUDES    = -I $(ZZINC) -I /usr/lib/x86_64-linux-gnu \
+			  -I $(ZZDIR)/unit_tests/googletest/googletest/include \
+			  -I $(ZZDIR)/unit_tests/googletest/googlemock/include
 COMPILE.cpp = $(CXX) $(CFLAGS) $(INCLUDES) $(CPPFLAGS) $(TARGET_ARCH) -c
 
 LIBS = -lm -lstdc++
 
 # The following are extra include flags needed by the Google Unit Testing
 # framework.
-LIBS_UNIT_TESTS = -lgtest -lgtest_main -lpthread
+LIBS_UNIT_TESTS = -L $(ZZDIR)/unit_tests/googletest/googletest/make/ -lgtest -lpthread
 
 #-----------------------
 #  SHELL COMMANDS 
@@ -74,7 +76,7 @@ $(library): $(object_files)
 
 $(testbench): $(object_files) $(libraries)
 	@echo $(LINK.cc)
-	$(LINK.cc) $(LIBS_UNIT_TESTS) $(LIBS) $^ -o $@
+	$(LINK.cc) $(LIBS) $^ $(LIBS_UNIT_TESTS) -o $@
 	-rm $(object_files)
 
 $(example): $(object_files) $(libraries)

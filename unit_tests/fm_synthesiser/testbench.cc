@@ -12,7 +12,6 @@
 //========================================================================
 
 #include <gtest/gtest.h>
-#include <gmock/gmock.h>
 
 #include <global/global_variables.h>
 #include <common/synth_config.h>
