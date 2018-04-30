@@ -1,0 +1,5 @@
+add_subdirectory(envelope)
+add_subdirectory(fm_synthesiser)
+add_subdirectory(oscillator)
+add_subdirectory(global)
+add_subdirectory(common)

@@ -1,3 +1,4 @@
+dist: trusty
 language: cpp
 compiler:
   - clang
@@ -6,15 +7,15 @@ script:
   # CLONE AND BUILD GTEST
   - cd unit_tests
   - git clone https://github.com/google/googletest.git
-  - cd googletest/googletest/make
-  - make gtest.a
-  - cd ../../../../
+  - cd ../
   # BUILD ZZ_SYNTH
-  - mkdir bin
-  - mkdir lib
-  - mv /home/travis/build/zimzum/zz_synth//unit_tests/googletest/googletest/make/gtest.a /home/travis/build/zimzum/zz_synth//unit_tests/googletest/googletest/make/libgtest.a
-  - make ZZDIR=$PWD/ all_recursive
+  - mkdir build
+  - cd build
+  - cmake  -DCMAKE_BUILD_TYPE=Release ../
+  - make
   # RUN UNIT TESTS
-  - ./bin/testbench_envelope.out
-  - ./bin/testbench_segment.out
-  - ./bin/testbench_rww.out
+  - ./unit_tests/envelope/testbench_envelope
+  - ./unit_tests/segment/testbench_segment
+  - ./unit_tests/oscillator/testbench_oscillator
+  - ./unit_tests/fm_synthesiser/testbench_fm_synthesiser
+  - ./unit_tests/read_write_wav/testbench_read_write_wav

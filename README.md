@@ -1,6 +1,6 @@
 zz_synth
 ========
-[![Build Status](https://travis-ci.org/zimzum/zz_synth.svg?branch=master)](https://travis-ci.org/zimzum/zz_synth)
+[![Build Status](https://travis-ci.org/banach-space/zz_synth.svg?branch=master)](https://travis-ci.org/banach-space/zz_synth)
 
 A software synthesiser implemented in C++11. 
 
@@ -25,49 +25,34 @@ At this point **zz_synth** requires **Google Test** in order to build
 succesfuly. There shouldn't be such dependency here and I intend to remove it
 shortly. For the time being, following the following steps.
 
-### Building Google Test
+### Cloning Google Test
 Assuming that you checked out this repo in `zz_synth`, follow these steps to
-build **Google Test**:
+clone **Google Test**:
 ```
 $ ~/zz_synth > cd unit_tests
 $ ~/zz_synth/unit_tests > git clone https://github.com/google/googletest.git
-$ ~/zz_synth/unit_tests > cd googletest/googletest/make
-$ ~/zz_synth/unit_tests/git clone https://github.com/google/googletest.git > make gtest.a
 ```
 
 ### Building zz_synth
-Create the **bin** and **lib** directories, and then call make:
+Create **build** and then call CMake:
 ```
-$ ~/zz_synth > mkdir bin; mkdir lib
-$ ~/zz_synth > make ZZDIR=<root_dir>/zz_synth all_recursive
-```
-
-The provided build system is recursive and every build command should be
-invoked from the top directory. For example, in order to build the
-**read_write_wav** testbench, type the following:
-```
-$: make unit_tests/read_write_wav TARGET=new
-```
-The **TARGET** variable is defined so that the requested target type is passed
-to makefiles in sub-directories. The following, fairly standard approach, is
-insufficient:
-```
-$: make unit_tests/read_write_wav new
+$ ~/zz_synth > mkdir build
+$ ~/zz_synth > cd build
+$ ~/zz_synth/build > cmake ../
+$ ~/zz_synth/build > make
 ```
 
 Making some noise
 ----------------------------
 Clearly the main goal of creating an audio synthesiser is to generate some
 noise! The easiest way to achieve that is to play with example code in the
-**examples/** sub-directory. For instance, type  
+**examples/** sub-directory. Alternatively, you could use the examples that are
+already there. After building the whole project, try the following:
 ```
-$: make examples/ar_envelope_note TARGET=all
+$ ~/zz_synth > cd build
+$ ~/zz_synth/build > examples/ar_envelope_note/ar_envelope_note
 ```
-and then type:
-```
-$: bin/ar_envelope_note.out
-```
-Finally! You'll find some noise in the **examples/ar_envelope_note/sounds**
+Finally! You'll find some noise in the **build/examples/ar_envelope_note/sounds**
 sub-directory.
 
 The purpose of this project
