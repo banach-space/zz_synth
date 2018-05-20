@@ -442,17 +442,6 @@ TEST(ExponentialSegmentTest, ExponentEqualOneDifferentAmplitudeEnd)
         ValidateLinearSegment(amplitude_start, it, number_of_steps, segment);
     }
 }
-
-//========================================================================
-// MAIN 
-//========================================================================
-int main(int argc, char *argv[])
-{
-    ::testing::InitGoogleTest(&argc, argv);
-
-	return RUN_ALL_TESTS();
-}
-
 //========================================================================
 // End of file
 //========================================================================

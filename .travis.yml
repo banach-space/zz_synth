@@ -14,8 +14,4 @@ script:
   - cmake  -DCMAKE_BUILD_TYPE=Release ../
   - make
   # RUN UNIT TESTS
-  - ./unit_tests/envelope/testbench_envelope
-  - ./unit_tests/segment/testbench_segment
-  - ./unit_tests/oscillator/testbench_oscillator
-  - ./unit_tests/fm_synthesiser/testbench_fm_synthesiser
-  - ./unit_tests/read_write_wav/testbench_read_write_wav
+  - ./unit_tests/UnitSynth
