@@ -3,7 +3,7 @@
 //   examples/ar_envelope_note/ar_envelope_note.cc
 //
 // AUTHOR:
-//   zimzum@github 
+//   zimzum@github
 //
 // DESCRIPTION:
 //   This file is intended to demonstrate how to generate notes with
@@ -13,7 +13,7 @@
 //   produced. These are marked with 'Param #:' and can be freely
 //   modified to experiment.
 //
-// License: GNU GPL v2.0 
+// License: GNU GPL v2.0
 //========================================================================
 
 #include <global/global_variables.h>
@@ -25,7 +25,7 @@
 using namespace std;
 
 //========================================================================
-// MAIN 
+// MAIN
 //========================================================================
 int main()
 {
@@ -49,7 +49,7 @@ int main()
 
     // Initialise the synthesiser
     SynthConfig &synthesiser  = SynthConfig::getInstance();
-    synthesiser.Init();	
+    synthesiser.Init();
 
     // Initialise the envelope
     ArEnvelope envelope(synthesiser, peak_amplitude, attack_duration, decay_duration);
@@ -60,12 +60,12 @@ int main()
         sprintf(file_name, "examples/ar_envelope_note/sounds/ar_envelope_note_%d.wav", file_idx);
         file_idx++;
 
-        // 2. Generate the samples 
+        // 2. Generate the samples
         SineWaveform osc(synthesiser, volume, initial_phase, *it);
         vector<int16_t> samples_out = osc(duration);
         envelope.ApplyEnvelope(samples_out);
 
-        // 3. Save the samples to the file 
+        // 3. Save the samples to the file
         WaveFileOut wf_out(duration);
         wf_out.SaveBufferToFile(file_name, samples_out);
     }

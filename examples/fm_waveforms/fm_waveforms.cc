@@ -3,7 +3,7 @@
 //   examples/fm_waveforms/fm_waveforms.cc
 //
 // AUTHOR:
-//   zimzum@github 
+//   zimzum@github
 //
 // DESCRIPTION:
 //   This file demonstrates how to generate frequency modulated waveforms
@@ -13,7 +13,7 @@
 //   the sounds being produced. These are marked with 'Param #:' and
 //   can be freely modified to experiment.
 //
-// License: GNU GPL v2.0 
+// License: GNU GPL v2.0
 //========================================================================
 
 #include <global/global_variables.h>
@@ -24,7 +24,7 @@
 using namespace std;
 
 //========================================================================
-// MAIN 
+// MAIN
 //========================================================================
 int main()
 {
@@ -46,7 +46,7 @@ int main()
 
     // Initialise the synthesiser
     SynthConfig &synthesiser  = SynthConfig::getInstance();
-    synthesiser.Init();	
+    synthesiser.Init();
 
     for (auto it : pitch_modulator)
     {
@@ -55,22 +55,22 @@ int main()
             // 1. Generate filename. Note that filename contains the
             //    index of modulation the pitch of the modulator.
             sprintf(
-                    file_name, 
-                    "examples/fm_waveforms/sounds/fm_wave_pitch_id_%lu_iom_%lu.wav", 
-                    it, 
+                    file_name,
+                    "examples/fm_waveforms/sounds/fm_wave_pitch_id_%lu_iom_%lu.wav",
+                    it,
                     static_cast<size_t>(it2));
 
-            // 2. Create the FM synthesiser and generate the samples 
+            // 2. Create the FM synthesiser and generate the samples
             FmSynthesiser fm_synthesiser(
-                    synthesiser, 
-                    volume, 
-                    initial_phase, 
-                    pitch_carrier, 
-                    it, 
+                    synthesiser,
+                    volume,
+                    initial_phase,
+                    pitch_carrier,
+                    it,
                     it2);
             vector<int16_t> samples_output = fm_synthesiser(duration);
 
-            // 3. Save the samples to the file 
+            // 3. Save the samples to the file
             WaveFileOut wf_out_sine(duration);
             wf_out_sine.SaveBufferToFile(file_name, samples_output);
         }

@@ -3,19 +3,19 @@
 //		templates/testbench.cc
 //
 // AUTHOR:
-//		zimzum@github 
+//		zimzum@github
 //
 // DESCRIPTION:
-//		Template testbench file.	
+//		Template testbench file.
 //
-// License: GNU GPL v2.0 
+// License: GNU GPL v2.0
 //========================================================================
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 
 //========================================================================
-// UTILITIES 
+// UTILITIES
 //========================================================================
 
 //========================================================================
@@ -27,7 +27,7 @@ TEST(YourTestNameTest, SubtestName)
 }
 
 //========================================================================
-// MAIN 
+// MAIN
 //========================================================================
 int main(int argc, char *argv[])
 {

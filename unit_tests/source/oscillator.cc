@@ -3,12 +3,12 @@
 //		unit_tests/oscillator/testbench.cc
 //
 // AUTHOR:
-//		zimzum@github 
+//		zimzum@github
 //
 // DESCRIPTION:
-//      Testbench for the Oscillator class.	
+//      Testbench for the Oscillator class.
 //
-// License: GNU GPL v2.0 
+// License: GNU GPL v2.0
 //========================================================================
 
 #include <algorithm>
@@ -21,7 +21,7 @@
 using namespace std;
 
 //========================================================================
-// UTILITIES 
+// UTILITIES
 //========================================================================
 template<typename T>
 void TestOscillator()
@@ -33,13 +33,13 @@ void TestOscillator()
 
     // Initialise the synthesiser
     SynthConfig &synthesiser  = SynthConfig::getInstance();
-    synthesiser.Init();	
+    synthesiser.Init();
 
     // The following lambda is used to check whether the input sample
-    // is within the volume bounds, i.e. sample \in (-volume, volume). 
+    // is within the volume bounds, i.e. sample \in (-volume, volume).
     // volume_current is defined for passing the current volume.
     int16_t volume_current = 0;
-    auto outside_bounds = [volume_current](int16_t sample) 
+    auto outside_bounds = [volume_current](int16_t sample)
     {
         return (sample > volume_current) && (sample < -volume_current);
     };

@@ -3,7 +3,7 @@
 //   examples/adsr_envelope_note/adsr_envelope_note.cc
 //
 // AUTHOR:
-//   zimzum@github 
+//   zimzum@github
 //
 // DESCRIPTION:
 //   This file is intended to demonstrate how to generate notes with
@@ -13,7 +13,7 @@
 //   produced. These are marked with 'Param #:' and can be freely
 //   modified to experiment.
 //
-// License: GNU GPL v2.0 
+// License: GNU GPL v2.0
 //========================================================================
 
 #include <global/global_variables.h>
@@ -25,7 +25,7 @@
 using namespace std;
 
 //========================================================================
-// MAIN 
+// MAIN
 //========================================================================
 int main()
 {
@@ -70,7 +70,7 @@ int main()
     //       is equivalent to setting the sustain segment level.
     // Initialise the synthesiser
     SynthConfig &synthesiser  = SynthConfig::getInstance();
-    synthesiser.Init();	
+    synthesiser.Init();
 
     for (auto it : pitch)
     {
@@ -80,39 +80,39 @@ int main()
 
         // 2. Create the attack segment
         number_of_steps = static_cast<size_t>(synthesiser.sampling_rate() * a_segment_duration);
-        auto segment_attack = 
+        auto segment_attack =
             unique_ptr<Segment>(new ExponentialSegment(
-                        start_amplitude_attack, 
-                        end_amplitude_attack, 
-                        exponent_a, 
+                        start_amplitude_attack,
+                        end_amplitude_attack,
+                        exponent_a,
                         number_of_steps));
 
         // 3. Create the decay segment
         number_of_steps = static_cast<size_t>(synthesiser.sampling_rate() * d_segment_duration);
-        auto segment_decay = 
+        auto segment_decay =
             unique_ptr<Segment>(new ExponentialSegment(
-                        start_amplitude_decay, 
-                        end_amplitude_decay, 
-                        exponent_d, 
-                        number_of_steps)); 
+                        start_amplitude_decay,
+                        end_amplitude_decay,
+                        exponent_d,
+                        number_of_steps));
 
         // 3. Create the sustain segment
         number_of_steps = static_cast<size_t>(synthesiser.sampling_rate() * s_segment_duration);
-        auto segment_sustain = 
+        auto segment_sustain =
             unique_ptr<Segment>(new ExponentialSegment(
-                        start_amplitude_sustain, 
-                        end_amplitude_sustain, 
-                        exponent_s, 
-                        number_of_steps)); 
+                        start_amplitude_sustain,
+                        end_amplitude_sustain,
+                        exponent_s,
+                        number_of_steps));
 
         // 4. Create the release segment
         number_of_steps = static_cast<size_t>(synthesiser.sampling_rate() * r_segment_duration);
-        auto segment_release = 
+        auto segment_release =
             unique_ptr<Segment>(new ExponentialSegment(
-                        start_amplitude_release, 
-                        end_amplitude_release, 
-                        exponent_r, 
-                        number_of_steps)); 
+                        start_amplitude_release,
+                        end_amplitude_release,
+                        exponent_r,
+                        number_of_steps));
 
         // 5. Create the envelope
         AdsrEnvelope envelope(segment_attack, segment_decay, segment_sustain, segment_release);
@@ -124,7 +124,7 @@ int main()
         // 7.  Apply the envelope
         envelope.ApplyEnvelope(samples);
 
-        // 8. Save the samples to the file 
+        // 8. Save the samples to the file
         WaveFileOut wf_out(duration);
         wf_out.SaveBufferToFile(file_name, samples);
     }

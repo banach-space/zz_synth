@@ -3,12 +3,12 @@
 //		unit_tests/fm_synthesiser/testbench.cc
 //
 // AUTHOR:
-//		zimzum@github 
+//		zimzum@github
 //
 // DESCRIPTION:
 //      Testbench for FM synthesiser
 //
-// License: GNU GPL v2.0 
+// License: GNU GPL v2.0
 //========================================================================
 
 #include <gtest/gtest.h>
@@ -20,7 +20,7 @@
 using namespace std;
 
 //========================================================================
-// UTILITIES 
+// UTILITIES
 //========================================================================
 void TestFmSynthesiser()
 {
@@ -34,13 +34,13 @@ void TestFmSynthesiser()
 
     // Initialise the synthesiser
     SynthConfig &synthesiser  = SynthConfig::getInstance();
-    synthesiser.Init();	
+    synthesiser.Init();
 
     // The following lambda is used to check whether the input sample
-    // is within the volume bounds, i.e. sample \in (-volume, volume). 
+    // is within the volume bounds, i.e. sample \in (-volume, volume).
     // volume_current is defined for passing the current volume.
     int16_t volume_current = volume;
-    auto outside_bounds = [volume_current](int16_t sample) 
+    auto outside_bounds = [volume_current](int16_t sample)
     {
         return (sample > volume_current) && (sample < -volume_current);
     };
@@ -50,11 +50,11 @@ void TestFmSynthesiser()
         for (auto it2 : index_of_modulation)
         {
             FmSynthesiser fm_synthesiser(
-                    synthesiser, 
-                    volume, 
-                    initial_phase, 
-                    pitch_carrier, 
-                    it, 
+                    synthesiser,
+                    volume,
+                    initial_phase,
+                    pitch_carrier,
+                    it,
                     it2);
             vector<int16_t> samples = fm_synthesiser(duration);
 

@@ -3,7 +3,7 @@
 //   examples/plain_note/waveforms.cc
 //
 // AUTHOR:
-//   zimzum@github 
+//   zimzum@github
 //
 // DESCRIPTION:
 //   This demonstrates how to generate different waveforms (sine wave,
@@ -13,7 +13,7 @@
 //   parameters that determine the sounds being produced. These are marked
 //   with 'Param #:' and can be freely modified to experiment.
 //
-// License: GNU GPL v2.0 
+// License: GNU GPL v2.0
 //========================================================================
 
 #include <global/global_variables.h>
@@ -24,7 +24,7 @@
 using namespace std;
 
 //========================================================================
-// MAIN 
+// MAIN
 //========================================================================
 int main()
 {
@@ -42,7 +42,7 @@ int main()
 
     // Initialise the synthesiser
     SynthConfig &synthesiser  = SynthConfig::getInstance();
-    synthesiser.Init();	
+    synthesiser.Init();
 
     for (auto it = pitch.begin(); it != pitch.end(); it++)
     {
@@ -52,11 +52,11 @@ int main()
         // 1. Generate filename
         sprintf(file_name, "examples/waveforms/sounds/sine_wave_%d.wav", file_idx);
 
-        // 2. Generate the samples 
+        // 2. Generate the samples
         SineWaveform osc_sine(synthesiser, volume, initial_phase, *it);
         vector<int16_t> samples_out_sine = osc_sine(duration);
 
-        // 3. Save the samples to the file 
+        // 3. Save the samples to the file
         WaveFileOut wf_out_sine(duration);
         wf_out_sine.SaveBufferToFile(file_name, samples_out_sine);
 
@@ -66,11 +66,11 @@ int main()
         // 1. Generate filename
         sprintf(file_name, "examples/waveforms/sounds/saw_tooth_%d.wav", file_idx);
 
-        // 2. Generate the samples 
+        // 2. Generate the samples
         SawtoothWaveform osc_sawtooth(synthesiser, volume, initial_phase, *it);
         vector<int16_t> samples_out_sawtooth = osc_sawtooth(duration);
 
-        // 3. Save the samples to the file 
+        // 3. Save the samples to the file
         WaveFileOut wf_out_sawtooth(duration);
         wf_out_sawtooth.SaveBufferToFile(file_name, samples_out_sawtooth);
 
@@ -80,11 +80,11 @@ int main()
         // 1. Generate filename
         sprintf(file_name, "examples/waveforms/sounds/square_%d.wav", file_idx);
 
-        // 2. Generate the samples 
+        // 2. Generate the samples
         SquareWaveform osc_square(synthesiser, volume, initial_phase, *it);
         vector<int16_t> samples_out_square = osc_square(duration);
 
-        // 3. Save the samples to the file 
+        // 3. Save the samples to the file
         WaveFileOut wf_out_square(duration);
         wf_out_square.SaveBufferToFile(file_name, samples_out_square);
 
@@ -94,11 +94,11 @@ int main()
         // 1. Generate filename
         sprintf(file_name, "examples/waveforms/sounds/triangle_%d.wav", file_idx);
 
-        // 2. Generate the samples 
+        // 2. Generate the samples
         TriangleWaveform osc_triangle(synthesiser, volume, initial_phase, *it);
         vector<int16_t> samples_out_triangle = osc_triangle(duration);
 
-        // 3. Save the samples to the file 
+        // 3. Save the samples to the file
         WaveFileOut wf_out_triangle(duration);
         wf_out_triangle.SaveBufferToFile(file_name, samples_out_triangle);
     }

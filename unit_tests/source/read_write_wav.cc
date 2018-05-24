@@ -3,12 +3,12 @@
 //   src/unit_tests/read_write_wav/testbench.c
 //
 // AUTHOR:
-//   zimzum@github 
+//   zimzum@github
 //
 // DESCRIPTION:
 //   Tests reading and writing WAVE files.
 //
-// License: GNU GPL v2.0 
+// License: GNU GPL v2.0
 //========================================================================
 
 #include <global/global_variables.h>
@@ -22,7 +22,7 @@
 using namespace std;
 
 //========================================================================
-// UTILITIES 
+// UTILITIES
 //========================================================================
 void CompareWaveHeaders(WaveFileOut &wf_out, WaveFileIn &wf_in);
 void CompareWaveHeaders(WaveFileOut &wf_out, WaveFileIn &wf_in)
@@ -57,15 +57,15 @@ TEST(ReadWriteWaveFileTest, HandleDifferentPitches)
 
     // Initialise the synthesiser
     SynthConfig &synthesiser  = SynthConfig::getInstance();
-    synthesiser.Init();	
+    synthesiser.Init();
 
     for (auto it = pitch.begin(); it != pitch.end(); it++)
     {
-        // 1. Generate the samples 
+        // 1. Generate the samples
         SineWaveform osc(synthesiser, volume, initial_phase, *it);
         vector<int16_t> samples_out = osc(duration);
 
-        // 2. Save the generated samples to the file 
+        // 2. Save the generated samples to the file
         WaveFileOut wf_out(duration);
         wf_out.SaveBufferToFile(file_name, samples_out);
 
@@ -90,15 +90,15 @@ TEST(ReadWriteWaveFileTest, HandleDifferentVolumes)
 
     // Initialise the synthesiser
     SynthConfig &synthesiser  = SynthConfig::getInstance();
-    synthesiser.Init();	
+    synthesiser.Init();
 
     for (auto it = volume.begin(); it != volume.end(); it++)
     {
-        // 1. Generate the samples 
+        // 1. Generate the samples
         SineWaveform osc(synthesiser,*it, initial_phase, pitch);
         vector<int16_t> samples_out = osc(duration);
 
-        // 2. Save the generated samples to the file 
+        // 2. Save the generated samples to the file
         WaveFileOut wf_out(duration);
         wf_out.SaveBufferToFile(file_name, samples_out);
 
@@ -123,15 +123,15 @@ TEST(ReadWriteWaveFileTest, HandleDifferentDuration)
 
     // Initialise the synthesiser
     SynthConfig &synthesiser  = SynthConfig::getInstance();
-    synthesiser.Init();	
+    synthesiser.Init();
 
     for (auto it = duration.begin(); it != duration.end(); it++)
     {
-        // 1. Generate the samples 
+        // 1. Generate the samples
         SineWaveform osc(synthesiser, volume, initial_phase, pitch);
         vector<int16_t> samples_out = osc(*it);
 
-        // 2. Save the generated samples to the file 
+        // 2. Save the generated samples to the file
         WaveFileOut wf_out(*it);
         wf_out.SaveBufferToFile(file_name, samples_out);
 
