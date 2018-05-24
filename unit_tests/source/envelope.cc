@@ -515,7 +515,7 @@ TEST(AdsrEnvelopeGenerationTest, HandleDifferentSustainLevels)
     double adsr_segment_duration      = 1.0;
     float end_amplitude_sustain;
     float start_amplitude_release;
-    size_t number_of_steps;
+    size_t number_of_samples;
 
     // NOTE: Amplitudes are defined so that there are no discontinuities.
     //       All segments are identical length. The attack, decay and
@@ -531,7 +531,7 @@ TEST(AdsrEnvelopeGenerationTest, HandleDifferentSustainLevels)
 
     // Number of samples in every segment
     adsr_segment_duration = duration / 4.0;
-    number_of_steps = static_cast<size_t>(synthesiser.sampling_rate() * adsr_segment_duration);
+    number_of_samples = static_cast<size_t>(synthesiser.sampling_rate() * adsr_segment_duration);
 
     for (auto it : end_amplitude_decay)
     {
@@ -545,7 +545,7 @@ TEST(AdsrEnvelopeGenerationTest, HandleDifferentSustainLevels)
                         start_amplitude_attack,
                         end_amplitude_attack,
                         exponent_adr,
-                        number_of_steps));
+                        number_of_samples));
 
         // 3. Create the decay segment
         auto segment_decay =
@@ -553,7 +553,7 @@ TEST(AdsrEnvelopeGenerationTest, HandleDifferentSustainLevels)
                         start_amplitude_decay,
                         it,
                         exponent_adr,
-                        number_of_steps));
+                        number_of_samples));
 
         // 3. Create the sustain segment
         auto segment_sustain =
@@ -561,7 +561,7 @@ TEST(AdsrEnvelopeGenerationTest, HandleDifferentSustainLevels)
                         start_amplitude_sustain,
                         it,
                         exponent_s,
-                        number_of_steps));
+                        number_of_samples));
 
         // 4. Create the release segment
         auto segment_release =
@@ -569,7 +569,7 @@ TEST(AdsrEnvelopeGenerationTest, HandleDifferentSustainLevels)
                         start_amplitude_release,
                         end_amplitude_release,
                         exponent_adr,
-                        number_of_steps));
+                        number_of_samples));
 
         // 5. Create the envelope
         AdsrEnvelope envelope(segment_attack, segment_decay, segment_sustain, segment_release);

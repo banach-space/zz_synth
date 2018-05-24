@@ -40,7 +40,8 @@ static void ValidateConstantSegment(
         size_t size_expected,
         Segment &segment)
 {
-        EXPECT_EQ(segment.Length(), size_expected);
+        EXPECT_EQ(true, segment.IsGenerated());
+        EXPECT_EQ(segment.GetLength(), size_expected);
         EXPECT_EQ(segment[0], amplitude_expected);
         EXPECT_EQ(segment[size_expected-1], amplitude_expected);
         EXPECT_EQ(segment[(size_expected-1)/2], amplitude_expected);
@@ -70,7 +71,8 @@ static void ValidateLinearSegment(
 
         float middle_amplitude_expected = (amplitude_end_expected + amplitude_start_expected)/2;
 
-        EXPECT_EQ(segment.Length(), size_expected);
+        EXPECT_EQ(true, segment.IsGenerated());
+        EXPECT_EQ(segment.GetLength(), size_expected);
         EXPECT_EQ(segment[size_expected-1], amplitude_end_expected);
         EXPECT_EQ(segment[0], amplitude_start_expected);
         if ((size_expected % 2))
@@ -104,10 +106,88 @@ static void ValidateSegmentExponential(
         size_t size_expected,
         Segment &segment)
 {
-        EXPECT_EQ(segment.Length(), size_expected);
+        EXPECT_EQ(true, segment.IsGenerated());
+        EXPECT_EQ(segment.GetLength(), size_expected);
         EXPECT_EQ(segment[0], amplitude_start_expected);
         EXPECT_EQ(segment[size_expected-1], amplitude_end_expected);
 }
+
+//========================================================================
+// TEST FIXTURES
+//========================================================================
+// The structure to hold some default set up for the segment
+typedef struct SegConf {
+  const float amplitude;
+  const float amplitude_start;
+  const float amplitude_end;
+  const size_t number_of_samples;
+  const SegmentGradient grad;
+  const float exponent;
+  SegConf()
+      : amplitude(1 << 15),
+        amplitude_start(0),
+        amplitude_end(1),
+        number_of_samples(101),
+        grad(SegmentGradient::kIncline),
+        exponent(2) {}
+} SegConf;
+
+class ConstSegmentTestFixture : public ::testing::Test {
+    // Initialise the synthesiser
+    SynthConfig &synthesiser  = SynthConfig::getInstance();
+protected:
+    // Init the segment
+    ConstantSegment segment;
+
+    static const SegConf default_conf;
+
+    virtual void SetUp() {
+      synthesiser.Init();
+      segment.SetAmplitude(default_conf.amplitude);
+      segment.SetNumberOfSamples(default_conf.number_of_samples);
+    }
+};
+
+SegConf const ConstSegmentTestFixture::default_conf;
+
+class LinearSegmentTestFixture : public ::testing::Test {
+    // Initialise the synthesiser
+    SynthConfig &synthesiser  = SynthConfig::getInstance();
+protected:
+    // Init the segment
+    LinearSegment segment;
+
+    static const SegConf default_conf;
+
+    virtual void SetUp() {
+      synthesiser.Init();
+      segment.SetPeakAmplitude(default_conf.amplitude);
+      segment.SetNumberOfSamples(default_conf.number_of_samples);
+      segment.SetGradient(default_conf.grad);
+    }
+};
+
+SegConf const LinearSegmentTestFixture::default_conf;
+
+class ExponentialSegmentTestFixture : public ::testing::Test {
+    // Initialise the synthesiser
+    SynthConfig &synthesiser  = SynthConfig::getInstance();
+protected:
+    // Init the segment
+    ExponentialSegment segment;
+
+    static const SegConf default_conf;
+
+    virtual void SetUp() {
+      synthesiser.Init();
+      segment.SetStartAmplitude(default_conf.amplitude_start);
+      segment.SetEndAmplitude(default_conf.amplitude_end);
+      segment.SetNumberOfSamples(default_conf.number_of_samples);
+      segment.SetExponent(default_conf.exponent);
+    }
+};
+
+SegConf const ExponentialSegmentTestFixture::default_conf;
 
 //========================================================================
 // TESTS
@@ -117,7 +197,7 @@ static void ValidateSegmentExponential(
 //------------------------------------------------------------------------
 TEST(AllSegmentTypesTest, HandleEmptySegment)
 {
-    size_t number_of_steps = 0;
+    size_t number_of_samples = 0;
     float peak_amplitude   = 1 << 15;
     float amplitude_start  = 1 << 15;
     float amplitude_end    = 1;
@@ -128,319 +208,251 @@ TEST(AllSegmentTypesTest, HandleEmptySegment)
     synthesiser.Init();
 
     // Constant segment
-    ConstantSegment segment_c(peak_amplitude, number_of_steps);
+    ConstantSegment segment_c(peak_amplitude, number_of_samples);
     EXPECT_EQ(segment_c.IsEmpty(), true);
 
     // Linear segment
-    LinearSegment segment_l(peak_amplitude, number_of_steps, SegmentGradient::kIncline);
+    LinearSegment segment_l(peak_amplitude, number_of_samples, SegmentGradient::kIncline);
     EXPECT_EQ(segment_l.IsEmpty(), true);
 
     // Exponential segment
-    ExponentialSegment segment_e(amplitude_start, amplitude_end, exponent, number_of_steps);
+    ExponentialSegment segment_e(amplitude_start, amplitude_end, exponent, number_of_samples);
     EXPECT_EQ(segment_e.IsEmpty(), true);
 }
 
 //------------------------------------------------------------------------
 // ConstantSegment
 //------------------------------------------------------------------------
-TEST(ConsantSegmentTest, HandleDifferentLengths)
+TEST_F(ConstSegmentTestFixture, HandleDifferentLengths)
 {
-    vector<size_t> number_of_steps = {4, 41, 101, 1001, 2000};
-    float amplitude                = 1 << 15;
+    vector<size_t> number_of_samples = {4, 41, 101, 1001, 2000};
 
-    // Initialise the synthesiser
-    SynthConfig &synthesiser  = SynthConfig::getInstance();
-    synthesiser.Init();
-
-    for (auto it = number_of_steps.begin(); it != number_of_steps.end(); it++)
+    for (auto it = number_of_samples.begin(); it != number_of_samples.end(); it++)
     {
-        ConstantSegment segment(amplitude, *it);
-        ValidateConstantSegment(amplitude, *it, segment);
+        segment.SetNumberOfSamples(*it);
+        segment.GenerateSamples();
+        ValidateConstantSegment(default_conf.amplitude, *it, segment);
     }
 }
 
-TEST(ConstantSegmentTest, HandleDifferentVolumes)
+TEST_F(ConstSegmentTestFixture, HandleDifferentVolumes)
 {
-    size_t number_of_steps  = 101;
     vector<float> amplitude = {0, 1, 1000, 1 << 15};
-
-    // Initialise the synthesiser
-    SynthConfig &synthesiser  = SynthConfig::getInstance();
-    synthesiser.Init();
 
     for (auto it = amplitude.begin(); it != amplitude.end(); it++)
     {
-        ConstantSegment segment(*it, number_of_steps);
-        ValidateConstantSegment(*it, number_of_steps, segment);
-
+        segment.SetAmplitude(*it);
+        segment.GenerateSamples();
+        ValidateConstantSegment(*it, default_conf.number_of_samples, segment);
     }
 }
 
 //------------------------------------------------------------------------
 // LinearSegment
 //------------------------------------------------------------------------
-TEST(LinearSegmentTest, HandleDifferentLengthsIncline)
+TEST_F(LinearSegmentTestFixture, HandleDifferentLengthsIncline)
 {
-    vector<size_t> number_of_steps = {4, 41, 101, 1001, 2000};
-    float peak_amplitude           = 1 << 15;
+    vector<size_t> number_of_samples = {4, 41, 101, 1001, 2000};
 
-    // Initialise the synthesiser
-    SynthConfig &synthesiser  = SynthConfig::getInstance();
-    synthesiser.Init();
-
-    for (auto it = number_of_steps.begin(); it != number_of_steps.end(); it++)
+    for (auto it = number_of_samples.begin(); it != number_of_samples.end(); it++)
     {
-        LinearSegment segment(peak_amplitude, *it, SegmentGradient::kIncline);
-        ValidateLinearSegment(0.0f, peak_amplitude, *it, segment);
+        segment.SetNumberOfSamples(*it);
+        segment.GenerateSamples();
+        ValidateLinearSegment(0.0f, default_conf.amplitude, *it, segment);
     }
 }
 
-TEST(LinearSegmentTest, HandleDifferentVolumesIncline)
+TEST_F(LinearSegmentTestFixture, HandleDifferentVolumesIncline)
 {
-    size_t number_of_steps       = 101;
     vector<float> peak_amplitude = {0, 1, 1000, 1 << 15};
-
-    // Initialise the synthesiser
-    SynthConfig &synthesiser  = SynthConfig::getInstance();
-    synthesiser.Init();
 
     for (auto it = peak_amplitude.begin(); it != peak_amplitude.end(); it++)
     {
-        LinearSegment segment(*it, number_of_steps, SegmentGradient::kIncline);
-        ValidateLinearSegment(0.0f, *it, number_of_steps, segment);
-
+        segment.SetPeakAmplitude(*it);
+        segment.GenerateSamples();
+        ValidateLinearSegment(0.0f, *it, default_conf.number_of_samples, segment);
     }
 }
 
-TEST(LinearSegmentTest, HandleDifferentLengthsDecline)
+TEST_F(LinearSegmentTestFixture, HandleDifferentLengthsDecline)
 {
-    vector<size_t> number_of_steps = {2, 41, 101, 1001, 2000};
-    float peak_amplitude           = 1 << 15;
+    vector<size_t> number_of_samples = {2, 41, 101, 1001, 2000};
 
-    // Initialise the synthesiser
-    SynthConfig &synthesiser  = SynthConfig::getInstance();
-    synthesiser.Init();
+    segment.SetGradient(SegmentGradient::kDecline);
 
-    for (auto it = number_of_steps.begin(); it != number_of_steps.end(); it++)
+    for (auto it = number_of_samples.begin(); it != number_of_samples.end(); it++)
     {
-        LinearSegment segment(peak_amplitude, *it, SegmentGradient::kDecline);
-        ValidateLinearSegment(peak_amplitude, 0.0f, *it, segment);
+        segment.SetNumberOfSamples(*it);
+        segment.GenerateSamples();
+        ValidateLinearSegment(default_conf.amplitude, 0.0f, *it, segment);
     }
 }
 
-TEST(LinearSegmentTest, HandleDifferentVolumesDecline)
+TEST_F(LinearSegmentTestFixture, HandleDifferentVolumesDecline)
 {
-    size_t number_of_steps       = 101;
     vector<float> peak_amplitude = {0, 1, 1000, 1 << 15};
 
-    // Initialise the synthesiser
-    SynthConfig &synthesiser  = SynthConfig::getInstance();
-    synthesiser.Init();
+    segment.SetGradient(SegmentGradient::kDecline);
 
     for (auto it = peak_amplitude.begin(); it != peak_amplitude.end(); it++)
     {
-        LinearSegment segment(*it, number_of_steps, SegmentGradient::kDecline);
-        ValidateLinearSegment(*it, 0.0f, number_of_steps, segment);
+        segment.SetPeakAmplitude(*it);
+        segment.GenerateSamples();
+        ValidateLinearSegment(*it, 0.0f, default_conf.number_of_samples, segment);
     }
 }
 
 //------------------------------------------------------------------------
 // ExponentialSegment
 //------------------------------------------------------------------------
-TEST(ExponentialSegmentTest, HandleDifferentVolumesStart)
-{
-    size_t number_of_steps        = 101;
-    vector<float> amplitude_start = {0, 1, 1000, 1 << 15};
-    float amplitude_end           = 1;
-    float exponent                = 2;
+TEST_F(ExponentialSegmentTestFixture, HandleDifferentVolumesStart) {
+  vector<float> amplitude_start = {0, 1, 1000, 1 << 15};
 
-    // Initialise the synthesiser
-    SynthConfig &synthesiser  = SynthConfig::getInstance();
-    synthesiser.Init();
-
-    for (auto it = amplitude_start.begin(); it != amplitude_start.end(); it++)
-    {
-        ExponentialSegment segment(*it, amplitude_end, exponent, number_of_steps);
-        ValidateSegmentExponential(*it, amplitude_end, number_of_steps, segment);
-    }
+  for (auto it = amplitude_start.begin(); it != amplitude_start.end(); it++) {
+    segment.SetStartAmplitude(*it);
+    segment.GenerateSamples();
+    ValidateSegmentExponential(*it, default_conf.amplitude_end,
+                               default_conf.number_of_samples, segment);
+  }
 }
 
-TEST(ExponentialSegmentTest, HandleDifferentVolumesEnd)
-{
-    size_t number_of_steps      = 101;
-    vector<float> amplitude_end = {0, 1, 1000, 1 << 15};
-    float amplitude_start       = 1;
-    float exponent              = 2;
+TEST_F(ExponentialSegmentTestFixture, HandleDifferentVolumesEnd) {
+  vector<float> amplitude_end = {0, 1, 1000, 1 << 15};
 
-    // Initialise the synthesiser
-    SynthConfig &synthesiser  = SynthConfig::getInstance();
-    synthesiser.Init();
-
-    for (auto it = amplitude_end.begin(); it != amplitude_end.end(); it++)
-    {
-        ExponentialSegment segment(amplitude_start, *it, exponent, number_of_steps);
-        ValidateSegmentExponential(amplitude_start, *it, number_of_steps, segment);
-    }
+  for (auto it = amplitude_end.begin(); it != amplitude_end.end(); it++) {
+    segment.SetEndAmplitude(*it);
+    segment.GenerateSamples();
+    ValidateSegmentExponential(default_conf.amplitude_start, *it,
+                               default_conf.number_of_samples, segment);
+  }
 }
 
-TEST(ExponentialSegmentTest, HandleDifferentLengths)
-{
-    vector<size_t> number_of_steps = {2, 41, 101, 1001, 2000};
-    float amplitude_start          = 13;
-    float amplitude_end            = 1313;
-    float exponent                 = 2;
+TEST_F(ExponentialSegmentTestFixture, HandleDifferentLengths) {
+  vector<size_t> number_of_samples = {2, 41, 101, 1001, 2000};
 
-    // Initialise the synthesiser
-    SynthConfig &synthesiser  = SynthConfig::getInstance();
-    synthesiser.Init();
-
-    for (auto it = number_of_steps.begin(); it != number_of_steps.end(); it++)
-    {
-        ExponentialSegment segment(amplitude_start, amplitude_end, exponent, *it);
-        ValidateSegmentExponential(amplitude_start, amplitude_end, *it, segment);
-    }
+  for (auto it = number_of_samples.begin(); it != number_of_samples.end();
+       it++) {
+    segment.SetNumberOfSamples(*it);
+    segment.GenerateSamples();
+    ValidateSegmentExponential(default_conf.amplitude_start,
+                               default_conf.amplitude_end, *it, segment);
+  }
 }
 
-TEST(ExponentialSegmentTest, HandleDifferentExponents)
-{
-    size_t number_of_steps = 101;
-    float amplitude_start  = 13;
-    float amplitude_end    = 1313;
-    vector<float> exponent = {0.0001f, 0.001f, 0.01f, 0.1f, 1.0f, 10.0f, 100.0f, 1000.0f, 10000.0f};
+TEST_F(ExponentialSegmentTestFixture, HandleDifferentExponents) {
+  vector<float> exponent = {0.0001f, 0.001f, 0.01f,   0.1f,    1.0f,
+                            10.0f,   100.0f, 1000.0f, 10000.0f};
 
-    // Initialise the synthesiser
-    SynthConfig &synthesiser  = SynthConfig::getInstance();
-    synthesiser.Init();
-
-    for (auto it = exponent.begin(); it != exponent.end(); it++)
-    {
-        ExponentialSegment segment(amplitude_start, amplitude_end, *it, number_of_steps);
-        ValidateSegmentExponential(amplitude_start, amplitude_end, number_of_steps, segment);
-    }
+  for (auto it = exponent.begin(); it != exponent.end(); it++) {
+    segment.SetExponent(*it);
+    segment.GenerateSamples();
+    ValidateSegmentExponential(default_conf.amplitude_start,
+                               default_conf.amplitude_end,
+                               default_conf.number_of_samples, segment);
+  }
 }
 
-TEST(ExponentialSegmentTest, ExponentEqualZero)
-{
-    size_t number_of_steps      = 101;
-    float amplitude_start       = 13;
-    float exponent              = 0;
-    vector<float> amplitude_end = {
-        -(1 << 15),
-        -1313.0f,
-        -13.25f,
-        -1.0f/2048.0f,
-        1.0f/2048.0f,
-        13.25f,
-        1313.0f,
-        1 >> 15};
+TEST_F(ExponentialSegmentTestFixture, ExponentEqualZero) {
+  float exponent = 0;
+  vector<float> amplitude_end = {-(1 << 15),      -1313.0f,       -13.25f,
+                                 -1.0f / 2048.0f, 1.0f / 2048.0f, 13.25f,
+                                 1313.0f,         1 >> 15};
 
-    // Initialise the synthesiser
-    SynthConfig &synthesiser  = SynthConfig::getInstance();
-    synthesiser.Init();
+  segment.SetExponent(exponent);
 
-    for (auto it : amplitude_end)
-    {
-        ExponentialSegment segment(amplitude_start, it, exponent, number_of_steps);
+  for (auto it : amplitude_end) {
+    segment.SetEndAmplitude(it);
+    segment.GenerateSamples();
 
-        // Exponent is 0, so expect this segment to be constant
-        ValidateConstantSegment(it, number_of_steps, segment);
-    }
+    // Exponent is 0, so expect this segment to be constant
+    ValidateConstantSegment(it, default_conf.number_of_samples, segment);
+  }
 }
 
-TEST(ExponentialSegmentTest, ExponentEqualOneDifferentStepsIncline)
-{
-    vector<size_t> number_of_steps = {2, 41, 101, 1001, 2000};
-    float amplitude_start  = 0;
-    float amplitude_end    = 1;
-    float exponent         = 1;
+TEST_F(ExponentialSegmentTestFixture, ExponentEqualOneDifferentStepsIncline) {
+  vector<size_t> number_of_samples = {2, 41, 101, 1001, 2000};
 
-    // Initialise the synthesiser
-    SynthConfig &synthesiser  = SynthConfig::getInstance();
-    synthesiser.Init();
+  // This test is specifically about kIncline segments. Make sure that the
+  // necessary conditions are met.
+  EXPECT_TRUE(segment.GetStartAmplitude() < segment.GetEndAmplitude())
+      << "This test relies on the amplitudes being suitable for kIncline";
 
-    for (auto it : number_of_steps)
-    {
-        ExponentialSegment segment(amplitude_start, amplitude_end, exponent, it);
+  // Setting the exponent to 1 makes this segment a linear segment.
+  segment.SetExponent(1.0f);
 
-        // Exponent is 1, so expect this segment to be linear
-        ValidateLinearSegment(amplitude_start, amplitude_end,  it, segment);
-    }
+  for (auto it : number_of_samples) {
+    segment.SetNumberOfSamples(it);
+    segment.GenerateSamples();
+
+    // Exponent is 1, so expect this segment to be linear
+    ValidateLinearSegment(default_conf.amplitude_start,
+                          default_conf.amplitude_end, it, segment);
+  }
 }
 
-TEST(ExponentialSegmentTest, ExponentEqualOneDifferentStepsDecline)
-{
-    vector<size_t> number_of_steps = {2, 41, 101, 1001, 2000};
-    float amplitude_start  = 1;
-    float amplitude_end    = 0;
-    float exponent         = 1;
+TEST_F(ExponentialSegmentTestFixture, ExponentEqualOneDifferentStepsDecline) {
+  vector<size_t> number_of_samples = {2, 41, 101, 1001, 2000};
+  float amplitude_start = 1;
+  float amplitude_end = 0;
 
-    // Initialise the synthesiser
-    SynthConfig &synthesiser  = SynthConfig::getInstance();
-    synthesiser.Init();
+  // Setting the exponent to 1 makes this segment a linear segment.
+  segment.SetExponent(1.0f);
 
-    for (auto it : number_of_steps)
-    {
-        ExponentialSegment segment(amplitude_start, amplitude_end, exponent, it);
+  // Make this a kDecline segment and make sure that the necessary conditions
+  // are met.
+  segment.SetStartAmplitude(amplitude_start);
+  segment.SetEndAmplitude(amplitude_end);
+  EXPECT_TRUE(segment.GetStartAmplitude() > segment.GetEndAmplitude())
+      << "This test relies on the amplitudes being suitable for kDecline";
 
-        // Exponent is 1, so expect this segment to be linear
-        ValidateLinearSegment(amplitude_start, amplitude_end, it, segment);
-    }
+  for (auto it : number_of_samples) {
+    segment.SetNumberOfSamples(it);
+    segment.GenerateSamples();
+
+    // Exponent is 1, so expect this segment to be linear
+    ValidateLinearSegment(amplitude_start, amplitude_end, it, segment);
+  }
 }
 
-TEST(ExponentialSegmentTest, ExponentEqualOneDifferentAmplitudeStart)
-{
-    size_t number_of_steps = 101;
-    vector<float> amplitude_start = {
-        -(1 << 15),
-        -1313.0f,
-        -13.25f,
-        -1.0f/2048.0f,
-        1.0f/2048.0f,
-        13.25f,
-        1313.0f,
-        1 >> 15};
-    float amplitude_end    = -1;
-    float exponent         = 1;
+TEST_F(ExponentialSegmentTestFixture, ExponentEqualOneDifferentAmplitudeStart) {
+  vector<float> amplitude_start = {-(1 << 15),      -1313.0f,       -13.25f,
+                                   -1.0f / 2048.0f, 1.0f / 2048.0f, 13.25f,
+                                   1313.0f,         1 >> 15};
+  float amplitude_end = -1;
 
-    // Initialise the synthesiser
-    SynthConfig &synthesiser  = SynthConfig::getInstance();
-    synthesiser.Init();
+  segment.SetEndAmplitude(amplitude_end);
 
-    for (auto it : amplitude_start)
-    {
-        ExponentialSegment segment(it, amplitude_end, exponent, number_of_steps);
+  // Setting the exponent to 1 makes this segment a linear segment.
+  segment.SetExponent(1.0f);
 
-        // Exponent is 1, so expect this segment to be linear
-        ValidateLinearSegment(it, amplitude_end, number_of_steps, segment);
-    }
+  for (auto it : amplitude_start) {
+    segment.SetStartAmplitude(it);
+    segment.GenerateSamples();
+
+    // Exponent is 1, so expect this segment to be linear
+    ValidateLinearSegment(it, amplitude_end, default_conf.number_of_samples,
+                          segment);
+  }
 }
 
-TEST(ExponentialSegmentTest, ExponentEqualOneDifferentAmplitudeEnd)
-{
-    size_t number_of_steps = 101;
-    vector<float> amplitude_end = {
-        -(1 << 15),
-        -1313.0f,
-        -13.25f,
-        -1.0f/2048.0f,
-        1.0f/2048.0f,
-        13.25f,
-        1313.0f,
-        1 >> 15};
-    float amplitude_start  = -1;
-    float exponent         = 1;
+TEST_F(ExponentialSegmentTestFixture, ExponentEqualOneDifferentAmplitudeEnd) {
+  vector<float> amplitude_end = {-(1 << 15),      -1313.0f,       -13.25f,
+                                 -1.0f / 2048.0f, 1.0f / 2048.0f, 13.25f,
+                                 1313.0f,         1 >> 15};
+  float amplitude_start = -1;
 
-    // Initialise the synthesiser
-    SynthConfig &synthesiser  = SynthConfig::getInstance();
-    synthesiser.Init();
+  segment.SetStartAmplitude(amplitude_start);
+  // Setting the exponent to 1 makes this segment a linear segment.
+  segment.SetExponent(1.0f);
 
-    for (auto it : amplitude_end)
-    {
-        ExponentialSegment segment(amplitude_start,it, exponent, number_of_steps);
+  for (auto it : amplitude_end) {
+    segment.SetEndAmplitude(it);
+    segment.GenerateSamples();
 
-        // Exponent is 1, so expect this segment to be linear
-        ValidateLinearSegment(amplitude_start, it, number_of_steps, segment);
-    }
+    // Exponent is 1, so expect this segment to be linear
+    ValidateLinearSegment(amplitude_start, it, default_conf.number_of_samples,
+                          segment);
+  }
 }
 //========================================================================
 // End of file

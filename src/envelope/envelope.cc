@@ -79,8 +79,8 @@ void ArEnvelope::ApplyEnvelope(std::vector<int16_t> &samples) const
     assert(!samples.empty());
 
     // 1. Apply attack
-    vector<float>::const_iterator it_seg = attack_segment_.segment_.begin();
-    vector<float>::const_iterator it_seg_end = attack_segment_.segment_.end();
+    vector<float>::const_iterator it_seg = attack_segment_.samples_.begin();
+    vector<float>::const_iterator it_seg_end = attack_segment_.samples_.end();
     vector<int16_t>::iterator it_data = samples.begin();
     vector<int16_t>::const_iterator it_data_end = samples.begin() 
         + static_cast<vector<int16_t>::difference_type>(attack_number_of_samples_);
@@ -92,8 +92,8 @@ void ArEnvelope::ApplyEnvelope(std::vector<int16_t> &samples) const
     }
 
     // 2. Apply decay
-    it_seg = decay_segment_.segment_.begin();
-    it_seg_end = decay_segment_.segment_.end();
+    it_seg = decay_segment_.samples_.begin();
+    it_seg_end = decay_segment_.samples_.end();
     it_data = samples.end()
         - static_cast<vector<int16_t>::difference_type>(decay_number_of_samples_);
     it_data_end = samples.end();
@@ -132,7 +132,7 @@ AdsrEnvelope::AdsrEnvelope(
     decay_segment_(std::move(decay_segment_arg)),
     sustain_segment_(std::move(sustain_segment_arg)),
     release_segment_(std::move(release_segment_arg)),
-    length_(attack_segment_->Length() + decay_segment_->Length() + sustain_segment_->Length() + release_segment_->Length())
+    length_(attack_segment_->GetLength() + decay_segment_->GetLength() + sustain_segment_->GetLength() + release_segment_->GetLength())
 {
 }
 
@@ -147,13 +147,13 @@ void AdsrEnvelope::ApplyEnvelope(std::vector<int16_t> &samples) const
     assert(!samples.empty());
 
     // 1. Apply attack
-    vector<float> attack_segment = attack_segment_->GetSegment();
+    vector<float> attack_segment = attack_segment_->GetSamples();
 
     vector<float>::const_iterator it_seg     = attack_segment.begin();
     vector<float>::const_iterator it_seg_end = attack_segment.end();
     vector<int16_t>::iterator it_data        = samples.begin();
     vector<int16_t>::iterator it_data_end    = samples.begin()
-        + static_cast<vector<int16_t>::difference_type>(attack_segment_->Length());
+        + static_cast<vector<int16_t>::difference_type>(attack_segment_->GetLength());
 
     for ( ; it_seg != it_seg_end && it_data != it_data_end; it_seg++, it_data++)
     {
@@ -161,11 +161,11 @@ void AdsrEnvelope::ApplyEnvelope(std::vector<int16_t> &samples) const
     }
 
     // 2. Apply decay
-    vector<float> decay_segment = decay_segment_->GetSegment();
+    vector<float> decay_segment = decay_segment_->GetSamples();
 
     it_data     = it_data_end;
     it_data_end = it_data
-        + static_cast<vector<int16_t>::difference_type>(decay_segment_->Length());
+        + static_cast<vector<int16_t>::difference_type>(decay_segment_->GetLength());
     it_seg     = decay_segment.begin();
     it_seg_end = decay_segment.end();
 
@@ -175,11 +175,11 @@ void AdsrEnvelope::ApplyEnvelope(std::vector<int16_t> &samples) const
     }
 
     // 3. Apply sustain
-    vector<float> sustain_segment = sustain_segment_->GetSegment();
+    vector<float> sustain_segment = sustain_segment_->GetSamples();
 
     it_data     = it_data_end;
     it_data_end = it_data
-        + static_cast<vector<int16_t>::difference_type>(sustain_segment_->Length());
+        + static_cast<vector<int16_t>::difference_type>(sustain_segment_->GetLength());
     it_seg     = sustain_segment.begin();
     it_seg_end = sustain_segment.end();
 
@@ -189,11 +189,11 @@ void AdsrEnvelope::ApplyEnvelope(std::vector<int16_t> &samples) const
     }
 
     // 4. Apply release
-    vector<float> release_segment = release_segment_->GetSegment();
+    vector<float> release_segment = release_segment_->GetSamples();
 
     it_data     = it_data_end;
     it_data_end = it_data
-        + static_cast<vector<int16_t>::difference_type>(release_segment_->Length());
+        + static_cast<vector<int16_t>::difference_type>(release_segment_->GetLength());
     it_seg     = release_segment.begin();
     it_seg_end = release_segment.end();
 

@@ -57,7 +57,7 @@ int main()
     double s_segment_duration = 4.0;
     double r_segment_duration = 3.0;
 
-    size_t number_of_steps;
+    size_t number_of_samples;
     uint32_t file_idx = 0;
     char file_name[200];
 
@@ -79,40 +79,40 @@ int main()
         file_idx++;
 
         // 2. Create the attack segment
-        number_of_steps = static_cast<size_t>(synthesiser.sampling_rate() * a_segment_duration);
+        number_of_samples = static_cast<size_t>(synthesiser.sampling_rate() * a_segment_duration);
         auto segment_attack =
             unique_ptr<Segment>(new ExponentialSegment(
                         start_amplitude_attack,
                         end_amplitude_attack,
                         exponent_a,
-                        number_of_steps));
+                        number_of_samples));
 
         // 3. Create the decay segment
-        number_of_steps = static_cast<size_t>(synthesiser.sampling_rate() * d_segment_duration);
+        number_of_samples = static_cast<size_t>(synthesiser.sampling_rate() * d_segment_duration);
         auto segment_decay =
             unique_ptr<Segment>(new ExponentialSegment(
                         start_amplitude_decay,
                         end_amplitude_decay,
                         exponent_d,
-                        number_of_steps));
+                        number_of_samples));
 
         // 3. Create the sustain segment
-        number_of_steps = static_cast<size_t>(synthesiser.sampling_rate() * s_segment_duration);
+        number_of_samples = static_cast<size_t>(synthesiser.sampling_rate() * s_segment_duration);
         auto segment_sustain =
             unique_ptr<Segment>(new ExponentialSegment(
                         start_amplitude_sustain,
                         end_amplitude_sustain,
                         exponent_s,
-                        number_of_steps));
+                        number_of_samples));
 
         // 4. Create the release segment
-        number_of_steps = static_cast<size_t>(synthesiser.sampling_rate() * r_segment_duration);
+        number_of_samples = static_cast<size_t>(synthesiser.sampling_rate() * r_segment_duration);
         auto segment_release =
             unique_ptr<Segment>(new ExponentialSegment(
                         start_amplitude_release,
                         end_amplitude_release,
                         exponent_r,
-                        number_of_steps));
+                        number_of_samples));
 
         // 5. Create the envelope
         AdsrEnvelope envelope(segment_attack, segment_decay, segment_sustain, segment_release);
