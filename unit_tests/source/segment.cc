@@ -35,16 +35,13 @@ using namespace std;
 //  OUTPUT:
 //      None
 //------------------------------------------------------------------------
-static void ValidateConstantSegment(
-        float amplitude_expected,
-        size_t size_expected,
-        Segment &segment)
-{
-        EXPECT_EQ(true, segment.IsGenerated());
-        EXPECT_EQ(segment.GetLength(), size_expected);
-        EXPECT_EQ(segment[0], amplitude_expected);
-        EXPECT_EQ(segment[size_expected-1], amplitude_expected);
-        EXPECT_EQ(segment[(size_expected-1)/2], amplitude_expected);
+static void ValidateConstantSegment(float amplitude_expected,
+                                    size_t size_expected, Segment &segment) {
+  EXPECT_EQ(true, segment.IsGenerated());
+  EXPECT_EQ(segment.GetLength(), size_expected);
+  EXPECT_EQ(segment[0], amplitude_expected);
+  EXPECT_EQ(segment[size_expected - 1], amplitude_expected);
+  EXPECT_EQ(segment[(size_expected - 1) / 2], amplitude_expected);
 }
 
 //------------------------------------------------------------------------
@@ -55,34 +52,33 @@ static void ValidateConstantSegment(
 //      Validates a liner semgnet. Verifies values at the beginning,
 //      end, and in the middle of the segment.
 //  INPUT:
-//      amplitude_start_expected - expected amplitude at the start of the segment
-//      amplitude_end_expected   - expected amplitude at the end of the segment
-//      size_expectedi           - expected length of the segment
+//      amplitude_start_expected - expected amplitude at the start of the
+//      segment amplitude_end_expected   - expected amplitude at the end of the
+//      segment size_expectedi           - expected length of the segment
 //      segment                  - the segment to check
 //  OUTPUT:
 //      None
 //------------------------------------------------------------------------
-static void ValidateLinearSegment(
-        float amplitude_start_expected,
-        float amplitude_end_expected,
-        size_t size_expected,
-        Segment &segment)
-{
+static void ValidateLinearSegment(float amplitude_start_expected,
+                                  float amplitude_end_expected,
+                                  size_t size_expected, Segment &segment) {
+  float middle_amplitude_expected =
+      (amplitude_end_expected + amplitude_start_expected) / 2;
 
-        float middle_amplitude_expected = (amplitude_end_expected + amplitude_start_expected)/2;
-
-        EXPECT_EQ(true, segment.IsGenerated());
-        EXPECT_EQ(segment.GetLength(), size_expected);
-        EXPECT_EQ(segment[size_expected-1], amplitude_end_expected);
-        EXPECT_EQ(segment[0], amplitude_start_expected);
-        if ((size_expected % 2))
-        {
-            EXPECT_LE(fabs(segment[(size_expected-1)/2]- middle_amplitude_expected), kEps);
-        } else
-        {
-            double temp = (segment[(size_expected-1)/2] + segment[(size_expected+1)/2])/2;
-            EXPECT_LE(fabs(temp- middle_amplitude_expected), kEps);
-        }
+  EXPECT_EQ(true, segment.IsGenerated());
+  EXPECT_EQ(segment.GetLength(), size_expected);
+  EXPECT_EQ(segment[size_expected - 1], amplitude_end_expected);
+  EXPECT_EQ(segment[0], amplitude_start_expected);
+  if ((size_expected % 2)) {
+    EXPECT_LE(
+        fabs(segment[(size_expected - 1) / 2] - middle_amplitude_expected),
+        kEps);
+  } else {
+    double temp =
+        (segment[(size_expected - 1) / 2] + segment[(size_expected + 1) / 2]) /
+        2;
+    EXPECT_LE(fabs(temp - middle_amplitude_expected), kEps);
+  }
 }
 
 //------------------------------------------------------------------------
@@ -93,23 +89,20 @@ static void ValidateLinearSegment(
 //      Validates an exponential semgnet. Verifies values at the beginning
 //      and end of the segment.
 //  INPUT:
-//      amplitude_start_expected - expected amplitude at the start of the segment
-//      amplitude_end_expected   - expected amplitude at the end of the segment
-//      size_expectedi           - expected length of the segment
+//      amplitude_start_expected - expected amplitude at the start of the
+//      segment amplitude_end_expected   - expected amplitude at the end of the
+//      segment size_expectedi           - expected length of the segment
 //      segment                  - the segment to check
 //  OUTPUT:
 //      None
 //------------------------------------------------------------------------
-static void ValidateSegmentExponential(
-        float amplitude_start_expected,
-        float amplitude_end_expected,
-        size_t size_expected,
-        Segment &segment)
-{
-        EXPECT_EQ(true, segment.IsGenerated());
-        EXPECT_EQ(segment.GetLength(), size_expected);
-        EXPECT_EQ(segment[0], amplitude_start_expected);
-        EXPECT_EQ(segment[size_expected-1], amplitude_end_expected);
+static void ValidateSegmentExponential(float amplitude_start_expected,
+                                       float amplitude_end_expected,
+                                       size_t size_expected, Segment &segment) {
+  EXPECT_EQ(true, segment.IsGenerated());
+  EXPECT_EQ(segment.GetLength(), size_expected);
+  EXPECT_EQ(segment[0], amplitude_start_expected);
+  EXPECT_EQ(segment[size_expected - 1], amplitude_end_expected);
 }
 
 //========================================================================
@@ -133,58 +126,61 @@ typedef struct SegConf {
 } SegConf;
 
 class ConstSegmentTestFixture : public ::testing::Test {
-    // Initialise the synthesiser
-    SynthConfig &synthesiser  = SynthConfig::getInstance();
-protected:
-    // Init the segment
-    ConstantSegment segment;
+  // Initialise the synthesiser
+  SynthConfig &synthesiser = SynthConfig::getInstance();
 
-    static const SegConf default_conf;
+ protected:
+  // Init the segment
+  ConstantSegment segment;
 
-    virtual void SetUp() {
-      synthesiser.Init();
-      segment.SetAmplitude(default_conf.amplitude);
-      segment.SetNumberOfSamples(default_conf.number_of_samples);
-    }
+  static const SegConf default_conf;
+
+  virtual void SetUp() {
+    synthesiser.Init();
+    segment.SetAmplitude(default_conf.amplitude);
+    segment.SetNumberOfSamples(default_conf.number_of_samples);
+  }
 };
 
 SegConf const ConstSegmentTestFixture::default_conf;
 
 class LinearSegmentTestFixture : public ::testing::Test {
-    // Initialise the synthesiser
-    SynthConfig &synthesiser  = SynthConfig::getInstance();
-protected:
-    // Init the segment
-    LinearSegment segment;
+  // Initialise the synthesiser
+  SynthConfig &synthesiser = SynthConfig::getInstance();
 
-    static const SegConf default_conf;
+ protected:
+  // Init the segment
+  LinearSegment segment;
 
-    virtual void SetUp() {
-      synthesiser.Init();
-      segment.SetPeakAmplitude(default_conf.amplitude);
-      segment.SetNumberOfSamples(default_conf.number_of_samples);
-      segment.SetGradient(default_conf.grad);
-    }
+  static const SegConf default_conf;
+
+  virtual void SetUp() {
+    synthesiser.Init();
+    segment.SetPeakAmplitude(default_conf.amplitude);
+    segment.SetNumberOfSamples(default_conf.number_of_samples);
+    segment.SetGradient(default_conf.grad);
+  }
 };
 
 SegConf const LinearSegmentTestFixture::default_conf;
 
 class ExponentialSegmentTestFixture : public ::testing::Test {
-    // Initialise the synthesiser
-    SynthConfig &synthesiser  = SynthConfig::getInstance();
-protected:
-    // Init the segment
-    ExponentialSegment segment;
+  // Initialise the synthesiser
+  SynthConfig &synthesiser = SynthConfig::getInstance();
 
-    static const SegConf default_conf;
+ protected:
+  // Init the segment
+  ExponentialSegment segment;
 
-    virtual void SetUp() {
-      synthesiser.Init();
-      segment.SetStartAmplitude(default_conf.amplitude_start);
-      segment.SetEndAmplitude(default_conf.amplitude_end);
-      segment.SetNumberOfSamples(default_conf.number_of_samples);
-      segment.SetExponent(default_conf.exponent);
-    }
+  static const SegConf default_conf;
+
+  virtual void SetUp() {
+    synthesiser.Init();
+    segment.SetStartAmplitude(default_conf.amplitude_start);
+    segment.SetEndAmplitude(default_conf.amplitude_end);
+    segment.SetNumberOfSamples(default_conf.number_of_samples);
+    segment.SetExponent(default_conf.exponent);
+  }
 };
 
 SegConf const ExponentialSegmentTestFixture::default_conf;
@@ -195,111 +191,103 @@ SegConf const ExponentialSegmentTestFixture::default_conf;
 //------------------------------------------------------------------------
 // All types of segments
 //------------------------------------------------------------------------
-TEST(AllSegmentTypesTest, HandleEmptySegment)
-{
-    size_t number_of_samples = 0;
-    float peak_amplitude   = 1 << 15;
-    float amplitude_start  = 1 << 15;
-    float amplitude_end    = 1;
-    float exponent         = 100;
+TEST(AllSegmentTypesTest, HandleEmptySegment) {
+  size_t number_of_samples = 0;
+  float peak_amplitude = 1 << 15;
+  float amplitude_start = 1 << 15;
+  float amplitude_end = 1;
+  float exponent = 100;
 
-    // Initialise the synthesiser
-    SynthConfig &synthesiser  = SynthConfig::getInstance();
-    synthesiser.Init();
+  // Initialise the synthesiser
+  SynthConfig &synthesiser = SynthConfig::getInstance();
+  synthesiser.Init();
 
-    // Constant segment
-    ConstantSegment segment_c(peak_amplitude, number_of_samples);
-    EXPECT_EQ(segment_c.IsEmpty(), true);
+  // Constant segment
+  ConstantSegment segment_c(peak_amplitude, number_of_samples);
+  EXPECT_EQ(segment_c.IsEmpty(), true);
 
-    // Linear segment
-    LinearSegment segment_l(peak_amplitude, number_of_samples, SegmentGradient::kIncline);
-    EXPECT_EQ(segment_l.IsEmpty(), true);
+  // Linear segment
+  LinearSegment segment_l(peak_amplitude, number_of_samples,
+                          SegmentGradient::kIncline);
+  EXPECT_EQ(segment_l.IsEmpty(), true);
 
-    // Exponential segment
-    ExponentialSegment segment_e(amplitude_start, amplitude_end, exponent, number_of_samples);
-    EXPECT_EQ(segment_e.IsEmpty(), true);
+  // Exponential segment
+  ExponentialSegment segment_e(amplitude_start, amplitude_end, exponent,
+                               number_of_samples);
+  EXPECT_EQ(segment_e.IsEmpty(), true);
 }
 
 //------------------------------------------------------------------------
 // ConstantSegment
 //------------------------------------------------------------------------
-TEST_F(ConstSegmentTestFixture, HandleDifferentLengths)
-{
-    vector<size_t> number_of_samples = {4, 41, 101, 1001, 2000};
+TEST_F(ConstSegmentTestFixture, HandleDifferentLengths) {
+  vector<size_t> number_of_samples = {4, 41, 101, 1001, 2000};
 
-    for (auto it = number_of_samples.begin(); it != number_of_samples.end(); it++)
-    {
-        segment.SetNumberOfSamples(*it);
-        segment.GenerateSamples();
-        ValidateConstantSegment(default_conf.amplitude, *it, segment);
-    }
+  for (auto it = number_of_samples.begin(); it != number_of_samples.end();
+       it++) {
+    segment.SetNumberOfSamples(*it);
+    segment.GenerateSamples();
+    ValidateConstantSegment(default_conf.amplitude, *it, segment);
+  }
 }
 
-TEST_F(ConstSegmentTestFixture, HandleDifferentVolumes)
-{
-    vector<float> amplitude = {0, 1, 1000, 1 << 15};
+TEST_F(ConstSegmentTestFixture, HandleDifferentVolumes) {
+  vector<float> amplitude = {0, 1, 1000, 1 << 15};
 
-    for (auto it = amplitude.begin(); it != amplitude.end(); it++)
-    {
-        segment.SetAmplitude(*it);
-        segment.GenerateSamples();
-        ValidateConstantSegment(*it, default_conf.number_of_samples, segment);
-    }
+  for (auto it = amplitude.begin(); it != amplitude.end(); it++) {
+    segment.SetAmplitude(*it);
+    segment.GenerateSamples();
+    ValidateConstantSegment(*it, default_conf.number_of_samples, segment);
+  }
 }
 
 //------------------------------------------------------------------------
 // LinearSegment
 //------------------------------------------------------------------------
-TEST_F(LinearSegmentTestFixture, HandleDifferentLengthsIncline)
-{
-    vector<size_t> number_of_samples = {4, 41, 101, 1001, 2000};
+TEST_F(LinearSegmentTestFixture, HandleDifferentLengthsIncline) {
+  vector<size_t> number_of_samples = {4, 41, 101, 1001, 2000};
 
-    for (auto it = number_of_samples.begin(); it != number_of_samples.end(); it++)
-    {
-        segment.SetNumberOfSamples(*it);
-        segment.GenerateSamples();
-        ValidateLinearSegment(0.0f, default_conf.amplitude, *it, segment);
-    }
+  for (auto it = number_of_samples.begin(); it != number_of_samples.end();
+       it++) {
+    segment.SetNumberOfSamples(*it);
+    segment.GenerateSamples();
+    ValidateLinearSegment(0.0f, default_conf.amplitude, *it, segment);
+  }
 }
 
-TEST_F(LinearSegmentTestFixture, HandleDifferentVolumesIncline)
-{
-    vector<float> peak_amplitude = {0, 1, 1000, 1 << 15};
+TEST_F(LinearSegmentTestFixture, HandleDifferentVolumesIncline) {
+  vector<float> peak_amplitude = {0, 1, 1000, 1 << 15};
 
-    for (auto it = peak_amplitude.begin(); it != peak_amplitude.end(); it++)
-    {
-        segment.SetPeakAmplitude(*it);
-        segment.GenerateSamples();
-        ValidateLinearSegment(0.0f, *it, default_conf.number_of_samples, segment);
-    }
+  for (auto it = peak_amplitude.begin(); it != peak_amplitude.end(); it++) {
+    segment.SetPeakAmplitude(*it);
+    segment.GenerateSamples();
+    ValidateLinearSegment(0.0f, *it, default_conf.number_of_samples, segment);
+  }
 }
 
-TEST_F(LinearSegmentTestFixture, HandleDifferentLengthsDecline)
-{
-    vector<size_t> number_of_samples = {2, 41, 101, 1001, 2000};
+TEST_F(LinearSegmentTestFixture, HandleDifferentLengthsDecline) {
+  vector<size_t> number_of_samples = {2, 41, 101, 1001, 2000};
 
-    segment.SetGradient(SegmentGradient::kDecline);
+  segment.SetGradient(SegmentGradient::kDecline);
 
-    for (auto it = number_of_samples.begin(); it != number_of_samples.end(); it++)
-    {
-        segment.SetNumberOfSamples(*it);
-        segment.GenerateSamples();
-        ValidateLinearSegment(default_conf.amplitude, 0.0f, *it, segment);
-    }
+  for (auto it = number_of_samples.begin(); it != number_of_samples.end();
+       it++) {
+    segment.SetNumberOfSamples(*it);
+    segment.GenerateSamples();
+    ValidateLinearSegment(default_conf.amplitude, 0.0f, *it, segment);
+  }
 }
 
-TEST_F(LinearSegmentTestFixture, HandleDifferentVolumesDecline)
-{
-    vector<float> peak_amplitude = {0, 1, 1000, 1 << 15};
+TEST_F(LinearSegmentTestFixture, HandleDifferentVolumesDecline) {
+  vector<float> peak_amplitude = {0, 1, 1000, 1 << 15};
 
-    segment.SetGradient(SegmentGradient::kDecline);
+  segment.SetGradient(SegmentGradient::kDecline);
 
-    for (auto it = peak_amplitude.begin(); it != peak_amplitude.end(); it++)
-    {
-        segment.SetPeakAmplitude(*it);
-        segment.GenerateSamples();
-        ValidateLinearSegment(*it, 0.0f, default_conf.number_of_samples, segment);
-    }
+  for (auto it = peak_amplitude.begin(); it != peak_amplitude.end(); it++) {
+    segment.SetPeakAmplitude(*it);
+    segment.GenerateSamples();
+    ValidateLinearSegment(*it, 0.0f, default_conf.number_of_samples, segment);
+  }
 }
 
 //------------------------------------------------------------------------

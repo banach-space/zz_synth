@@ -3,7 +3,7 @@
 //   src/global/global_variables.cc
 //
 // AUTHOR:
-//   zimzum@github 
+//   zimzum@github
 //
 // DESCRIPTION:
 //   Implementation of the global variables used in the synthesiser.
@@ -11,7 +11,7 @@
 //
 //  TODO: Turn this into a namespace!
 //
-// License: GNU GPL v2.0 
+// License: GNU GPL v2.0
 //========================================================================
 
 #include "global/global_variables.h"
@@ -19,12 +19,12 @@
 using namespace std;
 
 //========================================================================
-// Floating poing globals 
+// Floating poing globals
 //========================================================================
 const double kTwelthRootOfTwo = 1.0594630943593;
 
 // Pi and 2*Pi
-const double kPi    = 3.14159265358979;
+const double kPi = 3.14159265358979;
 const double kTwoPi = 6.28318530717958;
 
 // Epsilon for floating point comparisons. Very carefull here: is this value
@@ -35,7 +35,7 @@ extern const double kEps = 1e-14;
 const double kNoteC0 = 16.35;
 
 //========================================================================
-// Fixed point globals 
+// Fixed point globals
 //========================================================================
 //------------------------------------------------------------------------
 // Wave File Related
@@ -58,7 +58,7 @@ const uint32_t kRiffChunkId = 0x46464952;
 // Contains the letters "WAVE" in ASCII in little-endian form,
 // so that on little-endia machine (i.e. x86) it will be saved in
 // big-endian form, as per the format
-const uint32_t  kRiffFormat = 0x45564157;
+const uint32_t kRiffFormat = 0x45564157;
 
 // Contains the letters "fmt " in ASCII in little-endian form,
 // so that on little-endia machine (i.e. x86) it will be saved in
@@ -80,14 +80,14 @@ const uint16_t kNumberOfChannelsMono = 1;
 const uint16_t kNumberOfChannelsStereo = 2;
 
 //------------------------------------------------------------------------
-// SynthConfig 
+// SynthConfig
 //------------------------------------------------------------------------
 // SynthConfig contains pre-calculated frequencies for various notes.
 // This number specifies how many of those it contains.
 const size_t kNumberOfFrequencies = 128;
 
 //------------------------------------------------------------------------
-// General 
+// General
 //------------------------------------------------------------------------
 const uint32_t kCdSampleRate = 44100;
 

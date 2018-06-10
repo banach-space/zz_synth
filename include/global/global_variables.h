@@ -3,13 +3,13 @@
 //   global/global_variables.h
 //
 // AUTHOR:
-//   zimzum@github 
+//   zimzum@github
 //
 // DESCRIPTION:
-//   Global variables - declarations. For definitions and 
+//   Global variables - declarations. For definitions and
 //   thorough descriptions go to src/global/global_variables.cc
 //
-// License: GNU GPL v2.0 
+// License: GNU GPL v2.0
 //=============================================================
 
 #ifndef GLOBAL_H
@@ -30,7 +30,7 @@ extern const double kNoteC0;
 extern const double kEps;
 
 //=============================================================
-// Fixed point globals 
+// Fixed point globals
 //=============================================================
 //-------------------------------------------------------------
 // Wave File Related
@@ -42,7 +42,7 @@ extern const uint8_t kWaveFileHeaderSize;
 
 extern const uint32_t kRiffChunkId;
 
-extern const uint32_t  kRiffFormat;
+extern const uint32_t kRiffFormat;
 
 extern const uint32_t kFmtSubchunkId;
 
@@ -56,12 +56,12 @@ extern const uint16_t kNumberOfChannelsMono;
 extern const uint16_t kNumberOfChannelsStereo;
 
 //-------------------------------------------------------------
-// SynthConfig 
+// SynthConfig
 //-------------------------------------------------------------
 extern const std::size_t kNumberOfFrequencies;
 
 //-------------------------------------------------------------
-// General 
+// General
 //-------------------------------------------------------------
 extern const uint32_t kCdSampleRate;
 

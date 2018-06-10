@@ -26,7 +26,7 @@ struct ArgumentParser {
         fprintf(stdout, "\nUnitSynth - additional information;\n\n");
         fprintf(stdout, "Command Line Options:\n");
         // fprintf(stdout, "  --option_name\n      Option description\n")
-      // } else if (is_opt(argv[i], "--option_name=")) {
+        // } else if (is_opt(argv[i], "--option_name=")) {
         // option_val = argv[i] + strlen("--option_name=");
       } else {
         fprintf(stdout,

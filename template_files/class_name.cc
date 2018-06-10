@@ -3,14 +3,14 @@
 //      templates/class_name.cc
 //
 // AUTHOR:
-//      zimzum@github 
+//      zimzum@github
 //
 // DESCRIPTION:
 //      Template implementation file for defining classes. This file should
 //      considered as a rough guide and reasonable deviations, where
 //      necessary, are acceptable.
 //
-//  License: GNU GPL v2.0 
+//  License: GNU GPL v2.0
 //========================================================================
 
 #include "class_name.h"
@@ -24,7 +24,7 @@
 // None
 
 //------------------------------------------------------------------------
-// 2. GENERAL USER INTERFACE 
+// 2. GENERAL USER INTERFACE
 //------------------------------------------------------------------------
 // None
 
