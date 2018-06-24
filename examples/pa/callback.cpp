@@ -1,6 +1,6 @@
+#include <ncurses.h>
 #include <portaudio.h>
 #include <stdio.h>
-#include <ncurses.h>
 
 typedef struct {
   float left_phase;
@@ -77,8 +77,8 @@ int main(int argc, char agrv[]) {
     err = Pa_StartStream(stream);
     if (err != paNoError) goto error;
 
-    // SLEEP
-    /* Sleep for several seconds. */
+      // SLEEP
+      /* Sleep for several seconds. */
 #define NUM_SECONDS (0.5)
     Pa_Sleep(NUM_SECONDS * 1000);
     // STOP
@@ -86,7 +86,6 @@ int main(int argc, char agrv[]) {
     if (err != paNoError) goto error;
   }
   endwin();
-
 
 error:
   // TERMINATE PA
